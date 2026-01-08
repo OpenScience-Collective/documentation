@@ -15,29 +15,42 @@ uv run osa --help
 
 ### `osa chat`
 
-Interactive chat mode with the assistant.
+Interactive chat mode with a specific assistant.
 
 ```bash
-uv run osa chat
+# Start chat with HED assistant
+uv run osa chat --assistant hed
+
+# Start chat with BIDS assistant
+uv run osa chat --assistant bids
 ```
 
+Options:
+- `--assistant, -a`: Select assistant (hed, bids, eeglab). Default: hed
+- `--standalone, -s`: Run in standalone mode without external server (default)
+- `--url, -u`: API URL (overrides standalone mode)
+
 Features:
-- Multi-turn conversation
+- Multi-turn conversation with context
 - Rich formatted output
-- Streaming responses
 - Tool call visibility
 
 ### `osa ask`
 
-Single query mode for quick questions.
+Single query mode for quick questions to a specific assistant.
 
 ```bash
-uv run osa ask "How do I annotate a button press in HED?"
+# Ask the HED assistant
+uv run osa ask -a hed "How do I annotate a button press?"
+
+# Ask the BIDS assistant
+uv run osa ask -a bids "How should I organize my EEG dataset?"
 ```
 
 Options:
-- `--assistant`: Select assistant (hed, bids, eeglab)
-- `--model`: Override default model
+- `--assistant, -a`: Select assistant (hed, bids, eeglab). Default: hed
+- `--standalone, -s`: Run in standalone mode without external server (default)
+- `--url, -u`: API URL (overrides standalone mode)
 
 ### `osa serve`
 
@@ -92,24 +105,27 @@ default_model: openai/gpt-4.1-mini
 ### Basic Usage
 
 ```bash
-# Interactive chat
-uv run osa chat
+# Interactive chat with HED assistant
+uv run osa chat -a hed
 
-# Quick question
-uv run osa ask "What is HED?"
+# Quick question to HED assistant
+uv run osa ask -a hed "What is HED?"
 
 # Start server in background
 uv run osa serve &
 ```
 
-### With Specific Assistant
+### Different Assistants
 
 ```bash
-# Use HED assistant
-uv run osa ask --assistant hed "How do I annotate visual stimuli?"
+# HED assistant - annotation questions
+uv run osa ask -a hed "How do I annotate visual stimuli?"
 
-# Use BIDS assistant
-uv run osa ask --assistant bids "How should I organize my EEG dataset?"
+# BIDS assistant - data organization questions
+uv run osa ask -a bids "How should I organize my EEG dataset?"
+
+# EEGLAB assistant - analysis questions
+uv run osa ask -a eeglab "How do I filter my EEG data?"
 ```
 
 ### Development

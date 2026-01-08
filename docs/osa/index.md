@@ -40,11 +40,11 @@ uv run uvicorn src.api.main:app --reload --port 38528
 # CLI usage
 uv run osa --help
 
-# Interactive chat
-uv run osa chat
+# Interactive chat with HED assistant
+uv run osa chat -a hed
 
-# Single query
-uv run osa ask "How do I annotate a button press in HED?"
+# Single query to HED assistant
+uv run osa ask -a hed "How do I annotate a button press?"
 ```
 
 ## Specialist Assistants

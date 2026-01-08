@@ -67,11 +67,11 @@ The API will be available at `http://localhost:38528`.
 # Show available commands
 uv run osa --help
 
-# Interactive chat mode
-uv run osa chat
+# Interactive chat with HED assistant
+uv run osa chat -a hed
 
-# Single query
-uv run osa ask "How do I validate a HED string?"
+# Single query to HED assistant
+uv run osa ask -a hed "How do I validate a HED string?"
 
 # Serve API (alternative to uvicorn)
 uv run osa serve

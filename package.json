@@ -1,0 +1,16 @@
+{
+  "name": "osc-documentation",
+  "version": "0.1.0",
+  "description": "Documentation for the Open Science Collective",
+  "scripts": {
+    "install": "pip install -e .",
+    "dev": "mkdocs serve",
+    "build": "mkdocs build",
+    "deploy": "mkdocs build && wrangler pages deploy site --project-name=osc-docs"
+  },
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenScience-Collective/documentation"
+  }
+}

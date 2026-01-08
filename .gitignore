@@ -32,3 +32,13 @@ node_modules/
 
 # Wrangler
 .wrangler/
+
+# Claude Code
+CLAUDE.md
+
+# Planning files
+plan.md
+ideas.md
+scratch_notes.md
+research.md
+.context/

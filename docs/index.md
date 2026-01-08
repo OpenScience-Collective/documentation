@@ -4,47 +4,64 @@ Welcome to the documentation for the **Open Science Collective** (OSC) and its p
 
 ## What is OSC?
 
-The Open Science Collective is a community-driven initiative dedicated to building open-source tools and infrastructure for scientific research. We believe in making science more accessible, reproducible, and collaborative.
+The Open Science Collective is a community-driven initiative dedicated to building open-source tools and infrastructure for scientific research. We focus on precise, reliable tools for small research communities, built for accuracy over scale.
 
-## Documentation Sections
+## Our Projects
 
 <div class="grid cards" markdown>
 
--   :material-account-group:{ .lg .middle } **Collective**
+-   :material-robot:{ .lg .middle } **Open Science Assistant (OSA)**
 
     ---
 
-    Learn about the Open Science Collective, our mission, and how to contribute.
+    An extensible AI assistant platform for researchers working with open science tools. Provides domain-specific AI assistants for HED, BIDS, and EEGLAB with modular tools, open API, and extensible CLI.
 
-    [:octicons-arrow-right-24: About the Collective](collective/index.md)
+    [:octicons-arrow-right-24: OSA Documentation](osa/index.md)
 
--   :material-tools:{ .lg .middle } **OSA - Open Science Apps**
+-   :material-account-group:{ .lg .middle } **The Collective**
 
     ---
 
-    Explore our suite of open-source applications for scientific research.
+    Learn about the Open Science Collective, our mission, and how to contribute to our projects.
 
-    [:octicons-arrow-right-24: OSA Projects](osa/index.md)
+    [:octicons-arrow-right-24: About Us](collective/index.md)
 
 </div>
 
 ## Quick Links
 
 - [About Us](collective/about.md) - Learn about our organization
-- [HED Assistant](osa/hed-assistant/index.md) - AI-powered HED annotation tool
+- [OSA Getting Started](osa/getting-started.md) - Set up the Open Science Assistant
+- [OSA Architecture](osa/architecture.md) - System design and diagrams
 - [Contributing](collective/contributing.md) - Join our community
 
-## Getting Started
+## Featured: Open Science Assistant
+
+OSA provides domain-specific AI assistants for open science tools with:
+
+- **Precision over features**: Accurate, citation-backed answers researchers can trust
+- **Simple infrastructure**: Lab server deployment without complex scaling
+- **Extensible tools**: Modular tool system communities can adapt for their needs
+- **Multi-source knowledge**: GitHub issues, OpenALEX papers, Discourse forums, documentation
 
 ```bash
-# Clone this documentation repository
-git clone https://github.com/OpenScience-Collective/documentation
+# Quick start with OSA
+uv sync
+uv run osa --help
 
-# Install dependencies
-pip install -e .
+# Start the API server
+uv run uvicorn src.api.main:app --reload --port 38528
 
-# Start local development server
-mkdocs serve
+# Interactive chat
+uv run osa chat
 ```
 
-Visit `http://localhost:8000` to view the documentation locally.
+## Target Research Communities
+
+OSA serves multiple small research communities, each with specific tool needs:
+
+| Community | Focus Area | Knowledge Sources |
+|-----------|------------|-------------------|
+| **HED** | Hierarchical Event Descriptors | hed-standard repos, hedtags.org |
+| **BIDS** | Brain Imaging Data Structure | bids-standard repos, Neurostars |
+| **EEGLAB** | EEG analysis toolbox | SCCN wiki, mailing lists |

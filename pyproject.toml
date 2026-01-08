@@ -8,9 +8,22 @@ authors = [{ name = "Open Science Collective" }]
 requires-python = ">=3.11"
 
 dependencies = [
+    # MkDocs core
     "mkdocs>=1.6",
     "mkdocs-material>=9.5",
+
+    # Auto-documentation from Python code
+    "mkdocstrings>=0.26",
+    "mkdocstrings-python>=1.12",
+
+    # Additional plugins
+    "mkdocs-gen-files>=0.5",
+    "mkdocs-literate-nav>=0.6",
+    "mkdocs-section-index>=0.3",
+    "mkdocs-autorefs>=1.0",
     "mkdocs-minify-plugin>=0.8",
+
+    # Markdown extensions
     "pymdown-extensions>=10.7",
 ]
 

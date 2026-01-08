@@ -13,6 +13,33 @@ The Open Science Collective exists to:
 3. **Promote** best practices in open science and reproducible research
 4. **Bridge** the gap between cutting-edge research and practical tools
 
+## Design Principles
+
+### Precision Over Features
+
+Researchers need accurate, citation-backed answers. We prioritize reliability and correctness over feature count. Every response should be traceable to documentation or authoritative sources.
+
+### Simple Infrastructure
+
+Our tools are designed for lab server deployment without complex scaling requirements. Small research communities can self-host without DevOps expertise:
+
+- No PostgreSQL, Redis, or Kubernetes required
+- In-memory state for single-instance deployment
+- Direct document fetching, no complex RAG pipelines
+
+### Extensible Architecture
+
+General tool systems that communities can adapt for their specific needs:
+
+- Custom document retrieval tools
+- Domain-specific validators
+- Specialized system prompts
+- Knowledge source retrievers
+
+### Domain Expertise
+
+Deep knowledge of specific tools (HED, BIDS, EEGLAB), not broad generalist approaches. Each assistant is tuned for its domain.
+
 ## Core Values
 
 ### Openness
@@ -27,13 +54,9 @@ We believe the best tools are built together. We welcome contributions from anyo
 
 We strive for excellence in everything we do, from code quality to documentation to community interactions.
 
-### Accessibility
+### No Mocks, Real Tests
 
-Our tools should be usable by everyone. We prioritize clear documentation, intuitive interfaces, and inclusive design.
-
-### Reproducibility
-
-Science should be reproducible. Our tools are designed to support and encourage reproducible research practices.
+We believe in testing with real data. No mock tests, no artificial passes. If a test doesn't use real data, it's not a real test.
 
 ## Goals
 

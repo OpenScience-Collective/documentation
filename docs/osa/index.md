@@ -1,33 +1,80 @@
-# OSA - Open Science Apps
+# Open Science Assistant (OSA)
 
-OSA (Open Science Apps) is the Open Science Collective's portfolio of open-source applications designed to support scientific research.
+An extensible AI assistant platform for researchers working with open science tools. Built with LangGraph/LangChain and FastAPI.
 
-## Our Projects
+## Overview
 
-### HED Assistant
+OSA provides domain-specific AI assistants for open science tools (HED, BIDS, EEGLAB) with:
 
-An AI-powered assistant for working with Hierarchical Event Descriptors (HED) in neuroscience research.
+- **Modular tool system** for document retrieval, validation, and code execution
+- **Multi-source knowledge bases** from GitHub, OpenALEX, Discourse forums, mailing lists
+- **Extensible architecture** for adding new assistants and tools
+- **Production-ready observability** via LangFuse
 
-[:octicons-arrow-right-24: HED Assistant Documentation](hed-assistant/index.md)
+## Design Philosophy
 
-## Philosophy
+- **Precision over features**: Researchers need accurate, citation-backed answers
+- **Simple infrastructure**: Lab server deployment, no complex scaling
+- **Extensible tools**: General tool system that communities can adapt
+- **Domain expertise**: Deep knowledge of specific tools, not broad generalist
 
-All OSA projects share common principles:
+## Target Users
 
-- **Open Source** - All code is freely available under permissive licenses
-- **User-Focused** - Designed with researchers' needs in mind
-- **Well-Documented** - Comprehensive documentation for all skill levels
-- **Interoperable** - Built to work with existing tools and standards
+- Researchers learning HED annotations, BIDS formatting, or EEGLAB analysis
+- Lab members needing quick, accurate answers from documentation
+- Developers integrating these tools who need API/usage guidance
 
-## Technology Stack
+## Quick Start
 
-Our projects leverage modern technologies:
+```bash
+# Clone the repository
+git clone https://github.com/OpenScience-Collective/osa
+cd osa
 
-- **Python** - Primary development language
-- **TypeScript** - For web-based tools
-- **HED** - Hierarchical Event Descriptor standard
-- **BIDS** - Brain Imaging Data Structure compatibility
+# Install dependencies
+uv sync
 
-## Getting Involved
+# Run development server
+uv run uvicorn src.api.main:app --reload --port 38528
 
-Interested in contributing to OSA projects? Check out our [contributing guide](../collective/contributing.md) to get started.
+# CLI usage
+uv run osa --help
+
+# Interactive chat
+uv run osa chat
+
+# Single query
+uv run osa ask "How do I annotate a button press in HED?"
+```
+
+## Specialist Assistants
+
+| Assistant | Domain | Knowledge Sources |
+|-----------|--------|-------------------|
+| **HED Assistant** | Hierarchical Event Descriptors | hed-standard repos, hedtags.org |
+| **BIDS Assistant** | Brain Imaging Data Structure | bids-standard repos, Neurostars |
+| **EEGLAB Assistant** | EEG analysis toolbox | SCCN wiki, mailing lists |
+
+## Documentation
+
+- [Getting Started](getting-started.md) - Installation and setup
+- [Architecture](architecture.md) - System design and diagrams
+- [CLI Reference](cli-reference.md) - Command-line interface
+- [API Reference](api-reference.md) - REST API documentation
+- [Tools](tools/index.md) - Available tools
+- [Development](development.md) - Contributing to OSA
+
+## External API Integrations
+
+OSA integrates with existing validator and tool APIs rather than hosting validation engines locally:
+
+| Service | API Endpoint | Integration |
+|---------|--------------|-------------|
+| HED Validation | https://hedtools.org/hed | String, sidecar, spreadsheet validation |
+| BIDS Validator | https://bids-validator.github.io | Dataset structure validation |
+| OpenALEX | https://api.openalex.org | Academic paper search |
+| GitHub API | https://api.github.com | Issues, PRs, discussions |
+
+## License
+
+MIT

@@ -2,19 +2,29 @@
 
 ## Who We Are
 
-The Open Science Collective is a community-driven organization dedicated to building open-source tools for scientific research. Founded with the belief that science should be open, accessible, and reproducible, we bring together researchers, developers, and enthusiasts from around the world.
+The Open Science Collective is a community-driven organization dedicated to building open-source tools for scientific research. We focus on serving small research communities with precise, reliable tools built for accuracy over scale.
 
-## Our History
+## Our Focus
 
-The collective emerged from the shared vision of making scientific tools more accessible to researchers everywhere. What started as informal collaboration has grown into a structured initiative with multiple active projects.
+We develop tools that serve research communities working with:
+
+- **HED** - Hierarchical Event Descriptors (annotation standard)
+- **BIDS** - Brain Imaging Data Structure (data organization)
+- **EEGLAB** - EEG analysis MATLAB toolbox
+
+## Target Users
+
+- Researchers learning HED annotations, BIDS formatting, or EEGLAB analysis
+- Lab members needing quick, accurate answers from documentation
+- Developers integrating these tools who need API/usage guidance
 
 ## Our Team
 
 We are a diverse group of contributors including:
 
-- **Researchers** who understand the challenges of modern science
+- **Researchers** who understand the challenges of modern neuroscience
 - **Developers** who build robust, user-friendly tools
-- **Designers** who ensure our tools are accessible and intuitive
+- **Domain experts** who ensure our tools meet real research needs
 - **Community members** who provide feedback and support
 
 ## Get in Touch

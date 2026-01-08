@@ -2,19 +2,41 @@
 
 Thank you for your interest in contributing to the Open Science Collective! We welcome contributions of all kinds from everyone.
 
+## Development Workflow
+
+All development follows: **Issue -> Feature Branch -> PR -> Review -> Merge**
+
+1. **Pick an issue** from GitHub Issues
+2. **Create feature branch**: `git checkout -b feature/issue-N-short-description`
+3. **Implement** with atomic commits
+4. **Create PR** with `gh pr create`
+5. **Address review findings** before merging
+6. **Merge with merge commit** (never squash)
+
+```bash
+# Example workflow
+gh issue list                                    # Find issue to work on
+git checkout -b feature/issue-7-description      # Create branch
+# ... implement ...
+git add -A && git commit -m "feat: add X"        # Atomic commits
+gh pr create --title "feat: add X" --body "Closes #7"
+git push -u origin feature/issue-7-description
+gh pr merge --merge --delete-branch              # Merge commit, never squash
+```
+
 ## Ways to Contribute
 
 ### Code Contributions
 
 - Fix bugs or implement new features
-- Improve test coverage
+- Improve test coverage (with real tests, no mocks)
 - Refactor and optimize existing code
 
 ### Documentation
 
 - Fix typos and improve clarity
 - Add examples and tutorials
-- Translate documentation
+- Improve API documentation
 
 ### Community
 
@@ -22,45 +44,22 @@ Thank you for your interest in contributing to the Open Science Collective! We w
 - Report bugs and suggest features
 - Share your use cases and feedback
 
-## Getting Started
-
-### 1. Find Something to Work On
-
-- Browse [open issues](https://github.com/OpenScience-Collective) across our projects
-- Look for issues labeled `good first issue` or `help wanted`
-- Propose new ideas by opening a discussion
-
-### 2. Set Up Your Environment
+## Setting Up Your Environment
 
 ```bash
-# Fork and clone the repository
-git clone https://github.com/YOUR-USERNAME/REPOSITORY-NAME
+# Clone the repository
+git clone https://github.com/OpenScience-Collective/osa
+cd osa
 
-# Create a new branch
-git checkout -b feature/your-feature-name
+# Install dependencies with uv
+uv sync
 
-# Install dependencies
-pip install -e ".[dev]"
+# Install pre-commit hooks
+uv run pre-commit install
+
+# Run tests
+uv run pytest tests/ -v
 ```
-
-### 3. Make Your Changes
-
-- Write clear, well-documented code
-- Follow the existing code style
-- Add tests for new functionality
-- Update documentation as needed
-
-### 4. Submit Your Contribution
-
-```bash
-# Commit your changes
-git commit -m "Add: brief description of changes"
-
-# Push to your fork
-git push origin feature/your-feature-name
-```
-
-Then open a pull request on GitHub.
 
 ## Code Style
 
@@ -68,18 +67,29 @@ We use [Ruff](https://docs.astral.sh/ruff/) for Python linting and formatting:
 
 ```bash
 # Check code style
-ruff check .
+uv run ruff check .
 
 # Format code
-ruff format .
+uv run ruff format .
 ```
+
+### Guidelines
+
+- Type hints required for all public APIs
+- Docstrings for public functions and classes (Google style)
+- Atomic commits with concise messages, no emojis
+- Pre-commit hooks for automatic formatting
+
+## Testing
+
+- **NO MOCKS**: Real tests with real data only
+- **Dynamic tests**: Query registries/configs, don't hardcode values
+- **Coverage**: >70% minimum
+- Run `uv run pytest --cov` before committing
 
 ## Questions?
 
-If you have questions or need help, don't hesitate to:
+If you have questions or need help:
 
 - Open an issue on GitHub
 - Start a discussion in the repository
-- Reach out to maintainers
-
-We're here to help you succeed!

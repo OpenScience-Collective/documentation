@@ -4,7 +4,7 @@ Welcome to the Open Science Collective documentation. Here you'll find informati
 
 ## Overview
 
-The Open Science Collective (OSC) is a community of researchers, developers, and enthusiasts working together to advance open science through collaborative software development.
+The Open Science Collective (OSC) is a community of researchers, developers, and enthusiasts working together to advance open science through collaborative software development. We build precise, reliable tools for small research communities.
 
 ## In This Section
 
@@ -14,10 +14,25 @@ The Open Science Collective (OSC) is a community of researchers, developers, and
 
 ## Our Projects
 
-We develop and maintain a variety of open-source tools for the scientific community. Visit the [OSA section](../osa/index.md) to explore our project portfolio.
+### Open Science Assistant (OSA)
+
+An extensible AI assistant platform for researchers working with open science tools:
+
+- **HED Assistant** - Hierarchical Event Descriptors, annotation standards
+- **BIDS Assistant** - Brain Imaging Data Structure, dataset organization
+- **EEGLAB Assistant** - EEG analysis, MATLAB toolbox guidance
+
+Visit the [OSA section](../osa/index.md) to explore the platform.
+
+## Design Philosophy
+
+- **Precision over features**: Researchers need accurate, citation-backed answers
+- **Simple infrastructure**: Lab server deployment, no complex scaling
+- **Extensible tools**: General tool system that communities can adapt
+- **Domain expertise**: Deep knowledge of specific tools, not broad generalist
 
 ## Join Us
 
-We welcome contributors of all skill levels and backgrounds. Whether you're a seasoned developer or just getting started, there's a place for you in our community.
+We welcome contributors of all skill levels and backgrounds.
 
 [:material-github: GitHub](https://github.com/OpenScience-Collective){ .md-button }

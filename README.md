@@ -7,7 +7,8 @@ Documentation for the [Open Science Collective](https://osc.earth) and its proje
 ### Prerequisites
 
 - Python 3.11+
-- [Bun](https://bun.sh/) (for deployment scripts)
+- [uv](https://docs.astral.sh/uv/) (Python package manager)
+- [Bun](https://bun.sh/) (for scripts)
 - [Wrangler](https://developers.cloudflare.com/workers/wrangler/) (for Cloudflare deployment)
 
 ### Installation
@@ -17,8 +18,8 @@ Documentation for the [Open Science Collective](https://osc.earth) and its proje
 git clone https://github.com/OpenScience-Collective/documentation
 cd documentation
 
-# Install Python dependencies
-pip install -e .
+# Install dependencies
+uv sync
 ```
 
 ### Local Development
@@ -27,7 +28,7 @@ pip install -e .
 # Start the development server
 bun run dev
 # or
-mkdocs serve
+uv run mkdocs serve
 ```
 
 Visit `http://localhost:8000` to view the documentation.
@@ -38,7 +39,7 @@ Visit `http://localhost:8000` to view the documentation.
 # Build static site
 bun run build
 # or
-mkdocs build
+uv run mkdocs build
 ```
 
 ### Deployment

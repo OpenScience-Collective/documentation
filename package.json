@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "Documentation for the Open Science Collective",
   "scripts": {
-    "install": "pip install -e .",
-    "dev": "mkdocs serve",
-    "build": "mkdocs build",
-    "deploy": "mkdocs build && wrangler pages deploy site --project-name=osc-docs"
+    "setup": "uv sync",
+    "dev": "uv run mkdocs serve",
+    "build": "uv run mkdocs build",
+    "deploy": "uv run mkdocs build && wrangler pages deploy site --project-name=osc-docs"
   },
   "license": "BSD-3-Clause",
   "repository": {

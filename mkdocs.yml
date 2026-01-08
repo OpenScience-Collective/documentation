@@ -67,8 +67,16 @@ plugins:
   - minify:
       minify_html: true
   - section-index
-  # API reference generation (requires OSA dependencies installed)
-  # Uncomment these when building with full OSA environment:
+  # API Reference Generation
+  # --------------------------
+  # These plugins auto-generate API documentation from OSA source code.
+  # They are disabled by default because they require OSA dependencies.
+  #
+  # To enable:
+  # 1. Install OSA dependencies: cd osa && uv sync
+  # 2. Uncomment the plugins below
+  # 3. Run: uv run mkdocs build
+  #
   # - mkdocstrings:
   #     default_handler: python
   #     handlers:

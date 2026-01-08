@@ -1,0 +1,161 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+site_name: Open Science Collective
+site_url: https://docs.osc.earth
+site_author: Open Science Collective
+site_description: >-
+  Documentation for the Open Science Collective (OSC) and its projects,
+  including the Open Science Assistant (OSA).
+
+repo_name: OpenScience-Collective
+repo_url: https://github.com/OpenScience-Collective
+
+copyright: Copyright &copy; 2026 Open Science Collective
+
+theme:
+  name: material
+  custom_dir: overrides
+  favicon: assets/logo.png
+  logo: assets/logo.png
+  icon:
+    repo: fontawesome/brands/github
+
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tabs.link
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - minify:
+      minify_html: true
+  - section-index
+  # API Reference Generation
+  # --------------------------
+  # These plugins auto-generate API documentation from OSA source code.
+  # They are disabled by default because they require OSA dependencies.
+  #
+  # To enable:
+  # 1. Install OSA dependencies: cd osa && uv sync
+  # 2. Uncomment the plugins below
+  # 3. Run: uv run mkdocs build
+  #
+  # - mkdocstrings:
+  #     default_handler: python
+  #     handlers:
+  #       python:
+  #         paths:
+  #           - osa/src
+  #         options:
+  #           docstring_style: google
+  #           show_source: true
+  #           show_bases: true
+  #           show_root_heading: true
+  #           members_order: source
+  # - gen-files:
+  #     scripts:
+  #       - scripts/gen_ref_pages.py
+  # - literate-nav:
+  #     nav_file: SUMMARY.md
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/OpenScience-Collective
+
+extra_javascript:
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Collective:
+      - collective/index.md
+      - About: collective/about.md
+      - Mission: collective/mission.md
+      - Contributing: collective/contributing.md
+  - OSA:
+      - osa/index.md
+      - Getting Started: osa/getting-started.md
+      - Architecture: osa/architecture.md
+      - CLI Reference: osa/cli-reference.md
+      - API Reference: osa/api-reference.md
+      - Tools:
+          - osa/tools/index.md
+          - HED Tools: osa/tools/hed.md
+      - Development: osa/development.md

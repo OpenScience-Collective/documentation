@@ -1,0 +1,3 @@
+[submodule "osa"]
+	path = osa
+	url = https://github.com/OpenScience-Collective/osa.git

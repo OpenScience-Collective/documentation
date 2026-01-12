@@ -79,6 +79,39 @@ uv run osa config set api_url http://localhost:38528
 
 Configuration is stored in `~/.config/osa/config.yaml`.
 
+### `osa sync`
+
+Sync knowledge sources (GitHub issues/PRs, academic papers). See [Knowledge Sync](knowledge-sync.md) for details.
+
+```bash
+# Initialize database
+uv run osa sync init
+
+# Sync GitHub issues/PRs from HED repos
+uv run osa sync github
+
+# Sync academic papers
+uv run osa sync papers
+
+# Sync everything
+uv run osa sync all
+
+# Check status
+uv run osa sync status
+
+# Search (for testing)
+uv run osa sync search "validation error"
+```
+
+Options for `sync github`:
+
+- `-r, --repo`: Specific repo to sync (e.g., `hed-standard/hed-specification`)
+
+Options for `sync papers`:
+
+- `-s, --source`: Paper source (`openalex`, `semanticscholar`, `pubmed`)
+- `-q, --query`: Custom search query
+
 ## Configuration
 
 ### Environment Variables
@@ -89,6 +122,13 @@ Configuration is stored in `~/.config/osa/config.yaml`.
 | `OPENROUTER_API_KEY` | LLM provider API key | Required |
 | `LANGFUSE_PUBLIC_KEY` | LangFuse public key | Optional |
 | `LANGFUSE_SECRET_KEY` | LangFuse secret key | Optional |
+| `SYNC_ENABLED` | Enable automated knowledge sync | `true` |
+| `SYNC_GITHUB_CRON` | GitHub sync schedule (cron) | `0 2 * * *` |
+| `SYNC_PAPERS_CRON` | Papers sync schedule (cron) | `0 3 * * 0` |
+| `GITHUB_TOKEN` | GitHub token for sync | Optional |
+| `SEMANTIC_SCHOLAR_API_KEY` | Semantic Scholar API key | Optional |
+| `PUBMED_API_KEY` | PubMed/NCBI API key | Optional |
+| `DATA_DIR` | Data directory for knowledge DB | Platform-specific |
 
 ### Config File
 

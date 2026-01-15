@@ -112,8 +112,21 @@
 </style>
 
 <script>
-// API endpoint - configure based on deployment
-const API_BASE = 'https://api.osc.earth/osa';
+// API endpoint - allow override via query param for development/testing
+// Usage: ?api=http://localhost:38528 for local testing
+const urlParams = new URLSearchParams(window.location.search);
+const API_BASE = urlParams.get('api') || 'https://api.osc.earth/osa';
+
+// HTML escape to prevent XSS from API response data
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
 async function fetchStatus() {
   const container = document.getElementById('status-container');
@@ -134,15 +147,19 @@ async function fetchStatus() {
 
 function formatDate(isoString) {
   if (!isoString) return 'Never';
-  const date = new Date(isoString);
-  return date.toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZoneName: 'short'
-  });
+  try {
+    const date = new Date(isoString);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    });
+  } catch {
+    return 'Invalid date';
+  }
 }
 
 function formatAge(hours) {
@@ -164,7 +181,10 @@ function getHealthText(healthy, ageHours) {
 }
 
 function renderStatus(container, data) {
-  const { github, papers, scheduler, health } = data;
+  const github = data?.github || {};
+  const papers = data?.papers || {};
+  const scheduler = data?.scheduler || {};
+  const health = data?.health || {};
 
   container.innerHTML = `
     <div class="status-grid">
@@ -175,30 +195,30 @@ function renderStatus(container, data) {
         </h3>
         <div class="status-details">
           <span class="status-label">Status:</span>
-          <span class="status-value">${getHealthText(health.github_healthy, health.github_age_hours)}</span>
+          <span class="status-value">${escapeHtml(getHealthText(health.github_healthy, health.github_age_hours))}</span>
 
           <span class="status-label">Last sync:</span>
-          <span class="status-value">${formatAge(health.github_age_hours)}</span>
+          <span class="status-value">${escapeHtml(formatAge(health.github_age_hours))}</span>
 
           <span class="status-label">Total items:</span>
-          <span class="status-value">${github.total_items.toLocaleString()}</span>
+          <span class="status-value">${(github.total_items ?? 0).toLocaleString()}</span>
 
           <span class="status-label">Issues:</span>
-          <span class="status-value">${github.issues.toLocaleString()}</span>
+          <span class="status-value">${(github.issues ?? 0).toLocaleString()}</span>
 
           <span class="status-label">Pull Requests:</span>
-          <span class="status-value">${github.prs.toLocaleString()}</span>
+          <span class="status-value">${(github.prs ?? 0).toLocaleString()}</span>
 
           <span class="status-label">Open items:</span>
-          <span class="status-value">${github.open_items.toLocaleString()}</span>
+          <span class="status-value">${(github.open_items ?? 0).toLocaleString()}</span>
         </div>
 
         <div class="repo-list">
           <strong>Repositories:</strong>
-          ${Object.entries(github.repos).map(([repo, info]) => `
+          ${Object.entries(github.repos || {}).map(([repo, info]) => `
             <div class="repo-item">
-              ${repo}: ${info.items} items
-              ${info.last_sync ? `(synced ${formatDate(info.last_sync)})` : ''}
+              ${escapeHtml(repo)}: ${(info?.items ?? 0)} items
+              ${info?.last_sync ? `(synced ${escapeHtml(formatDate(info.last_sync))})` : ''}
             </div>
           `).join('')}
         </div>
@@ -211,21 +231,21 @@ function renderStatus(container, data) {
         </h3>
         <div class="status-details">
           <span class="status-label">Status:</span>
-          <span class="status-value">${getHealthText(health.papers_healthy, health.papers_age_hours)}</span>
+          <span class="status-value">${escapeHtml(getHealthText(health.papers_healthy, health.papers_age_hours))}</span>
 
           <span class="status-label">Last sync:</span>
-          <span class="status-value">${formatAge(health.papers_age_hours)}</span>
+          <span class="status-value">${escapeHtml(formatAge(health.papers_age_hours))}</span>
 
           <span class="status-label">Total papers:</span>
-          <span class="status-value">${papers.total_items.toLocaleString()}</span>
+          <span class="status-value">${(papers.total_items ?? 0).toLocaleString()}</span>
         </div>
 
         <div class="source-list">
           <strong>Sources:</strong>
-          ${Object.entries(papers.sources).map(([source, info]) => `
+          ${Object.entries(papers.sources || {}).map(([source, info]) => `
             <div class="source-item">
-              ${source}: ${info.items} papers
-              ${info.last_sync ? `(synced ${formatDate(info.last_sync)})` : ''}
+              ${escapeHtml(source)}: ${(info?.items ?? 0)} papers
+              ${info?.last_sync ? `(synced ${escapeHtml(formatDate(info.last_sync))})` : ''}
             </div>
           `).join('')}
         </div>
@@ -241,26 +261,26 @@ function renderStatus(container, data) {
           <span class="status-value">${scheduler.running ? 'Yes' : 'No'}</span>
 
           <span class="status-label">GitHub schedule:</span>
-          <span class="status-value">${scheduler.github_cron} (UTC)</span>
+          <span class="status-value">${escapeHtml(scheduler.github_cron ?? 'Not configured')} (UTC)</span>
 
           <span class="status-label">Papers schedule:</span>
-          <span class="status-value">${scheduler.papers_cron} (UTC)</span>
+          <span class="status-value">${escapeHtml(scheduler.papers_cron ?? 'Not configured')} (UTC)</span>
 
           ${scheduler.next_github_sync ? `
             <span class="status-label">Next GitHub sync:</span>
-            <span class="status-value">${formatDate(scheduler.next_github_sync)}</span>
+            <span class="status-value">${escapeHtml(formatDate(scheduler.next_github_sync))}</span>
           ` : ''}
 
           ${scheduler.next_papers_sync ? `
             <span class="status-label">Next papers sync:</span>
-            <span class="status-value">${formatDate(scheduler.next_papers_sync)}</span>
+            <span class="status-value">${escapeHtml(formatDate(scheduler.next_papers_sync))}</span>
           ` : ''}
         </div>
       </div>
     </div>
 
     <div class="last-updated">
-      Last checked: ${new Date().toLocaleString()}
+      Last checked: ${escapeHtml(new Date().toLocaleString())}
       <br>
       <button class="refresh-btn" onclick="refreshStatus()">Refresh</button>
     </div>
@@ -268,11 +288,17 @@ function renderStatus(container, data) {
 }
 
 function renderError(container, error) {
+  // Detect likely CORS or network issues
+  let hint = 'The API may be temporarily unavailable. Try again later.';
+  if (error instanceof TypeError && error.message.includes('fetch')) {
+    hint = 'Unable to reach the API. This may be a network or CORS issue.';
+  }
+
   container.innerHTML = `
     <div class="status-error">
       <strong>Unable to fetch status</strong>
-      <p>${error.message}</p>
-      <p>The API may be temporarily unavailable. Try again later.</p>
+      <p>${escapeHtml(error.message)}</p>
+      <p>${escapeHtml(hint)}</p>
       <button class="refresh-btn" onclick="refreshStatus()">Retry</button>
     </div>
   `;
@@ -320,4 +346,7 @@ The status data is fetched from the OSA API:
 GET /sync/status
 ```
 
-See the [API Reference](api-reference.md) for more details.
+Returns JSON with `github`, `papers`, `scheduler`, and `health` objects.
+
+!!! tip "Local Testing"
+    To test with a local API server, add `?api=http://localhost:38528` to this page's URL.

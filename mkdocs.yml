@@ -156,6 +156,7 @@ nav:
       - CLI Reference: osa/cli-reference.md
       - API Reference: osa/api-reference.md
       - Knowledge Sync: osa/knowledge-sync.md
+      - Sync Status: osa/status.md
       - Tools:
           - osa/tools/index.md
           - HED Tools: osa/tools/hed.md

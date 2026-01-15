@@ -115,7 +115,7 @@
 // API endpoint - allow override via query param for development/testing
 // Usage: ?api=http://localhost:38528 for local testing
 const urlParams = new URLSearchParams(window.location.search);
-const API_BASE = urlParams.get('api') || 'https://api.osc.earth/osa';
+const API_BASE = urlParams.get('api') || 'https://api.osc.earth/osa-dev';
 
 // HTML escape to prevent XSS from API response data
 function escapeHtml(str) {

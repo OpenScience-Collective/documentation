@@ -62,6 +62,7 @@ Options:
 - `hed-standard/hed-specification`
 - `hed-standard/hed-schemas`
 - `hed-standard/hed-javascript`
+- `hed-standard/hed-python`
 
 ### `osa sync papers`
 
@@ -84,6 +85,9 @@ Options:
 
 - `-s, --source`: Paper source (`openalex`, `semanticscholar`, `pubmed`)
 - `-q, --query`: Custom search query (default: "HED annotation" OR "Hierarchical Event Descriptors")
+
+!!! info "Automatic Deduplication"
+    Papers are automatically deduplicated using fuzzy title matching. The same paper from different sources (e.g., OpenALEX and Semantic Scholar) is only shown once in search results.
 
 ### `osa sync all`
 

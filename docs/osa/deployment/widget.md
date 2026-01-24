@@ -30,8 +30,12 @@ The widget appears as a chat bubble in the bottom-right corner of the page.
 | `storageKey` | string | Auto-derived | localStorage key for chat history |
 | `turnstileSiteKey` | string | `null` | Cloudflare Turnstile site key |
 | `showExperimentalBadge` | boolean | `true` | Show beta/experimental badge |
+| `repoUrl` | string | OSA GitHub URL | URL for the "Powered by" footer link |
+| `repoName` | string | `'Open Science Assistant'` | Display name in footer |
 | `allowPageContext` | boolean | `true` | Show page context toggle |
 | `pageContextDefaultEnabled` | boolean | `true` | Default state of page context |
+| `pageContextStorageKey` | string | `'osa-page-context-enabled'` | localStorage key for page context preference |
+| `pageContextLabel` | string | `'Share page URL...'` | Label text for the page context checkbox |
 | `fullscreen` | boolean | `false` | Open chat in fullscreen mode |
 
 ### Minimal Configuration
@@ -99,10 +103,10 @@ Users can open the chat in a separate browser window for a larger workspace. The
 Assistant responses support full Markdown rendering including:
 
 - Tables
-- Code blocks with syntax highlighting
+- Code blocks with copy button
 - Lists (ordered and unordered)
 - Links
-- Bold, italic, strikethrough
+- Bold and italic
 
 ## Environment Detection
 
@@ -153,17 +157,18 @@ The widget communicates with two backend endpoints:
   "page_context": {
     "url": "https://hedtags.org/docs/getting-started",
     "title": "Getting Started - HED"
-  },
-  "cf_turnstile_response": "token..."
+  }
 }
 ```
+
+The `cf_turnstile_response` field is also sent by the widget when Turnstile is configured, but this is consumed by the Cloudflare Worker proxy, not the backend API.
 
 ### Response Format
 
 ```json
 {
   "answer": "HED (Hierarchical Event Descriptors) is...",
-  "session_id": "abc123"
+  "tool_calls": []
 }
 ```
 
@@ -203,7 +208,7 @@ Each community page auto-configures the widget with the appropriate settings.
 
 - Check browser console for JavaScript errors
 - Verify the script URL is accessible
-- Ensure `communityId` contains only lowercase letters, numbers, and hyphens
+- Ensure `communityId` contains only letters, numbers, hyphens, and underscores (the backend registry uses kebab-case IDs)
 
 **"Offline" status:**
 

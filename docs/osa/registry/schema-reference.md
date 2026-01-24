@@ -77,6 +77,7 @@ List of documentation sources. Each entry creates a retrievable document.
 | `preload` | boolean | No | `false` | Embed in system prompt at startup |
 | `category` | string | No | `general` | Category for organization |
 | `type` | enum | No | `html` | Format: `sphinx`, `mkdocs`, `html`, `markdown`, `json` |
+| `source_repo` | string | No | `null` | GitHub repo for raw markdown sources (e.g., 'org/repo') |
 | `description` | string | No | `null` | Short description of document content |
 
 ### Preloaded vs On-Demand

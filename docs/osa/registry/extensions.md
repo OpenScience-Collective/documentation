@@ -93,13 +93,20 @@ extensions:
         - search_examples
 ```
 
-If `tools` is omitted, all `@tool`-decorated functions in the module are loaded:
+If `tools` is omitted, all names exported in the module's `__all__` list that are valid tool objects are loaded:
 
 ```yaml
 extensions:
   python_plugins:
     - module: src.assistants.my-tool.tools
-      # All @tool functions loaded
+      # All tools listed in __all__ are loaded
+```
+
+Your module must define `__all__` listing the tools to export:
+
+```python
+# src/assistants/my-tool/tools.py
+__all__ = ["validate_config", "search_examples"]
 ```
 
 ### Example: HED Tools
@@ -174,13 +181,14 @@ Exactly one of `command` or `url` must be provided for each server.
 
 When a `CommunityAssistant` is created, tools are loaded in this order:
 
-1. **Auto-generated tools** from YAML config:
-    - `retrieve_{community}_docs` - Document retrieval
+1. **Knowledge tools** from YAML config:
     - `list_{community}_recent` - Recent GitHub activity
     - `search_{community}_discussions` - GitHub search
     - `search_{community}_papers` - Academic paper search
-    - `fetch_current_page` - Page context (if enabled)
-2. **Python plugin tools** from `extensions.python_plugins`
-3. **MCP server tools** from `extensions.mcp_servers` (when implemented)
+2. **Documentation retrieval** - `retrieve_{community}_docs`
+3. **Page context** - `fetch_current_page` (if `enable_page_context: true`)
+4. **Additional tools** passed programmatically (if any)
+5. **Python plugin tools** from `extensions.python_plugins`
+6. **MCP server tools** from `extensions.mcp_servers` (when implemented)
 
 All tools are available to the LLM simultaneously. The system prompt should guide the LLM on when to use each tool.

@@ -153,10 +153,17 @@ nav:
       - osa/index.md
       - Getting Started: osa/getting-started.md
       - Architecture: osa/architecture.md
+      - Community Registry:
+          - osa/registry/index.md
+          - Adding a Community: osa/registry/quick-start.md
+          - Schema Reference: osa/registry/schema-reference.md
+          - Extensions: osa/registry/extensions.md
       - CLI Reference: osa/cli-reference.md
       - API Reference: osa/api-reference.md
       - Knowledge Sync: osa/knowledge-sync.md
       - Sync Status: osa/status.md
+      - Deployment:
+          - Widget: osa/deployment/widget.md
       - Tools:
           - osa/tools/index.md
           - HED Tools: osa/tools/hed.md

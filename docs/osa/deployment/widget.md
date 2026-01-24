@@ -1,0 +1,224 @@
+# Widget Deployment
+
+The OSA Chat Widget is an embeddable JavaScript component that adds an AI assistant to any website. It connects to the OSA backend and provides a floating chat interface.
+
+## Quick Integration
+
+Add two script tags to your HTML:
+
+```html
+<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script>
+  OSAChatWidget.setConfig({
+    communityId: 'hed'
+  });
+</script>
+```
+
+The widget appears as a chat bubble in the bottom-right corner of the page.
+
+## Configuration Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `communityId` | string | `'hed'` | Which community assistant to use |
+| `title` | string | `'HED Assistant'` | Widget header title |
+| `initialMessage` | string | HED greeting | First message shown to user |
+| `placeholder` | string | `'Ask about HED...'` | Input placeholder text |
+| `suggestedQuestions` | string[] | HED questions | Clickable suggestion buttons |
+| `apiEndpoint` | string | Auto-detected | Backend API URL |
+| `storageKey` | string | Auto-derived | localStorage key for chat history |
+| `turnstileSiteKey` | string | `null` | Cloudflare Turnstile site key |
+| `showExperimentalBadge` | boolean | `true` | Show beta/experimental badge |
+| `allowPageContext` | boolean | `true` | Show page context toggle |
+| `pageContextDefaultEnabled` | boolean | `true` | Default state of page context |
+| `fullscreen` | boolean | `false` | Open chat in fullscreen mode |
+
+### Minimal Configuration
+
+Only `communityId` is required. Everything else has sensible defaults:
+
+```html
+<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script>
+  OSAChatWidget.setConfig({
+    communityId: 'bids'
+  });
+</script>
+```
+
+### Full Configuration
+
+```html
+<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script>
+  OSAChatWidget.setConfig({
+    communityId: 'hed',
+    title: 'HED Assistant',
+    initialMessage: 'Hi! I can help with HED annotations. What would you like to know?',
+    placeholder: 'Ask about HED...',
+    suggestedQuestions: [
+      'What is HED?',
+      'How do I annotate a button press?',
+      'Validate my HED string',
+      'What tools are available?'
+    ],
+    showExperimentalBadge: false,
+    allowPageContext: true,
+    pageContextDefaultEnabled: true
+  });
+</script>
+```
+
+## Features
+
+### Page Context Awareness
+
+When enabled, the widget can share the current page's URL and title with the assistant. This helps provide contextually relevant answers when the widget is embedded on documentation pages.
+
+Users can toggle this via a checkbox in the widget. The preference is persisted in localStorage.
+
+### Chat History
+
+Conversations are persisted in localStorage using a key derived from the `communityId`. Each community has its own chat history. Users can clear history via the reset button.
+
+### Health Status
+
+The widget shows backend connectivity status (Online/Offline) via a status indicator. It checks the `/health` endpoint on load.
+
+### Resizable Window
+
+Users can resize the chat window by dragging the top-left corner. The size is not persisted across page loads.
+
+### Pop-out Window
+
+Users can open the chat in a separate browser window for a larger workspace. The pop-out window shares the same session.
+
+### Markdown Rendering
+
+Assistant responses support full Markdown rendering including:
+
+- Tables
+- Code blocks with syntax highlighting
+- Lists (ordered and unordered)
+- Links
+- Bold, italic, strikethrough
+
+## Environment Detection
+
+The widget auto-detects the environment based on the hostname:
+
+| Hostname Pattern | Backend |
+|-----------------|---------|
+| `develop.*` | Dev worker (`osa-worker-dev`) |
+| `localhost` / `127.0.0.1` | Dev worker |
+| Everything else | Production worker (`osa-worker`) |
+
+Override with `apiEndpoint`:
+
+```javascript
+OSAChatWidget.setConfig({
+  communityId: 'hed',
+  apiEndpoint: 'https://your-custom-backend.example.com'
+});
+```
+
+## Bot Protection
+
+The widget supports Cloudflare Turnstile for bot protection:
+
+```javascript
+OSAChatWidget.setConfig({
+  communityId: 'hed',
+  turnstileSiteKey: '0x4AAAAAA...'
+});
+```
+
+When configured, users must complete a Turnstile challenge before sending messages. The token is included in API requests.
+
+## API Endpoints
+
+The widget communicates with two backend endpoints:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/{communityId}/ask` | POST | Send a question, get a response |
+| `/health` | GET | Check backend status |
+
+### Request Format
+
+```json
+{
+  "question": "What is HED?",
+  "page_context": {
+    "url": "https://hedtags.org/docs/getting-started",
+    "title": "Getting Started - HED"
+  },
+  "cf_turnstile_response": "token..."
+}
+```
+
+### Response Format
+
+```json
+{
+  "answer": "HED (Hierarchical Event Descriptors) is...",
+  "session_id": "abc123"
+}
+```
+
+## Self-Hosting
+
+To host the widget yourself:
+
+1. Copy `osa-chat-widget.js` from the [frontend directory](https://github.com/OpenScience-Collective/osa/tree/main/frontend)
+2. Serve it from your static file server
+3. Update the script `src` to point to your hosted copy
+4. Set `apiEndpoint` to your OSA backend
+
+```html
+<script src="https://your-cdn.example.com/osa-chat-widget.js"></script>
+<script>
+  OSAChatWidget.setConfig({
+    communityId: 'my-tool',
+    apiEndpoint: 'https://your-backend.example.com'
+  });
+</script>
+```
+
+## Demo Page
+
+The demo page at [osa-demo.pages.dev](https://osa-demo.pages.dev) showcases all available community assistants with URL-based routing:
+
+- `/` - Landing page with community cards
+- `/hed` - HED assistant demo
+- `/bids` - BIDS assistant demo
+- `/eeglab` - EEGLAB assistant demo
+
+Each community page auto-configures the widget with the appropriate settings.
+
+## Troubleshooting
+
+**Widget doesn't appear:**
+
+- Check browser console for JavaScript errors
+- Verify the script URL is accessible
+- Ensure `communityId` contains only lowercase letters, numbers, and hyphens
+
+**"Offline" status:**
+
+- The backend may be down or unreachable
+- Check if `apiEndpoint` is correct for your environment
+- Network policies (CORS, CSP) may be blocking requests
+
+**Chat history not persisting:**
+
+- localStorage may be disabled or full
+- Private/incognito browsing clears localStorage on close
+- Different `communityId` values use different storage keys
+
+**Page context not working:**
+
+- Ensure `allowPageContext: true` (default)
+- User must enable the checkbox in the widget
+- The page URL is sent; the backend fetches the content

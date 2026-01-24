@@ -59,8 +59,14 @@ uv run osa ask -a hed "How do I annotate a button press?"
 
 - [Getting Started](getting-started.md) - Installation and setup
 - [Architecture](architecture.md) - System design and diagrams
+- [Community Registry](registry/index.md) - YAML-driven assistant configuration
+    - [Adding a Community](registry/quick-start.md) - Add a new assistant in 5 minutes
+    - [Schema Reference](registry/schema-reference.md) - Full YAML config reference
+    - [Extensions](registry/extensions.md) - Python plugins and MCP servers
 - [CLI Reference](cli-reference.md) - Command-line interface
 - [API Reference](api-reference.md) - REST API documentation
+- [Knowledge Sync](knowledge-sync.md) - Syncing GitHub, papers, and forums
+- [Widget Deployment](deployment/widget.md) - Embed the chat widget
 - [Tools](tools/index.md) - Available tools
 - [Development](development.md) - Contributing to OSA
 

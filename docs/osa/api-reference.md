@@ -62,6 +62,60 @@ Response:
 }
 ```
 
+### Ask (Community Endpoint)
+
+Send a question to a specific community assistant. Supports both streaming and non-streaming responses.
+
+```
+POST /{community_id}/ask
+Content-Type: application/json
+
+{
+  "question": "How do I annotate a button press in HED?",
+  "page_context": {
+    "url": "https://hedtags.org/docs/getting-started",
+    "title": "Getting Started - HED"
+  },
+  "stream": true
+}
+```
+
+**Streaming Response** (Content-Type: `text/event-stream`):
+
+```
+data: {"event": "content", "content": "To annotate"}
+
+data: {"event": "content", "content": " a button"}
+
+data: {"event": "tool_start", "name": "retrieve_hed_docs", "input": {...}}
+
+data: {"event": "tool_end", "name": "retrieve_hed_docs", "output": {...}}
+
+data: {"event": "content", "content": " press..."}
+
+data: {"event": "done"}
+```
+
+**Error Event**:
+```
+data: {"event": "error", "message": "Backend error message", "error_id": "abc-123", "retryable": false}
+```
+
+**Non-Streaming Response** (Content-Type: `application/json`):
+
+```json
+{
+  "answer": "To annotate a button press in HED...",
+  "tool_calls": [
+    {
+      "tool": "retrieve_hed_docs",
+      "input": {...},
+      "output": {...}
+    }
+  ]
+}
+```
+
 ### Chat
 
 Send a message and receive a streaming response.
@@ -96,6 +150,16 @@ data: {"type": "end", "usage": {"prompt_tokens": 1234, "completion_tokens": 567}
 ```
 
 ## Request Parameters
+
+### Ask Request
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `question` | string | Yes | User question |
+| `page_context` | object | No | Current page context (URL and title) |
+| `page_context.url` | string | No | Current page URL |
+| `page_context.title` | string | No | Current page title |
+| `stream` | boolean | No | Enable streaming response (default: `true`) |
 
 ### Chat Request
 

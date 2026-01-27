@@ -7,7 +7,8 @@ The OSA Chat Widget is an embeddable JavaScript component that adds an AI assist
 Add two script tags to your HTML:
 
 ```html
-<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script src="https://osa-demo.pages.dev/osa-chat-widget.js"
+        crossorigin="anonymous"></script>
 <script>
   OSAChatWidget.setConfig({
     communityId: 'hed'
@@ -16,6 +17,11 @@ Add two script tags to your HTML:
 ```
 
 The widget appears as a chat bubble in the bottom-right corner of the page.
+
+!!! warning "Don't Use Integrity Hashes"
+    Do **not** include `integrity="sha384-..."` hashes in the script tag. The widget is updated frequently with new features and bug fixes. Hardcoded integrity hashes will prevent the browser from loading updated versions, breaking the widget.
+
+    The `crossorigin="anonymous"` attribute is sufficient for CORS protection. We control the deployment at `osa-demo.pages.dev`.
 
 ## Configuration Options
 
@@ -37,6 +43,7 @@ The widget appears as a chat bubble in the bottom-right corner of the page.
 | `pageContextStorageKey` | string | `'osa-page-context-enabled'` | localStorage key for page context preference |
 | `pageContextLabel` | string | `'Share page URL...'` | Label text for the page context checkbox |
 | `fullscreen` | boolean | `false` | Open chat in fullscreen mode |
+| `streamingEnabled` | boolean | `true` | Enable progressive text display via Server-Sent Events |
 
 ### Minimal Configuration
 
@@ -107,6 +114,44 @@ Assistant responses support full Markdown rendering including:
 - Lists (ordered and unordered)
 - Links
 - Bold and italic
+
+### Streaming Responses
+
+The widget supports Server-Sent Events (SSE) streaming for progressive text display. When enabled (default), assistant responses appear word-by-word as they're generated, providing better user experience especially with slower models.
+
+**Features:**
+- Real-time text streaming with 100ms UI updates
+- Tool execution logging (visible in console)
+- Graceful error recovery with partial content preservation
+- 60-second stream timeout protection
+- Automatic fallback to non-streaming if backend doesn't support SSE
+
+**Configuration:**
+
+```javascript
+OSAChatWidget.setConfig({
+  communityId: 'hed',
+  streamingEnabled: true  // Enable streaming (default)
+});
+```
+
+Streaming is enabled by default. To disable:
+
+```javascript
+OSAChatWidget.setConfig({
+  communityId: 'hed',
+  streamingEnabled: false  // Wait for complete response
+});
+```
+
+**Technical Details:**
+
+The widget detects streaming responses by checking for `Content-Type: text/event-stream`. When detected, it parses SSE events and updates the UI progressively. Events include:
+
+- `content`: Text chunks to display
+- `tool_start` / `tool_end`: Tool execution lifecycle
+- `done`: Streaming complete
+- `error`: Backend error with message
 
 ## Environment Detection
 

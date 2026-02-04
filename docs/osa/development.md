@@ -137,12 +137,16 @@ def my_tool(param: str) -> str:
 
 3. Write tests (with real data, no mocks)
 
-## Adding a New Assistant
+## Adding a New Community Assistant
 
-1. Create system prompt in `src/assistants/{name}/`
-2. Configure tool set
-3. Add routing rules in router agent
-4. Write integration tests
+Adding a new research community to OSA is primarily a YAML configuration task. For the full walkthrough, see the [Community Registry](registry/index.md) documentation:
+
+1. **[Adding a Community](registry/quick-start.md)** - Create `src/assistants/{community-id}/config.yaml` with documentation sources, GitHub repos, citations, and system prompt
+2. **[Local Testing](registry/local-testing.md)** - Validate config, test endpoints, verify documentation retrieval, and sync knowledge
+3. **[Schema Reference](registry/schema-reference.md)** - Full YAML schema documentation for all configuration fields
+4. **[Extensions](registry/extensions.md)** - Add specialized Python tools (e.g., validation APIs, schema queries)
+
+The registry auto-discovers any `config.yaml` placed under `src/assistants/*/` and creates API endpoints, CLI commands, and auto-generated tools automatically.
 
 ## Key Documentation
 

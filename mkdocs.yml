@@ -156,6 +156,7 @@ nav:
       - Community Registry:
           - osa/registry/index.md
           - Adding a Community: osa/registry/quick-start.md
+          - Local Testing: osa/registry/local-testing.md
           - Schema Reference: osa/registry/schema-reference.md
           - Extensions: osa/registry/extensions.md
       - CLI Reference: osa/cli-reference.md

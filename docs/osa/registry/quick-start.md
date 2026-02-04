@@ -162,6 +162,7 @@ After completing these steps, your community has:
 
 ## Next Steps
 
+- **[Test locally](local-testing.md)** - Validate your config and test the assistant end-to-end before deploying
 - Add [specialized tools](extensions.md) for your community (e.g., validation APIs)
 - Configure the [system prompt](schema-reference.md#system_prompt) with domain-specific instructions
 - Set up [automated sync](../knowledge-sync.md) via the scheduler

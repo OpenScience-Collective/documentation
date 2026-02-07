@@ -62,6 +62,37 @@ Response:
 }
 ```
 
+### List Communities
+
+Get all available communities and their widget configuration.
+
+```
+GET /communities
+```
+
+Response:
+```json
+[
+  {
+    "id": "hed",
+    "name": "HED (Hierarchical Event Descriptors)",
+    "description": "Event annotation standard for neuroimaging research",
+    "status": "available",
+    "widget": {
+      "title": "HED Assistant",
+      "initial_message": "Hi! I'm the HED Assistant...",
+      "placeholder": "Ask about HED...",
+      "suggested_questions": [
+        "What is HED and how is it used?",
+        "How do I annotate an event with HED tags?"
+      ]
+    }
+  }
+]
+```
+
+This endpoint is public (no authentication required) and is used by the widget to load display configuration from the community YAML configs.
+
 ### Chat
 
 Send a message and receive a streaming response.

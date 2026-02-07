@@ -67,6 +67,16 @@ github:
     - org/my-tool
     - org/my-tool-plugins
 
+# Widget display configuration (optional)
+widget:
+  title: My Tool Assistant
+  initial_message: "Hi! I can help with My Tool. What would you like to know?"
+  placeholder: Ask about My Tool...
+  suggested_questions:
+    - How do I get started with My Tool?
+    - What are the configuration options?
+    - How do I use the API?
+
 # Paper search and citation tracking
 citations:
   queries:
@@ -129,26 +139,29 @@ uv run osa sync all --community my-tool
 
 ## Step 6: Deploy the Widget (Optional)
 
-Add the chat widget to your community's website:
+Add the chat widget to your community's website. If you configured the `widget` section in your `config.yaml`, only `communityId` is needed; the widget fetches display settings from the API automatically:
 
 ```html
 <script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
 <script>
   OSAChatWidget.setConfig({
-    communityId: 'my-tool',
-    title: 'My Tool Assistant',
-    initialMessage: 'Hi! I can help with My Tool. What would you like to know?',
-    placeholder: 'Ask about My Tool...',
-    suggestedQuestions: [
-      'How do I get started?',
-      'What are the configuration options?',
-      'How do I use the API?'
-    ]
+    communityId: 'my-tool'
   });
 </script>
 ```
 
-See the [Widget Deployment Guide](../deployment/widget.md) for more options.
+You can optionally add per-page context to help the assistant understand the current page:
+
+```html
+<script>
+  OSAChatWidget.setConfig({
+    communityId: 'my-tool',
+    widgetInstructions: 'The user is on the installation guide page.'
+  });
+</script>
+```
+
+See the [Widget Deployment Guide](../deployment/widget.md) for all configuration options.
 
 ## What You Get
 

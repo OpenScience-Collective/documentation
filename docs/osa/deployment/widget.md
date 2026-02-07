@@ -17,15 +17,33 @@ Add two script tags to your HTML:
 
 The widget appears as a chat bubble in the bottom-right corner of the page.
 
+## How Configuration Works
+
+Widget configuration uses a two-layer approach:
+
+1. **YAML defaults** (community-level): Title, greeting, placeholder, and suggested questions are defined in each community's `config.yaml` under the `widget` section. These are served by the `GET /communities` API endpoint.
+2. **JavaScript overrides** (page-level): Embedders can override any field via `setConfig()`. Any value set in JavaScript takes precedence over the YAML defaults.
+
+This means most embedders only need to set `communityId`; the widget fetches its display configuration from the API automatically.
+
 ## Configuration Options
+
+### Display Options (from YAML defaults)
+
+These fields are typically configured in the community's `config.yaml` and loaded automatically. You can override them per-page via `setConfig()`:
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `communityId` | string | `'hed'` | Which community assistant to use |
-| `title` | string | `'HED Assistant'` | Widget header title |
-| `initialMessage` | string | HED greeting | First message shown to user |
-| `placeholder` | string | `'Ask about HED...'` | Input placeholder text |
-| `suggestedQuestions` | string[] | HED questions | Clickable suggestion buttons |
+| `title` | string | From YAML or community name | Widget header title |
+| `initialMessage` | string | From YAML | First message shown to user |
+| `placeholder` | string | From YAML or `'Ask a question...'` | Input placeholder text |
+| `suggestedQuestions` | string[] | From YAML | Clickable suggestion buttons |
+
+### Behavior Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
 | `apiEndpoint` | string | Auto-detected | Backend API URL |
 | `storageKey` | string | Auto-derived | localStorage key for chat history |
 | `turnstileSiteKey` | string | `null` | Cloudflare Turnstile site key |
@@ -37,10 +55,11 @@ The widget appears as a chat bubble in the bottom-right corner of the page.
 | `pageContextStorageKey` | string | `'osa-page-context-enabled'` | localStorage key for page context preference |
 | `pageContextLabel` | string | `'Share page URL...'` | Label text for the page context checkbox |
 | `fullscreen` | boolean | `false` | Open chat in fullscreen mode |
+| `widgetInstructions` | string | `null` | Per-page context hint sent to the assistant (max 2000 chars) |
 
 ### Minimal Configuration
 
-Only `communityId` is required. Everything else has sensible defaults:
+Only `communityId` is required. The widget fetches display settings (title, greeting, placeholder, suggested questions) from the `/communities` API automatically:
 
 ```html
 <script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
@@ -50,6 +69,22 @@ Only `communityId` is required. Everything else has sensible defaults:
   });
 </script>
 ```
+
+### Per-Page Customization
+
+Use `widgetInstructions` to give the assistant context about the specific page where the widget is embedded. This is sent to the backend as part of the page context and helps the assistant provide more relevant answers:
+
+```html
+<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script>
+  OSAChatWidget.setConfig({
+    communityId: 'hed',
+    widgetInstructions: 'The user is on the HED online validation tools page. Focus on helping with validation errors and tool usage.'
+  });
+</script>
+```
+
+This is useful when the same community assistant is embedded across multiple pages (e.g., documentation, tools, tutorials) and you want the assistant to adapt its responses to the page context.
 
 ### Full Configuration
 
@@ -67,6 +102,7 @@ Only `communityId` is required. Everything else has sensible defaults:
       'Validate my HED string',
       'What tools are available?'
     ],
+    widgetInstructions: 'User is on the annotation guide page.',
     showExperimentalBadge: false,
     allowPageContext: true,
     pageContextDefaultEnabled: true
@@ -142,12 +178,15 @@ When configured, users must complete a Turnstile challenge before sending messag
 
 ## API Endpoints
 
-The widget communicates with two backend endpoints:
+The widget communicates with the following backend endpoints:
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
+| `/communities` | GET | Fetch available communities and widget config |
 | `/{communityId}/ask` | POST | Send a question, get a response |
 | `/health` | GET | Check backend status |
+
+On load, the widget fetches `/communities` to get display configuration (title, greeting, placeholder, suggested questions) for all available communities. This eliminates the need to hardcode these values in JavaScript.
 
 ### Request Format
 
@@ -156,12 +195,13 @@ The widget communicates with two backend endpoints:
   "question": "What is HED?",
   "page_context": {
     "url": "https://hedtags.org/docs/getting-started",
-    "title": "Getting Started - HED"
+    "title": "Getting Started - HED",
+    "widget_instructions": "User is on the getting started page."
   }
 }
 ```
 
-The `cf_turnstile_response` field is also sent by the widget when Turnstile is configured, but this is consumed by the Cloudflare Worker proxy, not the backend API.
+The `widget_instructions` field is optional and only sent when configured via `setConfig({ widgetInstructions: '...' })`. The `cf_turnstile_response` field is also sent by the widget when Turnstile is configured, but this is consumed by the Cloudflare Worker proxy, not the backend API.
 
 ### Response Format
 
@@ -193,14 +233,12 @@ To host the widget yourself:
 
 ## Demo Page
 
-The demo page at [osa-demo.pages.dev](https://osa-demo.pages.dev) showcases all available community assistants with URL-based routing:
+The demo page at [osa-demo.pages.dev](https://osa-demo.pages.dev) dynamically loads all available communities from the `/communities` API and showcases them with URL-based routing:
 
-- `/` - Landing page with community cards
-- `/hed` - HED assistant demo
-- `/bids` - BIDS assistant demo
-- `/eeglab` - EEGLAB assistant demo
+- `/` - Landing page with community cards (populated from API)
+- `/{communityId}` - Community-specific assistant demo (e.g., `/hed`, `/bids`, `/eeglab`)
 
-Each community page auto-configures the widget with the appropriate settings.
+Each community page auto-configures the widget using the YAML-defined defaults. New communities added to the registry appear on the demo page automatically without frontend changes.
 
 ## Troubleshooting
 

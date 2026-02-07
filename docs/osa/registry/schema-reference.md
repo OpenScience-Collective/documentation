@@ -16,6 +16,7 @@ Complete reference for the community `config.yaml` file format.
 | `github` | object | No | `null` | GitHub sync configuration |
 | `citations` | object | No | `null` | Paper/citation search config |
 | `discourse` | list | No | `[]` | Discourse forum configs |
+| `widget` | object | No | `null` | Widget display configuration (title, greeting, suggestions) |
 | `extensions` | object | No | `null` | Extension points (plugins, MCP) |
 
 ## `id`
@@ -205,6 +206,33 @@ extensions:
       url: https://mcp.my-tool.org
 ```
 
+## `widget`
+
+Widget display configuration for the embedded chat widget. These values provide defaults that the widget loads from the `/communities` API endpoint, so embedders only need to set `communityId` in their JavaScript.
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `title` | string | No | Community `name` | Widget header title (max 100 chars) |
+| `initial_message` | string | No | `null` | Greeting message shown when chat opens (max 1000 chars) |
+| `placeholder` | string | No | `"Ask a question..."` | Input field placeholder text (max 200 chars) |
+| `suggested_questions` | list[string] | No | `[]` | Clickable suggestion buttons (max 10) |
+
+```yaml
+widget:
+  title: HED Assistant
+  initial_message: "Hi! I'm the HED Assistant. I can help with HED annotation, validation, and related tools."
+  placeholder: Ask about HED...
+  suggested_questions:
+    - What is HED and how is it used?
+    - How do I annotate an event with HED tags?
+    - What tools are available for working with HED?
+    - Explain this HED validation error.
+```
+
+When the widget is embedded on a page, it fetches community defaults from `GET /communities` and applies them automatically. Embedders can still override any field via `setConfig()` in JavaScript; see the [Widget Deployment Guide](../deployment/widget.md).
+
+If `widget` is omitted, the widget falls back to generic defaults (title = community name, placeholder = "Ask a question...").
+
 ## `enable_page_context`
 
 When `true` (default), the assistant includes a `fetch_current_page` tool that retrieves content from the web page where the widget is embedded. This allows the assistant to provide contextually relevant answers based on what the user is currently reading.
@@ -253,6 +281,14 @@ citations:
     - Hierarchical Event Descriptors
   dois:
     - "10.1016/j.neuroimage.2021.118766"
+
+widget:
+  title: HED Assistant
+  initial_message: "Hi! I'm the HED Assistant. I can help with HED annotations."
+  placeholder: Ask about HED...
+  suggested_questions:
+    - What is HED and how is it used?
+    - How do I annotate an event with HED tags?
 
 discourse:
   - url: https://neurostars.org

@@ -165,7 +165,9 @@ nav:
       - Sync Status: osa/status.md
       - Deployment:
           - Widget: osa/deployment/widget.md
+      - Troubleshooting: osa/troubleshooting.md
       - Tools:
           - osa/tools/index.md
           - HED Tools: osa/tools/hed.md
       - Development: osa/development.md
+      - Version Management: osa/version-management.md

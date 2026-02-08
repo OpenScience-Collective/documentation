@@ -6,11 +6,17 @@ Complete reference for the community `config.yaml` file format.
 
 | Field | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
 | `id` | string | Yes | - | Unique identifier (kebab-case: `[a-z0-9]+(-[a-z0-9]+)*`) |
 | `name` | string | Yes | - | Display name |
 | `description` | string | Yes | - | Short description of the community/tool |
 | `status` | enum | No | `available` | One of: `available`, `beta`, `coming_soon` |
 | `system_prompt` | string | No | Built-in default | Custom system prompt template |
+| `cors_origins` | list[string] | No | `[]` | Allowed CORS origins for widget embedding |
+| `openrouter_api_key_env_var` | string | No | Platform key | Env var name for community API key |
+| `default_model` | string | No | Platform default | Default LLM model (OpenRouter format) |
+| `default_model_provider` | string | No | OpenRouter default | Provider routing preference |
 | `enable_page_context` | boolean | No | `true` | Enable page context tool for widget embedding |
 | `documentation` | list | No | `[]` | Documentation sources |
 | `github` | object | No | `null` | GitHub sync configuration |
@@ -63,6 +69,83 @@ system_prompt: |
 ```
 
 If omitted, a built-in default prompt is used that includes the community name, description, and standard tool usage instructions.
+
+## `cors_origins`
+
+Allowed CORS origins for widget embedding. Required if you plan to embed the widget on your website.
+
+- Must include scheme (`https://` or `http://`)
+- Supports wildcard subdomains (`*.example.org`)
+- No path, query, or fragment allowed
+- Max 255 characters per origin
+
+```yaml
+cors_origins:
+  # Production website
+  - https://myproject.org
+  - https://www.myproject.org
+
+  # Development/preview environments
+  - https://*.pages.dev           # Cloudflare Pages previews
+  - https://*.vercel.app          # Vercel previews
+  - http://localhost:3000         # Local development
+
+  # Subdomain wildcard
+  - https://*.myproject.org       # Matches docs.myproject.org, etc.
+```
+
+!!! tip "CORS Best Practices"
+    - Only add origins you control
+    - Use specific domains when possible
+    - Wildcards only for preview environments
+    - Never use `*` alone
+
+## `openrouter_api_key_env_var`
+
+Environment variable name containing your community's OpenRouter API key. This enables per-community cost attribution.
+
+```yaml
+openrouter_api_key_env_var: OPENROUTER_API_KEY_HED
+```
+
+Setup on the server:
+```bash
+export OPENROUTER_API_KEY_HED="sk-or-v1-your-api-key-here"
+```
+
+Without a community key, costs are billed to the platform's shared key with shared rate limits.
+
+## `default_model`
+
+Default LLM model in OpenRouter format (`creator/model-name`).
+
+```yaml
+# Cost-effective (recommended for most communities)
+default_model: anthropic/claude-haiku-4.5
+
+# Balanced capability and cost
+default_model: anthropic/claude-sonnet-4.5
+
+# Maximum capability (expensive)
+default_model: anthropic/claude-opus-4.5
+```
+
+| Model | Cost (per 1M tokens) | Use Case |
+|-------|---------------------|----------|
+| Haiku | ~$0.25 | General Q&A |
+| Sonnet | ~$3.00 | Complex tasks |
+| Opus | ~$15.00 | Critical accuracy |
+
+## `default_model_provider`
+
+Provider routing preference for performance optimization.
+
+```yaml
+default_model: anthropic/claude-haiku-4.5
+default_model_provider: Cerebras    # Route to Cerebras for speed
+```
+
+Common providers: `Cerebras` (ultra-fast), `Together` (balanced). Availability varies by model.
 
 ## `documentation`
 

@@ -1,13 +1,19 @@
 # Knowledge Sync
 
-OSA includes a knowledge discovery system that syncs GitHub discussions and academic papers for HED-related content. This helps the assistant link users to relevant discussions and research, not as authoritative knowledge sources, but for discovery.
+OSA includes a knowledge discovery system that syncs community-specific content from multiple sources. Each community gets its own SQLite FTS5 database at `data/knowledge/{community_id}.db`, populated by sync commands.
 
 ## Overview
 
-The knowledge database stores:
+The knowledge system supports six sync types:
 
-- **GitHub Issues and PRs** from HED repositories (hed-specification, hed-schemas, hed-javascript)
-- **Academic Papers** from OpenALEX, Semantic Scholar, and PubMed
+| Sync Type | Source | Description |
+|-----------|--------|-------------|
+| **GitHub** | GitHub REST API | Issues and PRs from community repositories |
+| **Papers** | OpenALEX, Semantic Scholar, PubMed | Academic papers and citation tracking |
+| **Docstrings** | GitHub repos | MATLAB/Python function documentation |
+| **Mailman** | Mailman archives | Mailing list messages |
+| **FAQ** | LLM summarization | FAQ entries generated from mailing list threads |
+| **BEPs** | bids-website + GitHub PRs | BIDS Extension Proposals (BIDS community only) |
 
 !!! note "Discovery, Not Answers"
     The knowledge system is for **discovery only**. The assistant links users to relevant discussions ("There's a related issue: [link]") rather than answering from them.
@@ -15,16 +21,22 @@ The knowledge database stores:
 ## Quick Start
 
 ```bash
-# Initialize the database
+# Initialize database for a community
+uv run osa sync init --community hed
+
+# Initialize databases for all communities
 uv run osa sync init
 
 # Sync GitHub issues/PRs
-uv run osa sync github
+uv run osa sync github --community hed
 
-# Sync academic papers
-uv run osa sync papers
+# Sync academic papers (includes citation tracking)
+uv run osa sync papers --community bids
 
-# Sync everything
+# Sync everything for a community
+uv run osa sync all --community eeglab
+
+# Sync everything for all communities
 uv run osa sync all
 
 # Check sync status
@@ -33,168 +45,242 @@ uv run osa sync status
 
 ## CLI Commands
 
+All sync commands accept `--community/-c` to specify the target community. Most default to `hed` if omitted.
+
 ### `osa sync init`
 
-Initialize the knowledge database. Creates the SQLite database with FTS5 full-text search support.
+Initialize the knowledge database with FTS5 full-text search support.
 
 ```bash
+# Initialize for a specific community
+uv run osa sync init --community bids
+
+# Initialize for all communities
 uv run osa sync init
 ```
 
 ### `osa sync github`
 
-Sync GitHub issues and PRs from HED repositories.
+Sync GitHub issues and PRs from community repositories.
 
 ```bash
-# Sync all HED repos
-uv run osa sync github
+# Sync all repos for a community
+uv run osa sync github --community hed
 
-# Sync specific repo
-uv run osa sync github -r hed-standard/hed-specification
+# Sync a specific repo
+uv run osa sync github --community hed -r hed-standard/hed-specification
+
+# Full sync (not incremental)
+uv run osa sync github --community bids --full
 ```
 
-Options:
+**Options:**
 
-- `-r, --repo`: Specific repository to sync (e.g., `hed-standard/hed-specification`)
+| Option | Description |
+|--------|-------------|
+| `-c, --community` | Community ID (default: `hed`) |
+| `-r, --repo` | Specific repository to sync |
+| `--full` | Full sync instead of incremental |
 
-**Synced repositories:**
-
-- `hed-standard/hed-specification`
-- `hed-standard/hed-schemas`
-- `hed-standard/hed-javascript`
-- `hed-standard/hed-python`
+Repositories are configured per-community in `config.yaml` under `github.repos`.
 
 ### `osa sync papers`
 
 Sync academic papers from multiple sources.
 
 ```bash
-# Sync from all sources
-uv run osa sync papers
+# Sync papers for a community (includes citations by default)
+uv run osa sync papers --community bids
 
-# Sync from specific source
-uv run osa sync papers -s openalex
-uv run osa sync papers -s semanticscholar
-uv run osa sync papers -s pubmed
+# Sync from a specific source
+uv run osa sync papers --community hed -s openalex
 
 # Custom search query
-uv run osa sync papers -q "BIDS event annotation"
+uv run osa sync papers --community hed -q "event annotation EEG"
+
+# Disable citation tracking
+uv run osa sync papers --community hed --no-citations
 ```
 
-Options:
+**Options:**
 
-- `-s, --source`: Paper source (`openalex`, `semanticscholar`, `pubmed`)
-- `-q, --query`: Custom search query (default: "HED annotation" OR "Hierarchical Event Descriptors")
+| Option | Description |
+|--------|-------------|
+| `-c, --community` | Community ID (default: `hed`) |
+| `-s, --source` | Paper source: `openalex`, `semanticscholar`, `pubmed` |
+| `-q, --query` | Custom search query (overrides community config) |
+| `-l, --limit` | Max papers per query (default: `100`) |
+| `--citations / --no-citations` | Sync papers citing community DOIs (default: enabled) |
+
+!!! info "Citation Tracking"
+    When `--citations` is enabled (the default), OSA also syncs papers that cite the DOIs listed in the community's `citations.dois` config. This automatically discovers new research that builds on the community's core publications.
 
 !!! info "Automatic Deduplication"
-    Papers are automatically deduplicated using fuzzy title matching. The same paper from different sources (e.g., OpenALEX and Semantic Scholar) is only shown once in search results.
+    Papers are deduplicated using fuzzy title matching. The same paper from different sources is only shown once in search results.
+
+### `osa sync docstrings`
+
+Sync code docstrings from GitHub repositories. Extracts documentation from MATLAB (`.m`) or Python (`.py`) files and indexes them for search.
+
+```bash
+# Sync all configured repos for a community
+uv run osa sync docstrings --community eeglab --language matlab
+
+# Sync Python docstrings
+uv run osa sync docstrings --community eeglab --language python
+
+# Sync a specific repo
+uv run osa sync docstrings --community eeglab -r sccn/eeglab -b develop
+```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `-c, --community` | Community ID (default: `hed`) |
+| `-l, --language` | Language: `matlab` or `python` (default: `matlab`) |
+| `-r, --repo` | Single repo to sync (`owner/name` format) |
+| `-b, --branch` | Branch to sync from (default: `main`) |
+
+Repositories and their branches are configured in `config.yaml` under `docstrings.repos`.
+
+### `osa sync mailman`
+
+Sync mailing list messages from Mailman archives.
+
+```bash
+# Sync all configured mailing lists for a community
+uv run osa sync mailman --community eeglab
+
+# Sync a specific mailing list
+uv run osa sync mailman --community eeglab --list eeglablist
+
+# Sync a specific year range
+uv run osa sync mailman --community eeglab --start-year 2020 --end-year 2025
+```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `-c, --community` | Community ID (default: `eeglab`) |
+| `--list` | Specific mailing list name |
+| `--start-year` | Earliest year to sync |
+| `--end-year` | Latest year to sync |
+
+Mailing lists are configured in `config.yaml` under `mailman`.
+
+### `osa sync faq`
+
+Generate FAQ summaries from mailing list threads using a two-stage LLM pipeline.
+
+```bash
+# Estimate cost first
+uv run osa sync faq --community eeglab --estimate
+
+# Generate FAQs with quality threshold
+uv run osa sync faq --community eeglab --quality 0.7
+
+# Limit number of threads to process
+uv run osa sync faq --community eeglab --max 100
+```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `-c, --community` | Community ID (default: `eeglab`) |
+| `--estimate` | Estimate cost without processing |
+| `--quality` | Minimum quality score, 0.0-1.0 (default: `0.6`) |
+| `--max` | Maximum threads to process |
+
+!!! warning "LLM Costs"
+    FAQ generation uses LLM calls. Always run with `--estimate` first to understand costs. The two-agent pipeline (evaluation + summarization) reduces costs by filtering low-quality threads early.
+
+### `osa sync beps`
+
+Sync BIDS Extension Proposals (BEPs) from the BIDS website and specification PRs.
+
+```bash
+uv run osa sync beps --community bids
+```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `-c, --community` | Community ID (default: `bids`) |
 
 ### `osa sync all`
 
-Sync all knowledge sources (GitHub + papers).
+Sync all knowledge sources for one or all communities. Runs GitHub, papers, and BEPs (for BIDS) in sequence.
 
 ```bash
+# Sync everything for one community
+uv run osa sync all --community hed
+
+# Sync everything for all communities
 uv run osa sync all
+
+# Full non-incremental sync
+uv run osa sync all --community bids --full
 ```
 
 ### `osa sync status`
 
-Show sync status and database statistics.
+Show sync status and database statistics. This is a read-only command and does not require API keys.
 
 ```bash
+# Show status for all communities
 uv run osa sync status
-```
 
-Example output:
-
-```
-Knowledge Database Status
-─────────────────────────
-Database: ~/.local/share/osa/knowledge/hed.db
-
-GitHub Items:
-  hed-standard/hed-specification: 45 issues, 23 PRs
-  hed-standard/hed-schemas: 12 issues, 8 PRs
-  hed-standard/hed-javascript: 18 issues, 5 PRs
-  Last sync: 2026-01-12 02:00:00 UTC
-
-Papers:
-  OpenALEX: 42 papers
-  Semantic Scholar: 38 papers
-  PubMed: 25 papers
-  Last sync: 2026-01-05 03:00:00 UTC
+# Show status for a specific community
+uv run osa sync status --community bids
 ```
 
 ### `osa sync search`
 
-Search the knowledge database (for testing).
+Search the knowledge database (useful for testing).
 
 ```bash
-uv run osa sync search "validation error"
+# Search a community's knowledge base
+uv run osa sync search "validation error" --community hed
+
+# Filter by source
+uv run osa sync search "ICA" --community eeglab --source github
 ```
 
-## Automated Sync (Docker)
+## Automated Sync
 
-When running OSA in Docker, the scheduler automatically syncs knowledge sources:
+When running OSA in production, each community has its own sync schedule configured in its `config.yaml` under the `sync` key. Schedules use APScheduler cron expressions (UTC timezone).
 
-| Source | Default Schedule | Environment Variable |
-|--------|-----------------|---------------------|
-| GitHub | Daily at 2am UTC | `SYNC_GITHUB_CRON` |
-| Papers | Weekly Sunday 3am UTC | `SYNC_PAPERS_CRON` |
-
-### Configuration
-
-Configure via environment variables in your `.env` file:
-
-```bash
-# Enable/disable automated sync
-SYNC_ENABLED=true
-
-# Sync schedules (cron expressions, UTC timezone)
-SYNC_GITHUB_CRON=0 2 * * *      # Daily at 2am
-SYNC_PAPERS_CRON=0 3 * * 0      # Weekly Sunday at 3am
-
-# Optional API keys for higher rate limits
-GITHUB_TOKEN=ghp_...
-SEMANTIC_SCHOLAR_API_KEY=...
-PUBMED_API_KEY=...
-```
-
-### Docker Compose
-
-The included `docker-compose.yml` mounts a volume for database persistence:
+**Example from EEGLAB config:**
 
 ```yaml
-services:
-  osa:
-    volumes:
-      - osa-data:/app/data
-
-volumes:
-  osa-data:
+sync:
+  github:
+    cron: "0 2 * * *"       # daily at 2am UTC
+  papers:
+    cron: "0 3 * * 0"       # weekly Sunday at 3am UTC
+  docstrings:
+    cron: "0 4 * * 1"       # weekly Monday at 4am UTC
+  mailman:
+    cron: "0 5 * * 1"       # weekly Monday at 5am UTC
+  faq:
+    cron: "0 6 1 * *"       # monthly 1st at 6am UTC
 ```
 
-This ensures the knowledge database persists across container restarts.
-
-## Manual Sync Trigger
-
-You can manually trigger sync at any time:
-
-```bash
-# Inside Docker container
-docker exec osa uv run osa sync all
-
-# Or from host with CLI
-uv run osa sync all
-```
+Not all sync types are required. A community only needs schedules for the sync types it uses.
 
 ## Database Location
 
+Each community has its own SQLite database:
+
 | Environment | Location |
 |-------------|----------|
-| Local (macOS) | `~/Library/Application Support/osa/knowledge/hed.db` |
-| Local (Linux) | `~/.local/share/osa/knowledge/hed.db` |
-| Docker | `/app/data/knowledge/hed.db` |
+| Local (macOS) | `~/Library/Application Support/osa/knowledge/{community_id}.db` |
+| Local (Linux) | `~/.local/share/osa/knowledge/{community_id}.db` |
+| Docker | `/app/data/knowledge/{community_id}.db` |
 
 The location can be overridden with the `DATA_DIR` environment variable.
 
@@ -202,64 +288,58 @@ The location can be overridden with the `DATA_DIR` environment variable.
 
 All API keys are optional but recommended for higher rate limits:
 
-| API Key | Purpose | Get Key |
-|---------|---------|---------|
-| `GITHUB_TOKEN` | GitHub API (issues/PRs) | [GitHub Settings](https://github.com/settings/tokens) |
-| `SEMANTIC_SCHOLAR_API_KEY` | Semantic Scholar API | [S2 API](https://www.semanticscholar.org/product/api) |
-| `PUBMED_API_KEY` | PubMed/NCBI API | [NCBI Settings](https://www.ncbi.nlm.nih.gov/account/settings/) |
+| API Key | Purpose | Required For |
+|---------|---------|-------------|
+| `GITHUB_TOKEN` | GitHub API (issues/PRs) | `sync github` |
+| `SEMANTIC_SCHOLAR_API_KEY` | Semantic Scholar API | `sync papers -s semanticscholar` |
+| `PUBMED_API_KEY` | PubMed/NCBI API | `sync papers -s pubmed` |
+| `OPENALEX_EMAIL` | OpenALEX polite pool | `sync papers -s openalex` |
 
-## Agent Tools
+!!! note
+    `sync status` and `sync search` are read-only and do not require API keys.
 
-The HED assistant has access to knowledge discovery tools:
-
-### `search_hed_discussions`
-
-Search GitHub issues and PRs for related discussions.
-
-```
-"Can you find any discussions about validation errors?"
-→ "There's a related discussion in hed-specification#123: [link]"
-```
-
-### `search_hed_papers`
-
-Search academic papers related to HED.
-
-```
-"Are there papers about HED in neuroimaging?"
-→ "I found a relevant paper: 'HED Annotation Best Practices' [link]"
-```
-
-## Troubleshooting
-
-### Sync fails with "gh: command not found"
-
-The `gh` CLI is required for GitHub sync. Install it:
-
-```bash
-# macOS
-brew install gh
-
-# Ubuntu/Debian
-sudo apt install gh
-```
-
-### Rate limiting
-
-If you hit rate limits, configure API keys in your `.env` file. Without keys:
+Without keys, rate limits apply:
 
 - GitHub: 60 requests/hour
 - Semantic Scholar: ~100 requests/5 minutes
 - PubMed: 3 requests/second
 
-With keys, limits are significantly higher.
+## Agent Tools
+
+Each community's assistant gets knowledge discovery tools based on its configuration:
+
+| Tool | Description | Config Requirement |
+|------|-------------|-------------------|
+| `search_{community}_discussions` | Search GitHub issues and PRs | `github.repos` |
+| `list_{community}_recent` | List recent GitHub activity | `github.repos` |
+| `search_{community}_papers` | Search academic papers | `citations` |
+| `search_{community}_code_docs` | Search code docstrings | `docstrings` |
+| `search_{community}_faq` | Search mailing list FAQ | `mailman` + `faq_generation` |
+
+See the [Tools](tools/index.md) section for detailed tool documentation per community.
+
+## Troubleshooting
+
+### Rate limiting
+
+If you hit rate limits, configure API keys in your `.env` file. See the API Keys section above.
 
 ### Database corruption
 
 If the database becomes corrupted, delete and reinitialize:
 
 ```bash
+# Find the database location
+uv run osa sync status --community hed
+
+# Delete and reinitialize
 rm ~/.local/share/osa/knowledge/hed.db
-uv run osa sync init
-uv run osa sync all
+uv run osa sync init --community hed
+uv run osa sync all --community hed
 ```
+
+### Sync shows 0 items
+
+- Check that the community's `config.yaml` has the relevant configuration (e.g., `github.repos` for GitHub sync)
+- Ensure API keys are set if required
+- Run with `--full` to bypass incremental sync

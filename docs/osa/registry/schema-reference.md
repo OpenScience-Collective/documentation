@@ -6,8 +6,6 @@ Complete reference for the community `config.yaml` file format.
 
 | Field | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
-| Field | Type | Required | Default | Description |
-|-------|------|----------|---------|-------------|
 | `id` | string | Yes | - | Unique identifier (kebab-case: `[a-z0-9]+(-[a-z0-9]+)*`) |
 | `name` | string | Yes | - | Display name |
 | `description` | string | Yes | - | Short description of the community/tool |
@@ -18,12 +16,19 @@ Complete reference for the community `config.yaml` file format.
 | `default_model` | string | No | Platform default | Default LLM model (OpenRouter format) |
 | `default_model_provider` | string | No | OpenRouter default | Provider routing preference |
 | `enable_page_context` | boolean | No | `true` | Enable page context tool for widget embedding |
+| `maintainers` | list[string] | No | `[]` | Community maintainer GitHub usernames |
 | `documentation` | list | No | `[]` | Documentation sources |
 | `github` | object | No | `null` | GitHub sync configuration |
 | `citations` | object | No | `null` | Paper/citation search config |
+| `docstrings` | object | No | `null` | Code docstring extraction config |
+| `mailman` | list | No | `[]` | Mailing list archive configs |
+| `faq_generation` | object | No | `null` | LLM-based FAQ generation config |
+| `sync` | object | No | `null` | Per-type cron sync schedules |
+| `budget` | object | No | `null` | Per-community spending limits |
 | `discourse` | list | No | `[]` | Discourse forum configs |
 | `widget` | object | No | `null` | Widget display configuration (title, greeting, suggestions) |
 | `extensions` | object | No | `null` | Extension points (plugins, MCP) |
+| `links` | object | No | `null` | External links (homepage, documentation, repository, demo) |
 
 ## `id`
 
@@ -229,6 +234,153 @@ citations:
 ```
 
 DOIs are validated against the `10.xxxx/yyyy` pattern. Common URL prefixes (`https://doi.org/`, `https://dx.doi.org/`) are automatically stripped.
+
+## `maintainers`
+
+List of community maintainer GitHub usernames. Used for scoped admin access and budget alert notifications.
+
+```yaml
+maintainers:
+  - username1
+  - username2
+```
+
+## `docstrings`
+
+Configuration for extracting code docstrings from GitHub repositories. Enables the `search_{community}_code_docs` tool.
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `repos` | list | Yes | - | Repositories to extract docstrings from |
+
+### DocstringRepoConfig
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `repo` | string | Yes | - | Repository in `org/repo` format |
+| `branch` | string | No | `main` | Branch to extract from |
+| `languages` | list[string] | Yes | - | Languages to extract: `matlab`, `python` |
+
+```yaml
+docstrings:
+  repos:
+    - repo: sccn/eeglab
+      branch: develop
+      languages: [matlab, python]
+    - repo: sccn/ICLabel
+      branch: master
+      languages: [matlab]
+```
+
+## `mailman`
+
+List of Mailman mailing list archives to sync. Enables the mailing list sync and FAQ generation pipeline.
+
+### MailmanConfig
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `list_name` | string | Yes | - | Mailing list name (used in archive URL) |
+| `base_url` | URL | Yes | - | Base URL of the Mailman pipermail archive |
+| `display_name` | string | No | `null` | Human-readable name for the list |
+| `start_year` | int | No | `null` | Earliest year to sync |
+
+```yaml
+mailman:
+  - list_name: eeglablist
+    base_url: https://sccn.ucsd.edu/pipermail/eeglablist/
+    display_name: EEGLAB Mailing List
+    start_year: 2004
+```
+
+## `faq_generation`
+
+Configuration for the two-stage LLM pipeline that generates FAQ entries from mailing list threads. The pipeline first scores thread quality (cheap), then summarizes high-quality threads (quality).
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `evaluation_agent` | object | No | - | Model config for scoring thread quality |
+| `summary_agent` | object | No | - | Model config for generating FAQ summaries |
+| `quality_threshold` | float | No | `0.7` | Minimum quality score to create FAQ (0.0-1.0) |
+| `sources` | object | No | - | Source-specific settings |
+
+### Agent Config
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `model` | string | Yes | - | Model in OpenRouter format |
+| `provider` | string | No | - | Provider routing preference |
+| `temperature` | float | No | `0.0` | LLM temperature |
+| `enable_caching` | bool | No | `true` | Enable prompt caching |
+
+```yaml
+faq_generation:
+  evaluation_agent:
+    model: qwen/qwen3-235b-a22b-2507
+    provider: DeepInfra/FP8
+    temperature: 0.0
+    enable_caching: true
+
+  summary_agent:
+    model: anthropic/claude-haiku-4.5
+    provider: Anthropic
+    temperature: 0.1
+    enable_caching: true
+
+  quality_threshold: 0.7
+
+  sources:
+    mailman:
+      enabled: true
+      min_messages: 2
+      min_participants: 2
+```
+
+## `sync`
+
+Per-community sync schedules. Each sync type can have its own cron expression (APScheduler format, UTC timezone).
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `github` | object | No | - | GitHub sync schedule |
+| `papers` | object | No | - | Paper sync schedule |
+| `docstrings` | object | No | - | Docstring sync schedule |
+| `mailman` | object | No | - | Mailing list sync schedule |
+| `faq` | object | No | - | FAQ generation schedule |
+| `beps` | object | No | - | BEP sync schedule |
+
+Each schedule object has a single `cron` field.
+
+```yaml
+sync:
+  github:
+    cron: "0 2 * * *"       # daily at 2am UTC
+  papers:
+    cron: "0 3 * * 0"       # weekly Sunday at 3am UTC
+  docstrings:
+    cron: "0 4 * * 1"       # weekly Monday at 4am UTC
+  mailman:
+    cron: "0 5 * * 1"       # weekly Monday at 5am UTC
+  faq:
+    cron: "0 6 1 * *"       # monthly 1st at 6am UTC
+```
+
+## `budget`
+
+Per-community spending limits for cost management.
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `daily_limit_usd` | float | No | - | Maximum daily spend in USD |
+| `monthly_limit_usd` | float | No | - | Maximum monthly spend in USD |
+| `alert_threshold_pct` | float | No | `80.0` | Alert when this percentage of budget is reached |
+
+```yaml
+budget:
+  daily_limit_usd: 5.00
+  monthly_limit_usd: 50.00
+  alert_threshold_pct: 80.0
+```
 
 ## `discourse`
 

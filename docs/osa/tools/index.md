@@ -1,18 +1,14 @@
 # Tools
 
-OSA provides a modular tool system for document retrieval, validation, and knowledge search. Tools are organized by domain and can be composed into assistant workflows.
+OSA provides a modular tool system for document retrieval, validation, and knowledge search. Each community assistant gets its own set of tools, combining generic knowledge discovery tools with community-specific capabilities.
 
-## Modular Design
-
-Each assistant in OSA has its own set of tools that can be independently developed and added. When a new assistant is added to OSA, its documentation is automatically populated here.
-
-## Assistant Tool Sets
+## Community Tool Sets
 
 ### HED Tools
 
 Tools for working with Hierarchical Event Descriptors (HED).
 
-- [HED Tools](hed.md) - Document retrieval, validation, tag suggestions
+- [HED Tools](hed.md) - Document retrieval, validation, tag suggestions, knowledge search
 
 **Status:** Available
 
@@ -20,84 +16,85 @@ Tools for working with Hierarchical Event Descriptors (HED).
 
 Tools for working with Brain Imaging Data Structure (BIDS).
 
-**Status:** Planned - will be added when BIDS assistant is implemented
+- [BIDS Tools](bids.md) - Document retrieval, BEP lookup, knowledge search
+
+**Status:** Available
 
 ### EEGLAB Tools
 
-Tools for working with EEGLAB analysis toolbox.
+Tools for working with the EEGLAB analysis toolbox.
 
-**Status:** Planned - will be added when EEGLAB assistant is implemented
+- [EEGLAB Tools](eeglab.md) - Document retrieval, docstring search, FAQ search, knowledge search
+
+**Status:** Available
 
 ---
 
 ## Common Tool Categories
 
-Each assistant typically provides tools in these categories:
+Every community assistant automatically receives knowledge discovery tools based on its YAML configuration. These are generated at startup by the `create_knowledge_tools` factory in `src/tools/knowledge.py`.
 
 ### Document Retrieval
 
-Fetch documentation from official sources:
+Each community gets a `retrieve_{community}_docs` tool that fetches documentation from configured sources. Some docs are preloaded into the system prompt; the rest are fetched on demand.
 
-| Tool Pattern | Description |
-|--------------|-------------|
-| `retrieve_{domain}_docs` | Fetch documentation by topic |
-
-### Validation
-
-Validate domain-specific data:
-
-| Tool Pattern | Description |
-|--------------|-------------|
-| `validate_{domain}_*` | Validate domain data |
-| `get_{domain}_schema_versions` | List schema versions |
+| Tool Name | Description |
+|-----------|-------------|
+| `retrieve_{community}_docs` | Fetch documentation by topic from configured sources |
 
 ### Knowledge Search
 
-Search community knowledge:
+Community-scoped tools for searching synced knowledge databases. All tools search the community's SQLite FTS5 database at `data/knowledge/{community_id}.db`.
 
-| Tool Pattern | Description |
-|--------------|-------------|
-| `search_github_issues` | Search GitHub issues and PRs |
-| `search_papers` | Search OpenALEX for academic papers |
-| `search_discourse` | Search Neurostars and other forums |
+| Tool Name | Description | Requires |
+|-----------|-------------|----------|
+| `search_{community}_discussions` | Search GitHub issues and PRs | `github.repos` in config |
+| `list_{community}_recent` | List recent GitHub activity by date | `github.repos` in config |
+| `search_{community}_papers` | Search academic papers (OpenALEX, Semantic Scholar, PubMed) | `citations` in config |
+| `search_{community}_code_docs` | Search code docstrings (MATLAB/Python) | `docstrings` in config |
+| `search_{community}_faq` | Search mailing list FAQ entries | `mailman` + `faq_generation` in config |
+
+### Validation
+
+Some communities provide domain-specific validation tools:
+
+| Tool Name | Description |
+|-----------|-------------|
+| `validate_{domain}_*` | Validate domain-specific data (e.g., HED strings) |
 
 ## Tool Architecture
 
-Tools follow a common pattern using LangChain:
+Tools are built using LangChain's `@tool` decorator and `StructuredTool.from_function` factory:
 
 ```python
 from langchain_core.tools import tool
-from pydantic import BaseModel, Field
 
-class RetrieveDocsInput(BaseModel):
-    """Input for document retrieval."""
-    topic: str = Field(description="Topic to search for")
-    max_docs: int = Field(default=3, description="Maximum documents")
-
-@tool(args_schema=RetrieveDocsInput)
-def retrieve_docs(topic: str, max_docs: int = 3) -> str:
-    """Retrieve documentation for a topic."""
+@tool
+def my_tool(query: str, limit: int = 5) -> str:
+    """Tool description used by the agent."""
     # Implementation
-    pass
+    return "results"
 ```
 
-## Tool Permissions
+Generic knowledge tools are created by factory functions in `src/tools/knowledge.py`. Community-specific tools are defined in `src/assistants/{community}/tools.py` and loaded as Python plugins via the `extensions.python_plugins` config.
 
-Some tools require explicit user permission:
+## Tool Loading Order
 
-| Permission Level | Examples | Reason |
-|------------------|----------|--------|
-| None | `retrieve_*_docs`, `validate_*` | Read-only operations |
-| Required | `create_github_issue` | Creates external resources |
-| Required | `send_email` | External communication |
+When a community assistant starts, tools are loaded in this order:
+
+1. **Knowledge tools** - `search_{community}_discussions`, `list_{community}_recent`, `search_{community}_papers`
+2. **Conditional knowledge tools** - `search_{community}_code_docs` (if `docstrings` configured), `search_{community}_faq` (if `mailman` configured)
+3. **Document retrieval** - `retrieve_{community}_docs`
+4. **Page context** - `fetch_current_page` (if `enable_page_context: true`)
+5. **Python plugin tools** - Custom tools from `extensions.python_plugins`
 
 ## Adding Custom Tools
 
-Communities can add their own tools:
+Communities can add tools through the Python plugin system:
 
-1. Create a tool function with `@tool` decorator
-2. Add to the tool registry in `src/tools/`
-3. Include in assistant configuration
-4. Add documentation in `docs/osa/tools/{domain}.md`
+1. Create a tool module at `src/assistants/{community}/tools.py`
+2. Define tools using the `@tool` decorator
+3. Export them via `__all__`
+4. Register in `config.yaml` under `extensions.python_plugins`
 
-See [Development](../development.md) for detailed instructions.
+See [Extensions](../registry/extensions.md) for details.

@@ -1,182 +1,323 @@
 # CLI Reference
 
-The OSA command-line interface provides quick access to the assistant.
+The OSA command-line interface is a lightweight HTTP client that connects to the OSA API. It installs with minimal dependencies (~7 packages) and forwards your API key via BYOK headers.
 
 ## Installation
 
-The CLI is included with OSA:
+```bash
+pip install open-science-assistant
+# or
+uv pip install open-science-assistant
+```
+
+To install server dependencies (for running the API server locally):
 
 ```bash
-uv sync
-uv run osa --help
+pip install 'open-science-assistant[server]'
 ```
 
 ## Commands
 
-### `osa chat`
+### `osa init`
 
-Interactive chat mode with a specific assistant.
+Interactive setup to configure your API key and preferences.
 
 ```bash
-# Start chat with HED assistant
-uv run osa chat --assistant hed
+# Interactive setup (prompts for API key)
+osa init
 
-# Start chat with BIDS assistant
-uv run osa chat --assistant bids
+# Non-interactive setup
+osa init --api-key sk-or-v1-your-key
+
+# With custom API URL
+osa init --api-key sk-or-v1-your-key --api-url https://custom-server.example.com
 ```
 
 Options:
-- `--assistant, -a`: Select assistant (hed, bids, eeglab). Default: hed
-- `--standalone, -s`: Run in standalone mode without external server (default)
-- `--url, -u`: API URL (overrides standalone mode)
 
-Features:
-- Multi-turn conversation with context
-- Rich formatted output
-- Tool call visibility
+- `--api-key, -k`: OpenRouter API key
+- `--api-url`: Override API URL
 
 ### `osa ask`
 
-Single query mode for quick questions to a specific assistant.
+Single query mode for quick questions.
 
 ```bash
 # Ask the HED assistant
-uv run osa ask -a hed "How do I annotate a button press?"
+osa ask -a hed "How do I annotate a button press?"
 
 # Ask the BIDS assistant
-uv run osa ask -a bids "How should I organize my EEG dataset?"
+osa ask -a bids "How should I organize my EEG dataset?"
+
+# JSON output (for scripting)
+osa ask -a hed "What is HED?" -o json
+
+# Disable streaming
+osa ask -a hed "What is HED?" --no-stream
 ```
 
 Options:
-- `--assistant, -a`: Select assistant (hed, bids, eeglab). Default: hed
-- `--standalone, -s`: Run in standalone mode without external server (default)
-- `--url, -u`: API URL (overrides standalone mode)
 
-### `osa serve`
+- `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
+- `--api-key, -k`: OpenRouter API key (overrides saved config)
+- `--api-url`: Override API URL
+- `--output, -o`: Output format: rich, json, plain. Default: rich
+- `--no-stream`: Disable streaming (get full response at once)
 
-Start the API server.
+### `osa chat`
+
+Interactive chat mode with conversation history.
 
 ```bash
-uv run osa serve
+# Start chat with HED assistant
+osa chat -a hed
+
+# Start chat with BIDS assistant
+osa chat -a bids
+
+# Disable streaming
+osa chat -a eeglab --no-stream
 ```
 
 Options:
-- `--port`: Server port (default: 38528)
-- `--host`: Host address (default: 127.0.0.1)
-- `--reload`: Enable auto-reload for development
+
+- `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
+- `--api-key, -k`: OpenRouter API key (overrides saved config)
+- `--api-url`: Override API URL
+- `--no-stream`: Disable streaming
+
+Features:
+
+- Multi-turn conversation with context
+- Rich formatted output with Markdown rendering
+- Tool call visibility
+- Type 'quit', 'exit', or 'q' to end the session
+
+### `osa health`
+
+Check API health status.
+
+```bash
+# Check default API
+osa health
+
+# Check specific URL
+osa health --url https://api.osc.earth/osa-dev
+```
+
+Options:
+
+- `--url, -u`: API URL to check
+
+### `osa version`
+
+Show the installed OSA version.
+
+```bash
+osa version
+```
 
 ### `osa config`
 
 Manage CLI configuration.
 
-```bash
-# Show current config
-uv run osa config show
+#### `osa config show`
 
-# Set a value
-uv run osa config set api_url http://localhost:38528
+Display current configuration and credentials (masked).
+
+```bash
+osa config show
 ```
 
-Configuration is stored in `~/.config/osa/config.yaml`.
+#### `osa config set`
+
+Update configuration settings.
+
+```bash
+# Set API URL
+osa config set --api-url https://custom-server.example.com
+
+# Set OpenRouter API key
+osa config set --openrouter-key sk-or-v1-your-key
+
+# Set output format
+osa config set --output json
+
+# Enable/disable streaming
+osa config set --no-streaming
+```
+
+Options:
+
+- `--api-url`: API URL
+- `--openrouter-key`: OpenRouter API key
+- `--output, -o`: Output format (rich, json, plain)
+- `--verbose/--no-verbose, -v`: Enable/disable verbose output
+- `--streaming/--no-streaming`: Enable/disable streaming
+
+#### `osa config path`
+
+Show configuration and data directory paths.
+
+```bash
+osa config path
+```
+
+#### `osa config reset`
+
+Reset configuration to defaults.
+
+```bash
+# With confirmation prompt
+osa config reset
+
+# Skip confirmation
+osa config reset --yes
+```
+
+### `osa serve`
+
+Start the OSA API server. Requires server dependencies.
+
+```bash
+# Install server dependencies first
+pip install 'open-science-assistant[server]'
+
+# Start server
+osa serve
+
+# Custom port and host
+osa serve --port 8080 --host 0.0.0.0
+
+# With auto-reload for development
+osa serve --reload
+```
+
+Options:
+
+- `--host, -h`: Host to bind to. Default: 0.0.0.0
+- `--port, -p`: Port to bind to. Default: 38528
+- `--reload, -r`: Enable auto-reload
 
 ### `osa sync`
 
-Sync knowledge sources (GitHub issues/PRs, academic papers). See [Knowledge Sync](knowledge-sync.md) for details.
+Sync knowledge sources (GitHub issues/PRs, academic papers). Requires server dependencies.
+See [Knowledge Sync](knowledge-sync.md) for details.
 
 ```bash
 # Initialize database
-uv run osa sync init
+osa sync init
 
-# Sync GitHub issues/PRs from HED repos
-uv run osa sync github
+# Sync GitHub issues/PRs
+osa sync github
 
 # Sync academic papers
-uv run osa sync papers
+osa sync papers
 
 # Sync everything
-uv run osa sync all
+osa sync all
 
 # Check status
-uv run osa sync status
-
-# Search (for testing)
-uv run osa sync search "validation error"
+osa sync status
 ```
-
-Options for `sync github`:
-
-- `-r, --repo`: Specific repo to sync (e.g., `hed-standard/hed-specification`)
-
-Options for `sync papers`:
-
-- `-s, --source`: Paper source (`openalex`, `semanticscholar`, `pubmed`)
-- `-q, --query`: Custom search query
 
 ## Configuration
 
-### Environment Variables
+### API Key Priority
+
+The CLI resolves API keys in this order:
+
+1. `--api-key` command-line flag (highest priority)
+2. `OPENROUTER_API_KEY` environment variable
+3. Saved credentials in `~/.config/osa/credentials.yaml`
+
+### Config Files
+
+The CLI stores configuration in the platform-specific config directory:
+
+| Platform | Path |
+|----------|------|
+| Linux | `~/.config/osa/` |
+| macOS | `~/Library/Application Support/osa/` |
+| Windows | `%APPDATA%\osa\` |
+
+Files:
+
+- `config.yaml`: Non-sensitive settings (API URL, output format)
+- `credentials.yaml`: API keys (stored with restricted permissions, chmod 600)
+
+Example `config.yaml`:
+
+```yaml
+api:
+  url: https://api.osc.earth/osa
+output:
+  format: rich
+  verbose: false
+  streaming: true
+```
+
+### Environment Variables (CLI)
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `OSA_API_URL` | API server URL | `http://localhost:38528` |
-| `OPENROUTER_API_KEY` | LLM provider API key | Required |
+| `OPENROUTER_API_KEY` | OpenRouter API key | None |
+
+### Environment Variables (Server)
+
+These are only relevant when running the server (`osa serve`):
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `OPENROUTER_API_KEY` | Server-side LLM API key | Required |
 | `LANGFUSE_PUBLIC_KEY` | LangFuse public key | Optional |
 | `LANGFUSE_SECRET_KEY` | LangFuse secret key | Optional |
 | `SYNC_ENABLED` | Enable automated knowledge sync | `true` |
 | `SYNC_GITHUB_CRON` | GitHub sync schedule (cron) | `0 2 * * *` |
 | `SYNC_PAPERS_CRON` | Papers sync schedule (cron) | `0 3 * * 0` |
 | `GITHUB_TOKEN` | GitHub token for sync | Optional |
-| `SEMANTIC_SCHOLAR_API_KEY` | Semantic Scholar API key | Optional |
-| `PUBMED_API_KEY` | PubMed/NCBI API key | Optional |
 | `DATA_DIR` | Data directory for knowledge DB | Platform-specific |
-
-### Config File
-
-The CLI uses `~/.config/osa/config.yaml`:
-
-```yaml
-api_url: http://localhost:38528
-default_assistant: hed
-default_model: openai/gpt-4.1-mini
-```
 
 ## Examples
 
-### Basic Usage
+### Quick Start
 
 ```bash
-# Interactive chat with HED assistant
-uv run osa chat -a hed
+# Install and setup
+pip install open-science-assistant
+osa init
 
-# Quick question to HED assistant
-uv run osa ask -a hed "What is HED?"
-
-# Start server in background
-uv run osa serve &
+# Ask a question
+osa ask -a hed "What is HED?"
 ```
 
 ### Different Assistants
 
 ```bash
 # HED assistant - annotation questions
-uv run osa ask -a hed "How do I annotate visual stimuli?"
+osa ask -a hed "How do I annotate visual stimuli?"
 
 # BIDS assistant - data organization questions
-uv run osa ask -a bids "How should I organize my EEG dataset?"
+osa ask -a bids "How should I organize my EEG dataset?"
 
 # EEGLAB assistant - analysis questions
-uv run osa ask -a eeglab "How do I filter my EEG data?"
+osa ask -a eeglab "How do I filter my EEG data?"
 ```
 
-### Development
+### Scripting with JSON Output
 
 ```bash
-# Run with auto-reload
-uv run osa serve --reload
+# Get structured output
+osa ask -a hed "What does HED stand for?" -o json
 
-# Run tests
-uv run pytest tests/ -v
+# Pipe to jq
+osa ask -a hed "What is HED?" -o json | jq '.answer'
+```
 
-# Check coverage
-uv run pytest --cov
+### Using with Environment Variable
+
+```bash
+export OPENROUTER_API_KEY=sk-or-v1-your-key
+osa ask -a hed "What is HED?"
+osa chat -a bids
 ```

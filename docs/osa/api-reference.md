@@ -4,9 +4,9 @@ The OSA REST API provides programmatic access to the assistant.
 
 ## Base URL
 
-```
-http://localhost:38528
-```
+- **Production**: `https://api.osc.earth/osa`
+- **Development**: `https://api.osc.earth/osa-dev`
+- **Local**: `http://localhost:38528`
 
 ## Authentication
 
@@ -14,17 +14,24 @@ OSA supports two authentication modes:
 
 ### Server API Key
 
+For server-to-server access using an admin key:
+
 ```bash
-curl -H "X-API-Key: your-server-key" http://localhost:38528/chat
+curl -H "X-API-Key: your-server-key" https://api.osc.earth/osa/health
 ```
 
 ### BYOK (Bring Your Own Key)
 
-Pass your OpenRouter API key directly:
+Pass your OpenRouter API key directly. This is the primary method for CLI and widget users:
 
 ```bash
-curl -H "X-OpenRouter-Key: your-openrouter-key" http://localhost:38528/chat
+curl -H "X-OpenRouter-Key: your-openrouter-key" \
+  https://api.osc.earth/osa/hed/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is HED?"}'
 ```
+
+When using BYOK, no server API key is required. The user's key is forwarded to the LLM provider.
 
 ## Endpoints
 
@@ -40,25 +47,8 @@ Response:
 ```json
 {
   "status": "healthy",
-  "version": "0.1.0"
-}
-```
-
-### API Info
-
-Get API information.
-
-```
-GET /info
-```
-
-Response:
-```json
-{
-  "name": "Open Science Assistant",
-  "version": "0.1.0",
-  "assistants": ["hed", "bids", "eeglab"],
-  "models": ["openai/gpt-4.1-mini", "anthropic/claude-3-5-haiku"]
+  "version": "0.7.0",
+  "environment": "production"
 }
 ```
 
@@ -91,42 +81,104 @@ Response:
 ]
 ```
 
-This endpoint is public (no authentication required) and is used by the widget to load display configuration from the community YAML configs.
+This endpoint is public (no authentication required).
+
+### Ask
+
+Ask a single question to a community assistant.
+
+```
+POST /{community}/ask
+Content-Type: application/json
+X-OpenRouter-Key: your-key
+
+{
+  "question": "How do I annotate a button press in HED?",
+  "stream": true
+}
+```
+
+#### Non-streaming Response
+
+When `stream: false`:
+
+```json
+{
+  "answer": "To annotate a button press in HED...",
+  "tool_calls": []
+}
+```
+
+#### Streaming Response (SSE)
+
+When `stream: true` (default):
+
+```
+data: {"event": "content", "content": "To"}
+
+data: {"event": "content", "content": " annotate"}
+
+data: {"event": "tool_start", "name": "retrieve_hed_docs", "params": {...}}
+
+data: {"event": "tool_end", "name": "retrieve_hed_docs", "result": "..."}
+
+data: {"event": "content", "content": "..."}
+
+data: {"event": "done"}
+```
 
 ### Chat
 
-Send a message and receive a streaming response.
+Multi-turn chat with conversation history.
 
 ```
-POST /chat
+POST /{community}/chat
 Content-Type: application/json
+X-OpenRouter-Key: your-key
 
 {
   "message": "How do I annotate a button press in HED?",
   "session_id": "optional-session-id",
-  "assistant": "hed",
-  "model": "openai/gpt-4.1-mini"
+  "stream": true
 }
 ```
 
-Response (Server-Sent Events):
+#### Non-streaming Response
+
+```json
+{
+  "session_id": "abc123",
+  "message": {
+    "role": "assistant",
+    "content": "To annotate a button press..."
+  },
+  "tool_calls": []
+}
 ```
-data: {"type": "start", "session_id": "abc123"}
 
-data: {"type": "token", "content": "To"}
+#### Streaming Response (SSE)
 
-data: {"type": "token", "content": " annotate"}
+```
+data: {"event": "session", "session_id": "abc123"}
 
-data: {"type": "tool_call", "tool": "retrieve_hed_docs", "params": {...}}
+data: {"event": "content", "content": "To"}
 
-data: {"type": "tool_result", "tool": "retrieve_hed_docs", "result": {...}}
+data: {"event": "tool_start", "name": "retrieve_hed_docs"}
 
-data: {"type": "token", "content": "..."}
+data: {"event": "content", "content": " annotate"}
 
-data: {"type": "end", "usage": {"prompt_tokens": 1234, "completion_tokens": 567}}
+data: {"event": "done", "session_id": "abc123"}
 ```
 
 ## Request Parameters
+
+### Ask Request
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `question` | string | Yes | Question to ask |
+| `stream` | boolean | No | Enable SSE streaming (default: true) |
+| `model` | string | No | Custom LLM model (requires BYOK) |
 
 ### Chat Request
 
@@ -134,26 +186,33 @@ data: {"type": "end", "usage": {"prompt_tokens": 1234, "completion_tokens": 567}
 |-----------|------|----------|-------------|
 | `message` | string | Yes | User message |
 | `session_id` | string | No | Session ID for multi-turn chat |
-| `assistant` | string | No | Assistant to use (hed, bids, eeglab) |
-| `model` | string | No | LLM model to use |
+| `stream` | boolean | No | Enable SSE streaming (default: true) |
+| `model` | string | No | Custom LLM model (requires BYOK) |
+
+## Headers
+
+| Header | Description | Required |
+|--------|-------------|----------|
+| `X-OpenRouter-Key` | OpenRouter API key (BYOK) | Yes (or X-API-Key) |
+| `X-API-Key` | Server admin API key | Yes (or BYOK) |
+| `X-User-ID` | User ID for cache optimization | No |
+| `Content-Type` | Must be `application/json` | Yes |
 
 ## Error Responses
-
-### 400 Bad Request
-
-```json
-{
-  "error": "Invalid request",
-  "detail": "Message is required"
-}
-```
 
 ### 401 Unauthorized
 
 ```json
 {
-  "error": "Unauthorized",
-  "detail": "API key required"
+  "detail": "API key required (or provide your own LLM key via BYOK headers)"
+}
+```
+
+### 403 Forbidden
+
+```json
+{
+  "detail": "Invalid API key"
 }
 ```
 
@@ -161,46 +220,74 @@ data: {"type": "end", "usage": {"prompt_tokens": 1234, "completion_tokens": 567}
 
 ```json
 {
-  "error": "Internal error",
   "detail": "LLM provider error"
 }
 ```
 
-## Python Client
+## Python Client Example
 
 ```python
 import httpx
 
-async with httpx.AsyncClient() as client:
-    async with client.stream(
+# Non-streaming
+response = httpx.post(
+    "https://api.osc.earth/osa/hed/ask",
+    json={"question": "What is HED?", "stream": False},
+    headers={"X-OpenRouter-Key": "your-key"},
+)
+print(response.json()["answer"])
+```
+
+```python
+import json
+import httpx
+
+# Streaming
+with httpx.Client() as client:
+    with client.stream(
         "POST",
-        "http://localhost:38528/chat",
-        json={"message": "What is HED?"},
+        "https://api.osc.earth/osa/hed/ask",
+        json={"question": "What is HED?", "stream": True},
         headers={"X-OpenRouter-Key": "your-key"},
     ) as response:
-        async for line in response.aiter_lines():
+        for line in response.iter_lines():
             if line.startswith("data: "):
                 data = json.loads(line[6:])
-                if data["type"] == "token":
+                if data["event"] == "content":
                     print(data["content"], end="", flush=True)
 ```
 
 ## cURL Examples
 
-### Basic Query
+### Ask (Non-streaming)
 
 ```bash
-curl -X POST http://localhost:38528/chat \
+curl -X POST https://api.osc.earth/osa/hed/ask \
   -H "Content-Type: application/json" \
   -H "X-OpenRouter-Key: your-key" \
-  -d '{"message": "What is HED?"}'
+  -d '{"question": "What is HED?", "stream": false}'
 ```
 
-### With Session
+### Ask (Streaming)
 
 ```bash
-curl -X POST http://localhost:38528/chat \
+curl -N -X POST https://api.osc.earth/osa/hed/ask \
   -H "Content-Type: application/json" \
   -H "X-OpenRouter-Key: your-key" \
-  -d '{"message": "Tell me more", "session_id": "my-session"}'
+  -d '{"question": "What is HED?"}'
+```
+
+### Chat with Session
+
+```bash
+curl -X POST https://api.osc.earth/osa/hed/chat \
+  -H "Content-Type: application/json" \
+  -H "X-OpenRouter-Key: your-key" \
+  -d '{"message": "What is HED?", "stream": false}'
+
+# Continue conversation with session_id from response
+curl -X POST https://api.osc.earth/osa/hed/chat \
+  -H "Content-Type: application/json" \
+  -H "X-OpenRouter-Key: your-key" \
+  -d '{"message": "Tell me more", "session_id": "abc123", "stream": false}'
 ```

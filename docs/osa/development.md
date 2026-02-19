@@ -7,21 +7,22 @@ Guide for contributing to OSA development.
 All development follows: **Issue -> Feature Branch -> PR -> Review -> Merge**
 
 1. **Pick an issue** from GitHub Issues
-2. **Create feature branch**: `git checkout -b feature/issue-N-short-description`
+2. **Create feature branch from develop**: `git checkout develop && git checkout -b feature/issue-N-short-description`
 3. **Implement** with atomic commits
-4. **Create PR** with `gh pr create`
+4. **Create PR to develop** with `gh pr create --base develop`
 5. **Address review findings** before merging
-6. **Merge with merge commit** (never squash)
+6. **Squash merge** to keep history clean
 
 ```bash
 # Example workflow
 gh issue list                                    # Find issue to work on
+git checkout develop && git pull                 # Start from develop
 git checkout -b feature/issue-7-interfaces       # Create branch
 # ... implement ...
 git add -A && git commit -m "feat: add X"        # Atomic commits
-gh pr create --title "feat: add X" --body "Closes #7"
+gh pr create --base develop --title "feat: add X" --body "Closes #7"
 git push -u origin feature/issue-7-interfaces
-gh pr merge --merge --delete-branch              # Merge commit, never squash
+gh pr merge --squash --delete-branch             # Squash merge
 ```
 
 ## Setup

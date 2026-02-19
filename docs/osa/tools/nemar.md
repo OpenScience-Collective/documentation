@@ -1,6 +1,6 @@
 # NEMAR Tools
 
-Tools for discovering and exploring BIDS-formatted EEG, MEG, and iEEG datasets from the NeuroElectroMagnetic Archive (NEMAR).
+Tools for discovering and exploring EEG, MEG, and iEEG datasets formatted according to the Brain Imaging Data Structure (BIDS) from the NeuroElectroMagnetic Archive (NEMAR).
 
 NEMAR hosts hundreds of BIDS-formatted neuroscience datasets sourced from [OpenNeuro](https://openneuro.org/), covering various experimental paradigms and recording modalities. These tools query the NEMAR public API to help researchers find datasets matching their research interests.
 
@@ -17,7 +17,7 @@ Search NEMAR datasets with flexible text search and filtering. Fetches all datas
 | `query` | string | Text search across dataset names, tasks, README, and authors (case-insensitive substring match) |
 | `modality_filter` | string | Filter by recording modality: `"EEG"`, `"MEG"`, `"iEEG"`, `"MRI"` (partial match, case-insensitive) |
 | `task_filter` | string | Filter by experimental task name, e.g. `"rest"`, `"gonogo"`, `"memory"` (partial match, case-insensitive) |
-| `has_hed` | boolean | If `true`, only return datasets with HED annotations |
+| `has_hed` | boolean | If `true`, only return datasets with Hierarchical Event Descriptors (HED) annotations |
 | `min_participants` | int | Minimum number of participants required |
 | `limit` | int | Maximum results to return (default: 20, capped at 50) |
 

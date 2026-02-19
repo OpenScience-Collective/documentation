@@ -12,14 +12,14 @@ Search NEMAR datasets with flexible text search and filtering. Fetches all datas
 
 **Parameters:**
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `query` | string | No | `null` | Text search across dataset names, tasks, README, and authors (case-insensitive substring match) |
-| `modality_filter` | string | No | `null` | Filter by recording modality: `"EEG"`, `"MEG"`, `"iEEG"`, `"MRI"` (partial match, case-insensitive) |
-| `task_filter` | string | No | `null` | Filter by experimental task name, e.g. `"rest"`, `"gonogo"`, `"memory"` (partial match, case-insensitive) |
-| `has_hed` | boolean | No | `null` | If `true`, only return datasets with HED annotations |
-| `min_participants` | int | No | `null` | Minimum number of participants required |
-| `limit` | int | No | `20` | Maximum results to return (capped at 50) |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `query` | string | Text search across dataset names, tasks, README, and authors (case-insensitive substring match) |
+| `modality_filter` | string | Filter by recording modality: `"EEG"`, `"MEG"`, `"iEEG"`, `"MRI"` (partial match, case-insensitive) |
+| `task_filter` | string | Filter by experimental task name, e.g. `"rest"`, `"gonogo"`, `"memory"` (partial match, case-insensitive) |
+| `has_hed` | boolean | If `true`, only return datasets with HED annotations |
+| `min_participants` | int | Minimum number of participants required |
+| `limit` | int | Maximum results to return (default: 20, capped at 50) |
 
 **Example:**
 
@@ -47,9 +47,9 @@ Get comprehensive metadata for a specific NEMAR dataset, including description, 
 
 **Parameters:**
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `dataset_id` | string | Yes | - | Dataset identifier in the format `ds` followed by 4-6 digits (e.g. `"ds000248"`, `"ds005697"`) |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `dataset_id` | string | Dataset identifier in the format `ds` followed by 4-6 digits (e.g. `"ds000248"`, `"ds005697"`) |
 
 **Example:**
 
@@ -65,10 +65,11 @@ result = get_nemar_dataset_details.invoke({
 
 - OpenNeuro and NEMAR links
 - DOI and citation information
-- Authors and license
+- Authors, license, and BIDS version
 - Data characteristics (modalities, tasks, participants, sessions, file count, size, age range)
 - HED annotation status and version
-- References, funding, acknowledgements
+- Latest snapshot version
+- References, funding, acknowledgements, and how-to-acknowledge guidance
 - README content (truncated to 1500 characters for long entries)
 
 ## Implementation Notes

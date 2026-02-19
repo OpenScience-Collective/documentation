@@ -30,7 +30,7 @@ Tools for working with the EEGLAB analysis toolbox.
 
 ### NEMAR Tools
 
-Tools for discovering and exploring BIDS-formatted datasets from NEMAR.
+Tools for discovering and exploring BIDS-formatted datasets from the NeuroElectroMagnetic Archive (NEMAR).
 
 - [NEMAR Tools](nemar.md) - Dataset search and metadata retrieval
 

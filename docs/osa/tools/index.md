@@ -44,11 +44,11 @@ Each community gets a `retrieve_{community}_docs` tool that fetches documentatio
 
 ### Knowledge Search
 
-Community-scoped tools for searching synced knowledge databases. All tools search the community's SQLite FTS5 database at `data/knowledge/{community_id}.db`.
+Community-scoped tools for searching synced knowledge databases. All tools search the community's SQLite Full-Text Search 5 (FTS5) database at `data/knowledge/{community_id}.db`.
 
 | Tool Name | Description | Requires |
 |-----------|-------------|----------|
-| `search_{community}_discussions` | Search GitHub issues and PRs | `github.repos` in config |
+| `search_{community}_discussions` | Search GitHub issues and Pull Requests (PRs) | `github.repos` in config |
 | `list_{community}_recent` | List recent GitHub activity by date | `github.repos` in config |
 | `search_{community}_papers` | Search academic papers (OpenALEX, Semantic Scholar, PubMed) | `citations` in config |
 | `search_{community}_code_docs` | Search code docstrings (MATLAB/Python) | `docstrings` in config |

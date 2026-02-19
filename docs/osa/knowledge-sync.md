@@ -1,6 +1,6 @@
 # Knowledge Sync
 
-OSA includes a knowledge discovery system that syncs community-specific content from multiple sources. Each community gets its own SQLite FTS5 database at `data/knowledge/{community_id}.db`, populated by sync commands.
+OSA includes a knowledge discovery system that syncs community-specific content from multiple sources. Each community gets its own SQLite Full-Text Search 5 (FTS5) database at `data/knowledge/{community_id}.db`, populated by sync commands.
 
 ## Overview
 
@@ -8,11 +8,11 @@ The knowledge system supports six sync types:
 
 | Sync Type | Source | Description |
 |-----------|--------|-------------|
-| **GitHub** | GitHub REST API | Issues and PRs from community repositories |
+| **GitHub** | GitHub REST API | Issues and Pull Requests (PRs) from community repositories |
 | **Papers** | OpenALEX, Semantic Scholar, PubMed | Academic papers and citation tracking |
 | **Docstrings** | GitHub repos | MATLAB/Python function documentation |
 | **Mailman** | Mailman archives | Mailing list messages |
-| **FAQ** | LLM summarization | FAQ entries generated from mailing list threads |
+| **FAQ** | Large Language Model (LLM) summarization | Frequently Asked Questions (FAQ) entries generated from mailing list threads |
 | **BEPs** | bids-website + GitHub PRs | BIDS Extension Proposals (BIDS community only) |
 
 !!! note "Discovery, Not Answers"

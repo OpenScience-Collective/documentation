@@ -7,7 +7,7 @@ The Brain Imaging Data Structure (BIDS) assistant provides tools for documentati
 | Tool | Type | Description |
 |------|------|-------------|
 | `retrieve_bids_docs` | Document retrieval | Fetch BIDS specification and website docs |
-| `search_bids_discussions` | Knowledge search | Search GitHub issues and PRs |
+| `search_bids_discussions` | Knowledge search | Search GitHub issues and Pull Requests (PRs) |
 | `list_bids_recent` | Knowledge search | List recent GitHub activity |
 | `search_bids_papers` | Knowledge search | Search academic papers |
 | `lookup_bep` | BIDS-specific | Look up BIDS Extension Proposals |
@@ -16,7 +16,7 @@ The Brain Imaging Data Structure (BIDS) assistant provides tools for documentati
 
 ### `retrieve_bids_docs`
 
-Fetches documentation from configured BIDS sources. The BIDS assistant has 49 configured documentation pages spanning the specification, website, and FAQ.
+Fetches documentation from configured BIDS sources. The BIDS assistant has 46 configured documentation pages spanning the specification, website, and FAQ.
 
 **Preloaded docs** (embedded in system prompt):
 

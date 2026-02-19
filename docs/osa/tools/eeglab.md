@@ -1,6 +1,6 @@
 # EEGLAB Tools
 
-The EEGLAB assistant provides tools for documentation retrieval, knowledge search, code docstring search, and mailing list FAQ search.
+The EEGLAB assistant provides tools for documentation retrieval, knowledge search, code docstring search, and mailing list Frequently Asked Questions (FAQ) search.
 
 ## Overview
 
@@ -17,14 +17,14 @@ The EEGLAB assistant provides tools for documentation retrieval, knowledge searc
 
 ### `retrieve_eeglab_docs`
 
-Fetches documentation from 22 configured EEGLAB sources, covering installation, data import, preprocessing, ICA, visualization, group analysis, scripting, and plugin integration.
+Fetches documentation from 25 configured EEGLAB sources, covering setup, data import, preprocessing, Independent Component Analysis (ICA), visualization, group analysis, scripting, and plugin integration.
 
 **Preloaded docs** (embedded in system prompt):
 
 - EEGLAB quickstart (installation and basic functionality)
 - Dataset management
 
-**On-demand docs:** data import (3 docs), preprocessing (4 docs), ICA and artifacts (4 docs), epoching, visualization (4 docs), group analysis (2 docs), scripting (2 docs), and integration (2 docs: BIDS, LSL).
+**On-demand docs:** setup (1 doc), data import (3 docs), preprocessing (4 docs), ICA and artifacts (4 docs), epoching, visualization (4 docs), group analysis (2 docs), scripting (2 docs), and integration (2 docs: BIDS, Lab Streaming Layer).
 
 ## Knowledge Search Tools
 
@@ -124,7 +124,7 @@ Response:
 
 ### `search_eeglab_faqs`
 
-Search FAQ entries generated from the EEGLAB mailing list archive (since 2004). The FAQ database is created using a two-agent LLM pipeline that evaluates thread quality and summarizes high-quality discussions.
+Search FAQ entries generated from the EEGLAB mailing list archive (since 2004). The FAQ database is created using a two-agent Large Language Model (LLM) pipeline that evaluates thread quality and summarizes high-quality discussions.
 
 **Parameters:**
 

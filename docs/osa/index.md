@@ -26,25 +26,39 @@ OSA provides domain-specific AI assistants for open science tools (HED, BIDS, EE
 
 ## Quick Start
 
+### As a User (CLI)
+
+```bash
+# Install the CLI (lightweight, ~7 dependencies)
+pip install open-science-assistant
+
+# Set up your API key
+osa init
+
+# Ask a question
+osa ask -a hed "How do I annotate a button press?"
+
+# Interactive chat
+osa chat -a hed
+```
+
+Get an OpenRouter API key at [openrouter.ai/keys](https://openrouter.ai/keys).
+
+### As a Developer
+
 ```bash
 # Clone the repository
 git clone https://github.com/OpenScience-Collective/osa
 cd osa
 
-# Install dependencies
+# Install all dependencies (including server)
 uv sync
 
 # Run development server
 uv run uvicorn src.api.main:app --reload --port 38528
 
-# CLI usage
-uv run osa --help
-
-# Interactive chat with HED assistant
-uv run osa chat -a hed
-
-# Single query to HED assistant
-uv run osa ask -a hed "How do I annotate a button press?"
+# Run tests
+uv run pytest tests/ -v
 ```
 
 ## Specialist Assistants

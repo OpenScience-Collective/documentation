@@ -171,5 +171,6 @@ nav:
           - HED Tools: osa/tools/hed.md
           - BIDS Tools: osa/tools/bids.md
           - EEGLAB Tools: osa/tools/eeglab.md
+          - NEMAR Tools: osa/tools/nemar.md
       - Development: osa/development.md
       - Version Management: osa/version-management.md

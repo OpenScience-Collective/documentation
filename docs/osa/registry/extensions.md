@@ -9,6 +9,8 @@ Extensions add specialized tools to community assistants beyond what YAML can au
 | Fetch documentation pages | Built-in (auto-generated from `documentation` config) |
 | Search GitHub issues/PRs | Built-in (auto-generated from `github` config) |
 | Search academic papers | Built-in (auto-generated from `citations` config) |
+| Search code docstrings | Built-in (auto-generated from `docstrings` config) |
+| Search mailing list FAQ | Built-in (auto-generated from `mailman` + `faq_generation` config) |
 | Call an external validation API | **Python plugin** |
 | Run a CLI tool | **Python plugin** |
 | Connect to an MCP server | **MCP server extension** |
@@ -109,9 +111,9 @@ Your module must define `__all__` listing the tools to export:
 __all__ = ["validate_config", "search_examples"]
 ```
 
-### Example: HED Tools
+### Examples from Implemented Communities
 
-The HED community has three specialized tools:
+**HED** - External API integration:
 
 | Tool | Purpose | External Dependency |
 |------|---------|---------------------|
@@ -119,7 +121,20 @@ The HED community has three specialized tools:
 | `suggest_hed_tags` | Natural language to HED tags | hed-lsp CLI tool |
 | `get_hed_schema_versions` | List available schema versions | hedtools.org REST API |
 
-These tools call external APIs that provide domain-specific functionality (validation, tag suggestion) which cannot be replicated in YAML configuration alone.
+**BIDS** - Specialized knowledge lookup:
+
+| Tool | Purpose | Data Source |
+|------|---------|-------------|
+| `lookup_bep` | Look up BIDS Extension Proposals | Synced BEP database |
+
+**EEGLAB** - Community-scoped wrappers:
+
+| Tool | Purpose | Data Source |
+|------|---------|-------------|
+| `search_eeglab_docstrings` | Search MATLAB/Python function docs | Synced docstrings database |
+| `search_eeglab_faqs` | Search mailing list FAQ entries | LLM-generated FAQ database |
+
+These tools provide domain-specific functionality that cannot be replicated in YAML configuration alone.
 
 ### Best Practices
 
@@ -182,13 +197,14 @@ Exactly one of `command` or `url` must be provided for each server.
 When a `CommunityAssistant` is created, tools are loaded in this order:
 
 1. **Knowledge tools** from YAML config:
-    - `list_{community}_recent` - Recent GitHub activity
-    - `search_{community}_discussions` - GitHub search
-    - `search_{community}_papers` - Academic paper search
+    - `search_{community}_discussions` - GitHub issues/PR search (if `github.repos` configured)
+    - `list_{community}_recent` - Recent GitHub activity (if `github.repos` configured)
+    - `search_{community}_papers` - Academic paper search (if `citations` configured)
+    - `search_{community}_code_docs` - Code docstring search (if `docstrings` configured)
+    - `search_{community}_faq` - Mailing list FAQ search (if `mailman` configured)
 2. **Documentation retrieval** - `retrieve_{community}_docs`
 3. **Page context** - `fetch_current_page` (if `enable_page_context: true`)
-4. **Additional tools** passed programmatically (if any)
-5. **Python plugin tools** from `extensions.python_plugins`
-6. **MCP server tools** from `extensions.mcp_servers` (when implemented)
+4. **Python plugin tools** from `extensions.python_plugins`
+5. **MCP server tools** from `extensions.mcp_servers` (when implemented)
 
 All tools are available to the LLM simultaneously. The system prompt should guide the LLM on when to use each tool.

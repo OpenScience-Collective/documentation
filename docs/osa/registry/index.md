@@ -43,6 +43,10 @@ flowchart LR
 | System prompt | `system_prompt` | LLM instructions with placeholders |
 | Documentation | `documentation` list | Auto-generates `retrieve_docs` tool |
 | Knowledge sync | `github.repos`, `citations` | GitHub issues/PRs and paper sync |
+| Code docs | `docstrings` | MATLAB/Python docstring sync and search |
+| Mailing lists | `mailman`, `faq_generation` | Mailing list FAQ sync and search |
+| Sync schedules | `sync` | Per-type cron schedules |
+| Budget | `budget` | Daily/monthly spending limits |
 | Specialized tools | `extensions.python_plugins` | Loads custom Python tool functions |
 | Widget behavior | `enable_page_context` | Adds page context tool for embeds |
 
@@ -55,9 +59,12 @@ src/assistants/
     hed/
         config.yaml          # HED community configuration
         tools.py             # HED-specific tools (validation, tag suggestion)
-    bids/                    # Future
-        config.yaml
-        tools.py
+    bids/
+        config.yaml          # BIDS community configuration
+        tools.py             # BIDS-specific tools (BEP lookup)
+    eeglab/
+        config.yaml          # EEGLAB community configuration
+        tools.py             # EEGLAB-specific tools (docstring/FAQ search)
 ```
 
 ## Key Principles

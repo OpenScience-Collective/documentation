@@ -169,5 +169,7 @@ nav:
       - Tools:
           - osa/tools/index.md
           - HED Tools: osa/tools/hed.md
+          - BIDS Tools: osa/tools/bids.md
+          - EEGLAB Tools: osa/tools/eeglab.md
       - Development: osa/development.md
       - Version Management: osa/version-management.md

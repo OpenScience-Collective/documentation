@@ -152,8 +152,8 @@ uv run osa sync init --community my-tool
 # Sync GitHub issues and PRs
 uv run osa sync github --community my-tool --full
 
-# Sync papers and citations
-uv run osa sync papers --community my-tool --citations
+# Sync papers (includes citation tracking by default)
+uv run osa sync papers --community my-tool
 
 # Or sync everything at once
 uv run osa sync all --community my-tool

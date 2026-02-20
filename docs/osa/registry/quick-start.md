@@ -130,8 +130,8 @@ If you configured GitHub repos or citations, sync the knowledge database:
 # Sync GitHub issues/PRs
 uv run osa sync github --community my-tool
 
-# Sync papers and citations
-uv run osa sync papers --community my-tool --citations
+# Sync papers (includes citation tracking by default)
+uv run osa sync papers --community my-tool
 
 # Or sync everything
 uv run osa sync all --community my-tool

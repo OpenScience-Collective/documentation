@@ -201,24 +201,40 @@ Options:
 
 ### `osa sync`
 
-Sync knowledge sources (GitHub issues/PRs, academic papers). Requires server dependencies.
-See [Knowledge Sync](knowledge-sync.md) for details.
+Sync knowledge sources for community assistants. Requires server dependencies. All subcommands accept `--community/-c` to specify the target community.
+
+See [Knowledge Sync](knowledge-sync.md) for full documentation.
 
 ```bash
-# Initialize database
-osa sync init
+# Initialize database for a community
+osa sync init --community hed
 
 # Sync GitHub issues/PRs
-osa sync github
+osa sync github --community bids
 
-# Sync academic papers
-osa sync papers
+# Sync academic papers (with citation tracking)
+osa sync papers --community bids
 
-# Sync everything
+# Sync code docstrings (MATLAB/Python)
+osa sync docstrings --community eeglab --language matlab
+
+# Sync mailing list archives
+osa sync mailman --community eeglab
+
+# Generate FAQ from mailing list threads
+osa sync faq --community eeglab --estimate
+
+# Sync BIDS Extension Proposals
+osa sync beps --community bids
+
+# Sync everything for all communities
 osa sync all
 
 # Check status
 osa sync status
+
+# Search knowledge database
+osa sync search "validation error" --community hed
 ```
 
 ## Configuration
@@ -273,10 +289,14 @@ These are only relevant when running the server (`osa serve`):
 | `LANGFUSE_PUBLIC_KEY` | LangFuse public key | Optional |
 | `LANGFUSE_SECRET_KEY` | LangFuse secret key | Optional |
 | `SYNC_ENABLED` | Enable automated knowledge sync | `true` |
-| `SYNC_GITHUB_CRON` | GitHub sync schedule (cron) | `0 2 * * *` |
-| `SYNC_PAPERS_CRON` | Papers sync schedule (cron) | `0 3 * * 0` |
-| `GITHUB_TOKEN` | GitHub token for sync | Optional |
+| `GITHUB_TOKEN` | GitHub token for sync (higher rate limits) | Optional |
+| `SEMANTIC_SCHOLAR_API_KEY` | Semantic Scholar API key | Optional |
+| `PUBMED_API_KEY` | PubMed/NCBI API key | Optional |
+| `OPENALEX_EMAIL` | Email for OpenALEX polite pool | Optional |
 | `DATA_DIR` | Data directory for knowledge DB | Platform-specific |
+
+!!! note "Sync Schedules"
+    Sync schedules are configured per-community in each community's `config.yaml` under the `sync` key, not via environment variables. See [Knowledge Sync](knowledge-sync.md) for details.
 
 ## Examples
 

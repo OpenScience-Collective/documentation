@@ -1,0 +1,40 @@
+name: Sync OSA Submodule
+
+on:
+  repository_dispatch:
+    types: [osa-updated]
+  schedule:
+    - cron: "0 6 * * 1"  # Weekly Monday 6am UTC as fallback
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Update OSA submodule
+        run: |
+          git submodule update --remote osa
+          echo "Updated OSA submodule to $(git -C osa rev-parse --short HEAD)"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "sync: update OSA submodule to latest"
+          title: "sync: update OSA submodule to latest"
+          body: |
+            Automated update of the OSA submodule to track latest changes.
+
+            Triggered by: ${{ github.event_name }}
+          branch: sync/osa-submodule
+          labels: sync
+          delete-branch: true

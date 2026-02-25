@@ -451,10 +451,47 @@ Widget display configuration for the embedded chat widget. These values provide 
 | `initial_message` | string | No | `null` | Greeting message shown when chat opens (max 1000 chars) |
 | `placeholder` | string | No | `"Ask a question..."` | Input field placeholder text (max 200 chars) |
 | `suggested_questions` | list[string] | No | `[]` | Clickable suggestion buttons (max 10) |
+| `theme_color` | string | No | `null` | Primary theme color as hex `#RRGGBB` (e.g., `#008a79`) |
+| `logo_url` | string | No | `null` | URL for custom logo/icon image |
+
+### `theme_color`
+
+Primary color applied to the widget button, header background, and accent elements. Must be a 6-digit hex color code.
+
+```yaml
+widget:
+  theme_color: "#008a79"    # Teal
+```
+
+When not set, the widget uses the platform default blue (`#2563eb`). The widget JS also accepts `themeColor` via `setConfig()` for per-page overrides.
+
+### `logo_url`
+
+URL to a custom logo or icon image displayed in the widget header avatar (replacing the default brain icon).
+
+- Must use `http://`, `https://`, or start with `/` (relative path)
+- Max 500 characters
+
+```yaml
+widget:
+  logo_url: https://example.com/my-logo.png
+```
+
+**Convention-based detection**: If `logo_url` is not set in the YAML, the API automatically checks for a `logo.*` file in the community's folder (`src/assistants/{id}/`). Supported formats: SVG, PNG, JPG, JPEG, WEBP. SVG is preferred over other formats when multiple exist. The file is served via the `GET /{community_id}/logo` endpoint.
+
+**Precedence** (highest to lowest):
+
+1. Widget JS `setConfig({ logo: 'url' })` -- embedder override
+2. YAML `widget.logo_url` -- community maintainer sets explicit URL
+3. Convention file -- `logo.png` or `logo.svg` in `src/assistants/{id}/`
+4. Default brain icon (built into the widget)
+
+### Example
 
 ```yaml
 widget:
   title: HED Assistant
+  theme_color: "#1a365d"
   initial_message: "Hi! I'm the HED Assistant. I can help with HED annotation, validation, and related tools."
   placeholder: Ask about HED...
   suggested_questions:
@@ -466,13 +503,34 @@ widget:
 
 When the widget is embedded on a page, it fetches community defaults from `GET /communities` and applies them automatically. Embedders can still override any field via `setConfig()` in JavaScript; see the [Widget Deployment Guide](../deployment/widget.md).
 
-If `widget` is omitted, the widget falls back to generic defaults (title = community name, placeholder = "Ask a question...").
+If `widget` is omitted, the widget falls back to generic defaults (title = community name, placeholder = "Ask a question...", platform blue theme, brain icon).
 
 ## `enable_page_context`
 
 When `true` (default), the assistant includes a `fetch_current_page` tool that retrieves content from the web page where the widget is embedded. This allows the assistant to provide contextually relevant answers based on what the user is currently reading.
 
 Set to `false` if the assistant will only be used via CLI or API (not embedded in a web page).
+
+## `links`
+
+External links for the community, exposed via the `/communities` API endpoint. Only populated links are included in the response.
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `homepage` | URL | No | `null` | Primary community website |
+| `documentation` | URL | No | `null` | Documentation or tutorials URL |
+| `repository` | URL | No | `null` | Source code repository (GitHub org or repo) |
+| `demo` | URL | No | `null` | Live demo page URL |
+
+```yaml
+links:
+  homepage: https://www.fieldtriptoolbox.org
+  documentation: https://www.fieldtriptoolbox.org/tutorial/
+  repository: https://github.com/fieldtrip/fieldtrip
+  demo: https://demo.osc.earth/fieldtrip
+```
+
+All fields are optional. If no links are provided, the `links` field is omitted from the API response.
 
 ## Complete Example
 
@@ -519,11 +577,17 @@ citations:
 
 widget:
   title: HED Assistant
+  theme_color: "#1a365d"
   initial_message: "Hi! I'm the HED Assistant. I can help with HED annotations."
   placeholder: Ask about HED...
   suggested_questions:
     - What is HED and how is it used?
     - How do I annotate an event with HED tags?
+
+links:
+  homepage: https://www.hedtags.org
+  documentation: https://www.hed-resources.org
+  repository: https://github.com/hed-standard
 
 discourse:
   - url: https://neurostars.org

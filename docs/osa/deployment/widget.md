@@ -21,7 +21,7 @@ The widget appears as a chat bubble in the bottom-right corner of the page.
 
 Widget configuration uses a two-layer approach:
 
-1. **YAML defaults** (community-level): Title, greeting, placeholder, and suggested questions are defined in each community's `config.yaml` under the `widget` section. These are served by the `GET /communities` API endpoint.
+1. **YAML defaults** (community-level): Title, greeting, placeholder, suggested questions, theme color, and logo are defined in each community's `config.yaml` under the `widget` section. These are served by the `GET /communities` API endpoint.
 2. **JavaScript overrides** (page-level): Embedders can override any field via `setConfig()`. Any value set in JavaScript takes precedence over the YAML defaults.
 
 This means most embedders only need to set `communityId`; the widget fetches its display configuration from the API automatically.
@@ -39,6 +39,8 @@ These fields are typically configured in the community's `config.yaml` and loade
 | `initialMessage` | string | From YAML | First message shown to user |
 | `placeholder` | string | From YAML or `'Ask a question...'` | Input placeholder text |
 | `suggestedQuestions` | string[] | From YAML | Clickable suggestion buttons |
+| `logo` | string | Auto-detected or from YAML | Logo URL for widget header avatar |
+| `themeColor` | string | From YAML or `'#2563eb'` | Primary theme color (hex `#RRGGBB`) |
 
 ### Behavior Options
 
@@ -94,6 +96,8 @@ This is useful when the same community assistant is embedded across multiple pag
   OSAChatWidget.setConfig({
     communityId: 'hed',
     title: 'HED Assistant',
+    logo: 'https://example.com/hed-logo.png',
+    themeColor: '#1a365d',
     initialMessage: 'Hi! I can help with HED annotations. What would you like to know?',
     placeholder: 'Ask about HED...',
     suggestedQuestions: [
@@ -184,9 +188,10 @@ The widget communicates with the following backend endpoints:
 |----------|--------|-------------|
 | `/communities` | GET | Fetch available communities and widget config |
 | `/{communityId}/ask` | POST | Send a question, get a response |
+| `/{communityId}/logo` | GET | Serve community logo image (if available) |
 | `/health` | GET | Check backend status |
 
-On load, the widget fetches `/communities` to get display configuration (title, greeting, placeholder, suggested questions) for all available communities. This eliminates the need to hardcode these values in JavaScript.
+On load, the widget fetches `/communities` to get display configuration (title, greeting, placeholder, suggested questions, logo, theme color) for all available communities. This eliminates the need to hardcode these values in JavaScript.
 
 ### Request Format
 
@@ -236,7 +241,7 @@ To host the widget yourself:
 The demo page at [osa-demo.pages.dev](https://osa-demo.pages.dev) dynamically loads all available communities from the `/communities` API and showcases them with URL-based routing:
 
 - `/` - Landing page with community cards (populated from API)
-- `/{communityId}` - Community-specific assistant demo (e.g., `/hed`, `/bids`, `/eeglab`)
+- `/{communityId}` - Community-specific assistant demo (e.g., `/hed`, `/bids`, `/eeglab`, `/fieldtrip`)
 
 Each community page auto-configures the widget using the YAML-defined defaults. New communities added to the registry appear on the demo page automatically without frontend changes.
 

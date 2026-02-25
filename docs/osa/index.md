@@ -4,7 +4,7 @@ An extensible AI assistant platform for researchers working with open science to
 
 ## Overview
 
-OSA provides domain-specific AI assistants for open science tools (HED, BIDS, EEGLAB) with:
+OSA provides domain-specific AI assistants for open science tools (HED, BIDS, EEGLAB, FieldTrip) with:
 
 - **Modular tool system** for document retrieval, validation, and code execution
 - **Multi-source knowledge bases** from GitHub, OpenALEX, Discourse forums, mailing lists
@@ -20,7 +20,7 @@ OSA provides domain-specific AI assistants for open science tools (HED, BIDS, EE
 
 ## Target Users
 
-- Researchers learning HED annotations, BIDS formatting, or EEGLAB analysis
+- Researchers learning HED annotations, BIDS formatting, EEGLAB analysis, or FieldTrip pipelines
 - Lab members needing quick, accurate answers from documentation
 - Developers integrating these tools who need API/usage guidance
 
@@ -68,6 +68,7 @@ uv run pytest tests/ -v
 | **HED Assistant** | Hierarchical Event Descriptors | hed-standard repos, hedtags.org |
 | **BIDS Assistant** | Brain Imaging Data Structure | bids-standard repos, Neurostars |
 | **EEGLAB Assistant** | EEG analysis toolbox | SCCN wiki, mailing lists |
+| **FieldTrip Assistant** | MEG/EEG/iEEG analysis toolbox | FieldTrip website, GitHub |
 
 ## Documentation
 

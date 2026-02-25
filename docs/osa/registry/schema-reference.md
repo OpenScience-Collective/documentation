@@ -530,7 +530,7 @@ links:
   demo: https://demo.osc.earth/fieldtrip
 ```
 
-All fields are optional. If no links are provided, the `links` field is omitted from the API response.
+All fields are optional. If no links are provided, the `links` field is `null` in the API response.
 
 ## Complete Example
 

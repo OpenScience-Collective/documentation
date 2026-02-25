@@ -70,6 +70,7 @@ github:
 # Widget display configuration (optional)
 widget:
   title: My Tool Assistant
+  theme_color: "#2b6cb0"
   initial_message: "Hi! I can help with My Tool. What would you like to know?"
   placeholder: Ask about My Tool...
   suggested_questions:

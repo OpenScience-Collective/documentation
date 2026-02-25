@@ -75,11 +75,34 @@ Response:
       "suggested_questions": [
         "What is HED and how is it used?",
         "How do I annotate an event with HED tags?"
-      ]
+      ],
+      "logo_url": "/hed/logo",
+      "theme_color": "#1a365d"
+    },
+    "links": {
+      "homepage": "https://www.hedtags.org",
+      "documentation": "https://www.hed-resources.org",
+      "repository": "https://github.com/hed-standard"
     }
   }
 ]
 ```
+
+The `logo_url` field is auto-populated when a `logo.*` file exists in the community folder, or can be set explicitly in the YAML config. The `theme_color` field is only present when configured. The `links` field is `null` when no links are configured.
+
+This endpoint is public (no authentication required).
+
+### Community Logo
+
+Serve the community's logo image file.
+
+```
+GET /{community}/logo
+```
+
+Returns the logo file with appropriate `Content-Type` header. Supported formats: SVG, PNG, JPG, JPEG, WEBP. SVG files include a `Content-Security-Policy` header (`default-src 'none'; style-src 'unsafe-inline'`) to prevent XSS. Responses are cached for 24 hours (`Cache-Control: public, max-age=86400`).
+
+Returns `404` if no logo file exists for the community.
 
 This endpoint is public (no authentication required).
 

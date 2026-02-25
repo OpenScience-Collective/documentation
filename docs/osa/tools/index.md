@@ -28,6 +28,14 @@ Tools for working with the EEGLAB analysis toolbox.
 
 **Status:** Available
 
+### FieldTrip Tools
+
+Tools for working with the FieldTrip MEG/EEG/iEEG analysis toolbox.
+
+Uses the standard knowledge discovery tools (document retrieval, GitHub search, paper search, docstring search). No community-specific custom tools.
+
+**Status:** Available
+
 ### NEMAR Tools
 
 Tools for discovering and exploring BIDS-formatted datasets from the NeuroElectroMagnetic Archive (NEMAR).

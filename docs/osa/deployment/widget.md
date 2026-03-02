@@ -57,6 +57,10 @@ These fields are typically configured in the community's `config.yaml` and loade
 | `pageContextStorageKey` | string | `'osa-page-context-enabled'` | localStorage key for page context preference |
 | `pageContextLabel` | string | `'Share page URL...'` | Label text for the page context checkbox |
 | `fullscreen` | boolean | `false` | Open chat in fullscreen mode |
+| `disclaimerEnabled` | boolean | `true` | Show AI disclaimer above footer |
+| `disclaimerText` | string | `'This is a multi-agent AI...'` | Disclaimer message text |
+| `disclaimerColor` | string | `'#9a3412'` | Disclaimer text color |
+| `disclaimerBackground` | string | `'#fff7ed'` | Disclaimer background color |
 | `widgetInstructions` | string | `null` | Per-page context hint sent to the assistant (max 2000 chars) |
 
 ### Minimal Configuration
@@ -109,7 +113,10 @@ This is useful when the same community assistant is embedded across multiple pag
     widgetInstructions: 'User is on the annotation guide page.',
     showExperimentalBadge: false,
     allowPageContext: true,
-    pageContextDefaultEnabled: true
+    pageContextDefaultEnabled: true,
+    disclaimerText: 'AI-powered assistant. Responses may contain errors.',
+    disclaimerColor: '#92400e',
+    disclaimerBackground: '#fffbeb'
   });
 </script>
 ```

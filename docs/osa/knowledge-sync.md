@@ -4,7 +4,7 @@ OSA includes a knowledge discovery system that syncs community-specific content 
 
 ## Overview
 
-The knowledge system supports six sync types:
+The knowledge system supports seven sync types:
 
 | Sync Type | Source | Description |
 |-----------|--------|-------------|
@@ -13,6 +13,7 @@ The knowledge system supports six sync types:
 | **Docstrings** | GitHub repos | MATLAB/Python function documentation |
 | **Mailman** | Mailman archives | Mailing list messages |
 | **FAQ** | Large Language Model (LLM) summarization | Frequently Asked Questions (FAQ) entries generated from mailing list threads |
+| **Discourse** | Discourse public JSON API | Forum topics with first post and accepted answers |
 | **BEPs** | bids-website + GitHub PRs | BIDS Extension Proposals (BIDS community only) |
 
 !!! note "Discovery, Not Answers"
@@ -211,9 +212,36 @@ uv run osa sync beps --community bids
 |--------|-------------|
 | `-c, --community` | Community ID (default: `bids`) |
 
+### `osa sync discourse`
+
+Sync Discourse forum topics from a community's Discourse instance. Uses the public JSON API (no authentication required).
+
+```bash
+# Sync forum topics for a community
+uv run osa sync discourse --community mne
+
+# Full sync (not incremental)
+uv run osa sync discourse --community mne --full
+
+# Limit number of topics (for testing)
+uv run osa sync discourse --community mne --max 10
+```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `-c, --community` | Community ID (default: `mne`) |
+| `--full` | Full sync instead of incremental |
+| `--max` | Maximum topics to sync (for testing) |
+
+The syncer uses patient rate limiting (1 request per second by default) to respect the Discourse API limits (200 requests per minute). Topics are stored with their first post and either the accepted answer or the highest-voted reply.
+
+Discourse forums are configured in `config.yaml` under `discourse`.
+
 ### `osa sync all`
 
-Sync all knowledge sources for one or all communities. Runs GitHub, papers, and BEPs (for BIDS) in sequence.
+Sync all knowledge sources for one or all communities. Runs GitHub, papers, Discourse, and BEPs (for BIDS) in sequence.
 
 ```bash
 # Sync everything for one community
@@ -315,6 +343,7 @@ Each community's assistant gets knowledge discovery tools based on its configura
 | `search_{community}_papers` | Search academic papers | `citations` |
 | `search_{community}_code_docs` | Search code docstrings | `docstrings` |
 | `search_{community}_faq` | Search mailing list FAQ | `mailman` + `faq_generation` |
+| `search_{community}_forum` | Search Discourse forum topics | `discourse` |
 
 See the [Tools](tools/index.md) section for detailed tool documentation per community.
 

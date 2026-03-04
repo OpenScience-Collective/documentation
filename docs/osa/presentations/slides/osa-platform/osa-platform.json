@@ -1,0 +1,690 @@
+{
+  "presentation": {
+    "metadata": {
+      "title": "Open Science Assistant",
+      "author": "Yahya",
+      "description": "An extensible AI assistant platform for research communities",
+      "theme": "light",
+      "aspectRatio": "16:9",
+      "controls": {
+        "slideNumbers": true,
+        "progress": true,
+        "showNotes": false
+      },
+      "customTheme": {
+        "colors": {
+          "primary": "#1D4ED8",
+          "background": "#FFFFFF",
+          "text": "#111827",
+          "accent": "#059669"
+        },
+        "fonts": {
+          "heading": "Inter, system-ui, sans-serif",
+          "body": "Inter, system-ui, sans-serif"
+        }
+      }
+    },
+    "slides": [
+      {
+        "id": "title",
+        "layout": "title",
+        "background": "#F0F4FF",
+        "transition": "fade",
+        "elements": [
+          {
+            "type": "text",
+            "content": "# Open Science Assistant",
+            "style": { "fontSize": "xxl", "alignment": "center", "fontWeight": "bold", "color": "#1D4ED8" },
+            "position": { "area": "center", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "An extensible AI platform for research communities",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#4B5563" },
+            "position": { "area": "center", "order": 1 }
+          },
+          {
+            "type": "text",
+            "content": "docs.osc.earth/osa",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#1D4ED8" },
+            "position": { "area": "center", "order": 2 }
+          }
+        ],
+        "speakerNotes": "Welcome to OSA. This presentation covers what we built, how it works, where we are, and where we're headed."
+      },
+      {
+        "id": "problem",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## The Problem",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "Researchers work with **specialized open science tools** (HED, BIDS, EEGLAB, MNE)",
+                "children": [
+                  "Each tool has its own docs, forums, mailing lists, GitHub repos",
+                  "Knowledge is scattered across 20+ year archives"
+                ]
+              },
+              "General-purpose AI assistants **hallucinate domain-specific answers**",
+              "Small communities (dozens to hundreds of users) can't justify building custom AI tools",
+              "Researchers need **precise, citation-backed answers**, not creative guesses"
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "content", "order": 0 },
+            "animation": { "fragment": true, "type": "fade", "index": 0 }
+          }
+        ],
+        "speakerNotes": "The core tension: researchers need precise help with specific tools, but their communities are too small to build custom AI solutions. General AI hallucinates tool-specific answers."
+      },
+      {
+        "id": "principles",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Design Principles",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "**Precision over features**",
+                "children": ["Citation-backed answers", "Anti-hallucination by design"]
+              },
+              {
+                "text": "**Simple infrastructure**",
+                "children": ["Lab server deployment", "No Kubernetes, no vector DB"]
+              }
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "**Extensible tools**",
+                "children": ["YAML-driven community configs", "Plugin system for custom tools"]
+              },
+              {
+                "text": "**Domain expertise**",
+                "children": ["Deep knowledge of specific tools", "Not a broad generalist"]
+              }
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "right", "order": 0 }
+          }
+        ],
+        "speakerNotes": "These four principles guide every decision. We deliberately chose NOT to build for enterprise scale, millions of users, or complex multi-tenant scenarios."
+      },
+      {
+        "id": "architecture",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Architecture",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "**User** --> **Cloudflare Worker** --> **FastAPI Backend** --> **Community Registry**",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#1D4ED8" },
+            "position": { "area": "content", "order": 0 }
+          },
+          {
+            "type": "table",
+            "headers": ["Layer", "Component", "Role"],
+            "rows": [
+              ["Edge", "Cloudflare Worker", "CORS, rate limiting, bot protection"],
+              ["API", "FastAPI + LangGraph", "Agent orchestration, tool calling"],
+              ["Registry", "YAML configs", "Auto-discovers community assistants"],
+              ["Assistants", "HED, BIDS, EEGLAB, MNE, ...", "Domain-specific agents with tools"],
+              ["Knowledge", "SQLite + FTS5", "Per-community databases, BM25 search"]
+            ],
+            "position": { "area": "content", "order": 1 }
+          }
+        ],
+        "speakerNotes": "Simple single-instance architecture. Cloudflare Worker handles CORS, rate limiting, bot protection. FastAPI backend with LangGraph agents. Each community gets its own assistant with auto-generated tools. SQLite with FTS5 for knowledge search."
+      },
+      {
+        "id": "tech-stack",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Tech Stack",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "table",
+            "headers": ["Component", "Technology", "Why"],
+            "rows": [
+              ["Agent Orchestration", "LangGraph", "State machine for tool-calling loops"],
+              ["API Server", "FastAPI", "Async, auto-docs, type-safe"],
+              ["LLM Access", "LiteLLM + OpenRouter", "Unified provider interface, BYOK"],
+              ["Knowledge Store", "SQLite + FTS5", "Zero-config, per-community DBs"],
+              ["Edge Proxy", "Cloudflare Worker", "Global CDN, bot protection, CORS"],
+              ["Frontend", "Embeddable JS Widget", "Drop-in for any website"],
+              ["Observability", "LangFuse", "Token tracking, session replay"],
+              ["CLI", "Typer + Rich", "Thin HTTP client, ~7 deps"]
+            ],
+            "caption": "Deliberately simple choices for lab-scale deployment",
+            "position": { "area": "content", "order": 0 }
+          }
+        ],
+        "speakerNotes": "Every tech choice optimizes for simplicity. SQLite over Postgres, in-memory state over Redis, direct doc fetching over vector DBs. A single Docker container runs everything."
+      },
+      {
+        "id": "yaml-onboarding",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Community Onboarding",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "### One YAML file = One community\nNo Python required for basic setup.\nAuto-discovered at startup, no code changes needed.",
+            "style": { "fontSize": "large", "alignment": "left" },
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "code",
+            "code": "id: my-community\nname: My Research Tool\nstatus: available\ndefault_model: anthropic/claude-haiku-4.5\n\ndocumentation:\n  - title: User Guide\n    preload: true\n    source_url: https://raw.github...\n\ngithub:\n  repos:\n    - org/my-tool\n\nsync:\n  github:\n    cron: \"0 2 * * *\"\n\nwidget:\n  title: My Tool Assistant\n  suggested_questions:\n    - How do I get started?",
+            "language": "python",
+            "caption": "src/assistants/my-community/config.yaml",
+            "lineNumbers": false,
+            "position": { "area": "right", "order": 0 }
+          }
+        ],
+        "speakerNotes": "The YAML config is the core innovation for onboarding. A single file defines identity, docs, GitHub sync, knowledge sources, widget behavior, and budget limits. Auto-discovery at startup means no code changes needed."
+      },
+      {
+        "id": "what-yaml-drives",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## What the YAML Drives",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "table",
+            "headers": ["config.yaml drives...", "What gets generated"],
+            "rows": [
+              ["API Routes", "POST /community/ask, POST /community/chat"],
+              ["System Prompt", "Preloaded docs, tool descriptions, persona"],
+              ["Knowledge Tools", "search_discussions, search_papers, retrieve_docs"],
+              ["Sync Schedules", "GitHub nightly, papers weekly, docstrings weekly"],
+              ["Widget", "Title, suggested questions, branding, theme"],
+              ["Budget", "Daily and monthly spending limits per community"]
+            ],
+            "position": { "area": "content", "order": 0 }
+          }
+        ],
+        "speakerNotes": "One YAML file generates API routes, system prompt, knowledge tools, sync schedules, widget configuration, and budget limits. All auto-discovered at startup."
+      },
+      {
+        "id": "communities",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Live Communities",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "table",
+            "headers": ["Community", "Domain", "Special Capabilities"],
+            "rows": [
+              ["HED", "Event annotation", "Schema validation, tag suggestions, HED-LSP"],
+              ["EEGLAB", "EEG analysis", "20+ yr mailing list FAQ, MATLAB docstrings"],
+              ["BIDS", "Data organization", "BEP lookup, dataset structure guidance"],
+              ["MNE-Python", "MEG/EEG processing", "Discourse forum search, Python docstrings"],
+              ["NEMAR", "Dataset portal", "Dataset search, BIDS metadata queries"],
+              ["FieldTrip", "MEG/EEG toolbox", "MATLAB docstring search"]
+            ],
+            "position": { "area": "content", "order": 0 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "From single-community to **6 communities** in ~3 months using the YAML registry system",
+            "position": { "area": "footer", "order": 0 }
+          }
+        ],
+        "speakerNotes": "Six research communities live, each with tailored knowledge and tools. HED was first, then rapid onboarding of the others using the YAML registry system."
+      },
+      {
+        "id": "tool-system",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Tool System",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "**Auto-generated from YAML**",
+                "children": [
+                  "retrieve_{id}_docs",
+                  "search_{id}_discussions",
+                  "search_{id}_papers",
+                  "search_{id}_code_docs",
+                  "search_{id}_faq"
+                ]
+              }
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "**Custom Python plugins**",
+                "children": [
+                  "HED: validate_hed_string, suggest_hed_tags",
+                  "NEMAR: search_nemar_datasets",
+                  "Any @tool decorated function"
+                ]
+              },
+              {
+                "text": "**Knowledge sources**",
+                "children": [
+                  "GitHub issues and PRs",
+                  "Academic papers via OpenALEX",
+                  "Mailing list archives",
+                  "Discourse forums",
+                  "Code docstrings"
+                ]
+              }
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "right", "order": 0 }
+          }
+        ],
+        "speakerNotes": "Two-tier tool system: auto-generated knowledge tools from YAML config, plus custom Python plugins for domain-specific functionality like HED validation."
+      },
+      {
+        "id": "knowledge-pipeline",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Knowledge Pipeline",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "**Sources** --> **Nightly Sync** --> **SQLite FTS5** --> **BM25 Ranking** --> **Cited Response**",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#1D4ED8" },
+            "position": { "area": "content", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "**5 knowledge sources synced automatically**",
+                "children": [
+                  "GitHub issues and PRs (nightly)",
+                  "Academic papers via OpenALEX (weekly)",
+                  "Mailing list archives (EEGLAB: 20+ years)",
+                  "Discourse forums (MNE, FieldTrip)",
+                  "Code docstrings from MATLAB and Python repos"
+                ]
+              }
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "content", "order": 1 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "important",
+            "content": "Knowledge is for **discovery only**. The assistant links users to relevant discussions rather than answering from them.",
+            "position": { "area": "footer", "order": 0 },
+            "animation": { "fragment": true, "type": "fade", "index": 0 }
+          }
+        ],
+        "speakerNotes": "Multiple knowledge sources synced on schedules into per-community SQLite databases. FTS5 provides fast keyword + BM25 search. Key design choice: knowledge is for discovery and citation, not for generating answers from."
+      },
+      {
+        "id": "faq-pipeline",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Smart FAQ Generation",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "**Stage 1: Evaluation** (cheap model, Qwen3-235B FP8)",
+                "children": [
+                  "Score each mailing list thread for quality",
+                  "Threads below 0.7 threshold are skipped (~85% of threads)"
+                ]
+              },
+              {
+                "text": "**Stage 2: Summarization** (quality model, Claude Haiku 4.5)",
+                "children": [
+                  "Only high-scoring threads get summarized",
+                  "Generates structured FAQ entries with citations"
+                ]
+              }
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "content", "order": 0 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Two-stage pipeline reduces summary costs by **~85%**. EEGLAB: 20+ years of mailing list archives processed.",
+            "position": { "area": "footer", "order": 0 }
+          }
+        ],
+        "speakerNotes": "Cost-efficient FAQ generation: cheap eval model scores thread quality first, quality summary model only processes high-scoring threads. Reduced EEGLAB processing costs by ~85%."
+      },
+      {
+        "id": "widget",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Embeddable Widget",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              "**Drop-in** JS snippet for any website",
+              "**Page-aware**: shares current URL and title as context",
+              "**BYOK**: users bring their own API key",
+              "Chat history in localStorage",
+              "Markdown rendering with code copy",
+              "Resizable and pop-out window",
+              "Cloudflare Turnstile bot protection",
+              "Community logos and branding"
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "code",
+            "code": "<script\n  src=\"https://demo.osc.earth/widget.js\"\n  data-community=\"hed\">\n</script>",
+            "language": "html",
+            "caption": "Minimal integration: one script tag",
+            "lineNumbers": false,
+            "position": { "area": "right", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "Live at **demo.osc.earth** -- auto-populates community cards from API",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#1D4ED8" },
+            "position": { "area": "footer", "order": 0 }
+          }
+        ],
+        "speakerNotes": "The widget is designed for easy embedding. Page context awareness means it knows what documentation page the user is reading. Demo page auto-discovers communities from the API."
+      },
+      {
+        "id": "current-state",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Where We Are (v0.7.1)",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "title": "Working Well",
+            "content": "6 communities live and serving\nYAML-driven onboarding proven\nKnowledge sync running nightly\nWidget deployed on community sites\nCLI available via pip install\nPrompt caching reducing costs\n~$1-5/mo for 10K requests",
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "warning",
+            "title": "Known Gaps",
+            "content": "Ephemeral preview backends (not yet designed)\nCross-community delegation (planned)\nSession persistence across restarts\nSecurity hardening (SSRF, key redaction)\nAudio/video material support",
+            "position": { "area": "right", "order": 0 }
+          }
+        ],
+        "speakerNotes": "Honest assessment. The platform works well for its current scope. The ephemeral backend is the biggest design gap; it will take significant work to design and implement, but it is critical for enabling community maintainers to develop and test their configs independently."
+      },
+      {
+        "id": "agent-arena",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Future: Multi-Assistant Delegation",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "**User** asks HED Assistant about data format --> HED **delegates to BIDS** --> response with attribution",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#1D4ED8" },
+            "position": { "area": "content", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              "Assistants **delegate to peer specialists** when questions cross domains",
+              "Peers declared explicitly in config, no surprise routing",
+              "Depth limit of 1, no delegation chains",
+              "Attribution: *According to the BIDS assistant...*",
+              "Future: universal /ask endpoint with auto-routing"
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "content", "order": 1 },
+            "animation": { "fragment": true, "type": "fade", "index": 0 }
+          }
+        ],
+        "speakerNotes": "The agent arena vision: community assistants that can delegate to each other. A HED user asking about BIDS data organization gets routed to the BIDS specialist. Explicit peer declaration keeps it predictable."
+      },
+      {
+        "id": "ephemeral-backends",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Future: Ephemeral Preview Backends",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "**Goal**: Community maintainers develop and test configs without touching production",
+                "children": [
+                  "Push to feature branch triggers CI build",
+                  "Docker image deployed on a new port automatically",
+                  "Full working preview URL provided",
+                  "Community maintainers test their YAML changes end-to-end"
+                ]
+              }
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "content", "order": 0 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "warning",
+            "title": "Status",
+            "content": "Not yet designed. Significant infrastructure work needed for port allocation, resource cleanup, and database isolation. This is the key to making OSA truly self-service.",
+            "position": { "area": "content", "order": 1 }
+          }
+        ],
+        "speakerNotes": "The ephemeral backend is the biggest design challenge ahead. It needs careful architecture to handle port allocation, resource cleanup, and database isolation. But it is the key to making OSA truly self-service for community maintainers."
+      },
+      {
+        "id": "roadmap",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Roadmap",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "**Near-term**",
+                "children": [
+                  "Session context persistence (fix conversation drops)",
+                  "Security hardening (SSRF, key redaction, cost guards)",
+                  "SQLite WAL mode for concurrent access",
+                  "Cursor-based pagination for large repos"
+                ]
+              },
+              {
+                "text": "**Medium-term**",
+                "children": [
+                  "Multi-assistant delegation (cross-community routing)",
+                  "Audio/video training material support",
+                  "Tool call tracing and observability dashboard",
+                  "Conversation summarization for long sessions"
+                ]
+              },
+              {
+                "text": "**Long-term**",
+                "children": [
+                  "Ephemeral preview backends",
+                  "Universal /ask endpoint with auto-routing",
+                  "Community self-service onboarding portal"
+                ]
+              }
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "content", "order": 0 }
+          }
+        ],
+        "speakerNotes": "Roadmap derived from open GitHub issues. Near-term focuses on stability and security. Medium-term on the agent arena and richer content. Long-term on making the platform fully self-service."
+      },
+      {
+        "id": "why-it-matters",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Why It Matters",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              {
+                "text": "**For researchers**",
+                "children": [
+                  "Precise, domain-specific help instead of generic AI hallucinations",
+                  "Answers backed by real issues, papers, and documentation",
+                  "Embedded where they already work (project websites, docs)"
+                ]
+              },
+              {
+                "text": "**For community maintainers**",
+                "children": [
+                  "One YAML file to create an AI assistant for their tool",
+                  "No ML expertise required",
+                  "Automated knowledge sync keeps it current"
+                ]
+              },
+              {
+                "text": "**For the ecosystem**",
+                "children": [
+                  "Shared infrastructure across small communities",
+                  "Cross-community knowledge flow via delegation",
+                  "Open source, lab-deployable, cost-effective at ~$1-5/mo"
+                ]
+              }
+            ],
+            "bulletStyle": "disc",
+            "style": { "fontSize": "large" },
+            "position": { "area": "content", "order": 0 }
+          }
+        ],
+        "speakerNotes": "The value proposition at three levels: individual researchers get better help, maintainers get an easy way to serve their community, and the ecosystem benefits from shared infrastructure and cross-pollination."
+      },
+      {
+        "id": "closing",
+        "layout": "title",
+        "background": "#F0F4FF",
+        "transition": "fade",
+        "elements": [
+          {
+            "type": "text",
+            "content": "# Thank You",
+            "style": { "fontSize": "xxl", "alignment": "center", "fontWeight": "bold", "color": "#1D4ED8" },
+            "position": { "area": "center", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "**Demo**: demo.osc.earth\n**Docs**: docs.osc.earth/osa\n**Code**: github.com/OpenScience-Collective/osa",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#374151" },
+            "position": { "area": "center", "order": 1 }
+          }
+        ],
+        "speakerNotes": "Links for follow-up. The demo page auto-discovers communities, so people can try it right away."
+      }
+    ]
+  }
+}

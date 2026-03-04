@@ -171,6 +171,10 @@ nav:
           - HED Tools: osa/tools/hed.md
           - BIDS Tools: osa/tools/bids.md
           - EEGLAB Tools: osa/tools/eeglab.md
+          - MNE-Python Tools: osa/tools/mne.md
           - NEMAR Tools: osa/tools/nemar.md
+      - Presentations:
+          - osa/presentations/index.md
+          - OSA Platform Overview: osa/presentations/osa-platform.md
       - Development: osa/development.md
       - Version Management: osa/version-management.md

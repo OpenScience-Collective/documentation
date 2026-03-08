@@ -193,6 +193,20 @@ data: {"event": "content", "content": " annotate"}
 data: {"event": "done", "session_id": "abc123"}
 ```
 
+### Mirrors
+
+Ephemeral database mirror management. See [Database Mirrors](mirrors.md) for full documentation.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/mirrors` | Create a mirror |
+| `GET` | `/mirrors` | List active mirrors |
+| `GET` | `/mirrors/{id}` | Get mirror metadata |
+| `DELETE` | `/mirrors/{id}` | Delete a mirror |
+| `POST` | `/mirrors/{id}/refresh` | Re-copy from production |
+| `POST` | `/mirrors/{id}/sync` | Run sync pipeline |
+| `GET` | `/mirrors/{id}/download/{community}` | Download SQLite file |
+
 ## Request Parameters
 
 ### Ask Request
@@ -219,6 +233,7 @@ data: {"event": "done", "session_id": "abc123"}
 | `X-OpenRouter-Key` | OpenRouter API key (BYOK) | Yes (or X-API-Key) |
 | `X-API-Key` | Server admin API key | Yes (or BYOK) |
 | `X-User-ID` | User ID for cache optimization | No |
+| `X-Mirror-ID` | Route to an ephemeral database mirror (see [Database Mirrors](mirrors.md)) | No |
 | `Content-Type` | Must be `application/json` | Yes |
 
 ## Error Responses

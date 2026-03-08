@@ -161,6 +161,7 @@ nav:
           - Extensions: osa/registry/extensions.md
       - CLI Reference: osa/cli-reference.md
       - API Reference: osa/api-reference.md
+      - Database Mirrors: osa/mirrors.md
       - Knowledge Sync: osa/knowledge-sync.md
       - Sync Status: osa/status.md
       - Deployment:

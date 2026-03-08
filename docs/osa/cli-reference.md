@@ -59,6 +59,7 @@ osa ask -a hed "What is HED?" --no-stream
 Options:
 
 - `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
+- `--mirror, -m`: Mirror ID for ephemeral database routing (see [Database Mirrors](mirrors.md))
 - `--api-key, -k`: OpenRouter API key (overrides saved config)
 - `--api-url`: Override API URL
 - `--output, -o`: Output format: rich, json, plain. Default: rich
@@ -82,6 +83,7 @@ osa chat -a eeglab --no-stream
 Options:
 
 - `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
+- `--mirror, -m`: Mirror ID for ephemeral database routing (see [Database Mirrors](mirrors.md))
 - `--api-key, -k`: OpenRouter API key (overrides saved config)
 - `--api-url`: Override API URL
 - `--no-stream`: Disable streaming
@@ -198,6 +200,33 @@ Options:
 - `--host, -h`: Host to bind to. Default: 0.0.0.0
 - `--port, -p`: Port to bind to. Default: 38528
 - `--reload, -r`: Enable auto-reload
+
+### `osa mirror`
+
+Manage ephemeral database mirrors for development. See [Database Mirrors](mirrors.md) for full documentation.
+
+```bash
+# Create a mirror
+osa mirror create -c hed -c bids --label "my-test"
+
+# List active mirrors
+osa mirror list
+
+# Show mirror details
+osa mirror info abc123def456
+
+# Delete a mirror
+osa mirror delete abc123def456
+
+# Re-copy production data into mirror
+osa mirror refresh abc123def456
+
+# Run sync pipeline against mirror
+osa mirror sync abc123def456 --type github
+
+# Download mirror databases locally
+osa mirror pull abc123def456
+```
 
 ### `osa sync`
 

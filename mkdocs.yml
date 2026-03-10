@@ -152,7 +152,9 @@ nav:
   - OSA:
       - osa/index.md
       - Getting Started: osa/getting-started.md
-      - Architecture: osa/architecture.md
+      - Architecture:
+          - Overview: osa/architecture.md
+          - Details: osa/architecture-details.md
       - Community Registry:
           - osa/registry/index.md
           - Adding a Community: osa/registry/quick-start.md

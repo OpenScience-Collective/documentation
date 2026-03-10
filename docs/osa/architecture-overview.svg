@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <filter id="shadow" x="-3%" y="-3%" width="106%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+    </filter>
+    <filter id="shadowSm" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="9" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrowDark" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="9" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="620" fill="url(#bgGrad)" rx="12"/>
+
+  <!-- Title -->
+  <text x="450" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Open Science Assistant (OSA)</text>
+  <text x="450" y="56" text-anchor="middle" font-size="12" fill="#64748b">AI-powered research assistant platform for open science communities</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- ROW 1: Users -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="300" y="78" width="300" height="52" rx="26" fill="#1e40af" filter="url(#shadow)"/>
+  <text x="450" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="white">Researchers</text>
+  <text x="450" y="116" text-anchor="middle" font-size="10" fill="#bfdbfe">HED, BIDS, EEGLAB, MNE communities</text>
+
+  <!-- Arrow: Users -> Interfaces -->
+  <path d="M 450,130 L 450,155" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- ROW 2: Client Interfaces -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="80" y="160" width="740" height="70" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" filter="url(#shadow)"/>
+  <text x="100" y="180" font-size="10" font-weight="600" fill="#1e40af" letter-spacing="0.5">CLIENT INTERFACES</text>
+
+  <rect x="100" y="192" width="150" height="28" rx="6" fill="white" stroke="#93c5fd" stroke-width="1" filter="url(#shadowSm)"/>
+  <text x="175" y="211" text-anchor="middle" font-size="11" font-weight="500" fill="#1e3a5f">CLI (pip install)</text>
+
+  <rect x="270" y="192" width="190" height="28" rx="6" fill="white" stroke="#93c5fd" stroke-width="1" filter="url(#shadowSm)"/>
+  <text x="365" y="211" text-anchor="middle" font-size="11" font-weight="500" fill="#1e3a5f">Web Chat Widget (JS)</text>
+
+  <rect x="480" y="192" width="150" height="28" rx="6" fill="white" stroke="#93c5fd" stroke-width="1" filter="url(#shadowSm)"/>
+  <text x="555" y="211" text-anchor="middle" font-size="11" font-weight="500" fill="#1e3a5f">REST API</text>
+
+  <rect x="650" y="192" width="150" height="28" rx="6" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+  <text x="725" y="211" text-anchor="middle" font-size="10" font-weight="500" fill="#1e40af">BYOK + API Keys</text>
+
+  <!-- Arrow: Interfaces -> Edge -->
+  <path d="M 450,230 L 450,253" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="460" y="246" font-size="8" fill="#94a3b8">HTTPS</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- ROW 3: Edge -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="200" y="258" width="500" height="36" rx="8" fill="#fef3c7" stroke="#fbbf24" stroke-width="1" filter="url(#shadow)"/>
+  <text x="450" y="281" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Cloudflare Pages + Apache Reverse Proxy (api.osc.earth) + CORS</text>
+
+  <!-- Arrow: Edge -> Platform -->
+  <path d="M 450,294 L 450,317" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- ROW 4: OSA Platform (main box) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="80" y="322" width="740" height="148" rx="12" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="100" y="344" font-size="11" font-weight="700" fill="#065f46" letter-spacing="0.5">OSA PLATFORM</text>
+  <text x="260" y="344" font-size="9" fill="#065f46">(FastAPI + LangGraph + Docker)</text>
+
+  <!-- Community routing boxes -->
+  <text x="100" y="366" font-size="10" font-weight="600" fill="#065f46">Community-based routing (each community = independent agent + tools + knowledge):</text>
+
+  <rect x="100" y="376" width="145" height="80" rx="8" fill="white" stroke="#86efac" stroke-width="1" filter="url(#shadowSm)"/>
+  <text x="172" y="398" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">/hed/</text>
+  <text x="172" y="414" text-anchor="middle" font-size="9" fill="#64748b">Annotations, validation</text>
+  <text x="172" y="428" text-anchor="middle" font-size="9" fill="#64748b">Doc retrieval, HED tools</text>
+  <text x="172" y="442" text-anchor="middle" font-size="8" fill="#a3a3a3">hedtags.org integration</text>
+
+  <rect x="260" y="376" width="145" height="80" rx="8" fill="white" stroke="#86efac" stroke-width="1" filter="url(#shadowSm)"/>
+  <text x="332" y="398" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">/eeglab/</text>
+  <text x="332" y="414" text-anchor="middle" font-size="9" fill="#64748b">EEG analysis, MATLAB</text>
+  <text x="332" y="428" text-anchor="middle" font-size="9" fill="#64748b">Doc retrieval, search</text>
+  <text x="332" y="442" text-anchor="middle" font-size="8" fill="#a3a3a3">sccn.ucsd.edu docs</text>
+
+  <rect x="420" y="376" width="145" height="80" rx="8" fill="white" stroke="#86efac" stroke-width="1" filter="url(#shadowSm)"/>
+  <text x="492" y="398" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">/mne/</text>
+  <text x="492" y="414" text-anchor="middle" font-size="9" fill="#64748b">M/EEG analysis, Python</text>
+  <text x="492" y="428" text-anchor="middle" font-size="9" fill="#64748b">Doc retrieval, search</text>
+  <text x="492" y="442" text-anchor="middle" font-size="8" fill="#a3a3a3">mne.tools docs</text>
+
+  <!-- Ellipsis for more communities -->
+  <rect x="580" y="376" width="80" height="80" rx="8" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="620" y="416" text-anchor="middle" font-size="18" fill="#86efac">...</text>
+  <text x="620" y="436" text-anchor="middle" font-size="8" fill="#94a3b8">add via YAML</text>
+
+  <!-- Shared infrastructure note -->
+  <rect x="674" y="376" width="132" height="80" rx="8" fill="#f0fdf4" stroke="#d1fae5" stroke-width="1"/>
+  <text x="740" y="394" text-anchor="middle" font-size="9" font-weight="600" fill="#065f46">Shared infra</text>
+  <text x="740" y="410" text-anchor="middle" font-size="8.5" fill="#64748b">LiteLLM (LLM)</text>
+  <text x="740" y="423" text-anchor="middle" font-size="8.5" fill="#64748b">SQLite + FTS5 (data)</text>
+  <text x="740" y="436" text-anchor="middle" font-size="8.5" fill="#64748b">Session mgmt</text>
+  <text x="740" y="449" text-anchor="middle" font-size="8.5" fill="#64748b">SSE streaming</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- ROW 5: External Services + Data -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <!-- Arrows from platform down to services -->
+  <!-- Platform -> OpenRouter -->
+  <path d="M 200,470 L 200,500 L 140,500 L 140,520" fill="none" stroke="#64748b" stroke-width="1.3" marker-end="url(#arrowDark)"/>
+  <text x="146" y="497" font-size="8" fill="#64748b">LLM</text>
+
+  <!-- Platform -> LangFuse -->
+  <path d="M 350,470 L 350,500 L 330,500 L 330,520" fill="none" stroke="#64748b" stroke-width="1.3" marker-end="url(#arrowDark)"/>
+  <text x="356" y="497" font-size="8" fill="#64748b">traces</text>
+
+  <!-- Platform -> GitHub -->
+  <path d="M 500,470 L 500,500 L 520,500 L 520,520" fill="none" stroke="#64748b" stroke-width="1.3" marker-end="url(#arrowDark)"/>
+  <text x="506" y="497" font-size="8" fill="#64748b">sync</text>
+
+  <!-- Platform -> hedtools -->
+  <path d="M 650,470 L 650,500 L 700,500 L 700,520" fill="none" stroke="#64748b" stroke-width="1.3" marker-end="url(#arrowDark)"/>
+  <text x="656" y="497" font-size="8" fill="#64748b">validate</text>
+
+  <!-- Service boxes -->
+  <rect x="60" y="524" width="180" height="52" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
+  <text x="150" y="546" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">OpenRouter</text>
+  <text x="150" y="562" text-anchor="middle" font-size="9" fill="#94a3b8">Qwen, Claude, GPT, Gemini</text>
+
+  <rect x="260" y="524" width="140" height="52" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
+  <text x="330" y="546" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">LangFuse</text>
+  <text x="330" y="562" text-anchor="middle" font-size="9" fill="#94a3b8">Observability, cost</text>
+
+  <rect x="420" y="524" width="200" height="52" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
+  <text x="520" y="546" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">GitHub API</text>
+  <text x="520" y="562" text-anchor="middle" font-size="9" fill="#94a3b8">Issues, PRs (knowledge source)</text>
+
+  <rect x="640" y="524" width="160" height="52" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
+  <text x="720" y="546" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">hedtools.org</text>
+  <text x="720" y="562" text-anchor="middle" font-size="9" fill="#94a3b8">HED validation API</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Footer note -->
+  <!-- ═══════════════════════════════════════════ -->
+  <text x="450" y="600" text-anchor="middle" font-size="10" fill="#94a3b8">Single-instance lab server deployment. No inter-community routing. Communities are added via YAML config, no code changes needed.</text>
+
+</svg>

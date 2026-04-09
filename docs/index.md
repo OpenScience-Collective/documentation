@@ -34,6 +34,8 @@ The Open Science Collective is a community-driven initiative dedicated to buildi
 - [OSA Getting Started](osa/getting-started.md) - Set up the Open Science Assistant
 - [OSA Architecture](osa/architecture.md) - System design and diagrams
 - [Contributing](collective/contributing.md) - Join our community
+- [Discord](https://discord.gg/5dWJCUmUww) - Chat, Q&A, and live course sessions
+- [Courses](https://courses.osc.earth) - Free courses on AI-powered research workflows
 
 ## Featured: Open Science Assistant
 

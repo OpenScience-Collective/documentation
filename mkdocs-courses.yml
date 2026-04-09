@@ -1,16 +1,18 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 
-site_name: Open Science Collective
-site_url: https://docs.osc.earth
+site_name: OSC Courses
+site_url: https://courses.osc.earth
 site_author: Open Science Collective
 site_description: >-
-  Documentation for the Open Science Collective (OSC) and its projects,
-  including the Open Science Assistant (OSA).
+  Free, open courses from the Open Science Collective on AI-powered research
+  workflows, scientific computing, and open science tools.
 
 repo_name: OpenScience-Collective
 repo_url: https://github.com/OpenScience-Collective
 
 copyright: Copyright &copy; 2026 Open Science Collective
+
+docs_dir: courses
 
 theme:
   name: material
@@ -44,14 +46,14 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
+      primary: teal
       accent: deep purple
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
+      primary: teal
       accent: deep purple
       toggle:
         icon: material/brightness-4
@@ -67,33 +69,6 @@ plugins:
   - minify:
       minify_html: true
   - section-index
-  # API Reference Generation
-  # --------------------------
-  # These plugins auto-generate API documentation from OSA source code.
-  # They are disabled by default because they require OSA dependencies.
-  #
-  # To enable:
-  # 1. Install OSA dependencies: cd osa && uv sync
-  # 2. Uncomment the plugins below
-  # 3. Run: uv run mkdocs build
-  #
-  # - mkdocstrings:
-  #     default_handler: python
-  #     handlers:
-  #       python:
-  #         paths:
-  #           - osa/src
-  #         options:
-  #           docstring_style: google
-  #           show_source: true
-  #           show_bases: true
-  #           show_root_heading: true
-  #           members_order: source
-  # - gen-files:
-  #     scripts:
-  #       - scripts/gen_ref_pages.py
-  # - literate-nav:
-  #     nav_file: SUMMARY.md
 
 markdown_extensions:
   - abbr
@@ -141,45 +116,8 @@ extra:
     - icon: fontawesome/brands/discord
       link: https://discord.gg/5dWJCUmUww
 
-extra_javascript:
-  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
-
 nav:
   - Home: index.md
-  - Collective:
-      - collective/index.md
-      - About: collective/about.md
-      - Mission: collective/mission.md
-      - Contributing: collective/contributing.md
-  - OSA:
-      - osa/index.md
-      - Getting Started: osa/getting-started.md
-      - Architecture:
-          - Overview: osa/architecture.md
-          - Details: osa/architecture-details.md
-      - Community Registry:
-          - osa/registry/index.md
-          - Adding a Community: osa/registry/quick-start.md
-          - Local Testing: osa/registry/local-testing.md
-          - Schema Reference: osa/registry/schema-reference.md
-          - Extensions: osa/registry/extensions.md
-      - CLI Reference: osa/cli-reference.md
-      - API Reference: osa/api-reference.md
-      - Database Mirrors: osa/mirrors.md
-      - Knowledge Sync: osa/knowledge-sync.md
-      - Sync Status: osa/status.md
-      - Deployment:
-          - Widget: osa/deployment/widget.md
-      - Troubleshooting: osa/troubleshooting.md
-      - Tools:
-          - osa/tools/index.md
-          - HED Tools: osa/tools/hed.md
-          - BIDS Tools: osa/tools/bids.md
-          - EEGLAB Tools: osa/tools/eeglab.md
-          - MNE-Python Tools: osa/tools/mne.md
-          - NEMAR Tools: osa/tools/nemar.md
-      - Presentations:
-          - osa/presentations/index.md
-          - OSA Platform Overview: osa/presentations/osa-platform.md
-      - Development: osa/development.md
-      - Version Management: osa/version-management.md
+  - Agentic Research Course:
+      - agentic-research/index.md
+      - "Week 1: Git, GitHub, CLI": agentic-research/week-01.md

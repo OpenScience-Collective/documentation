@@ -12,17 +12,15 @@ This session does double duty: it teaches the foundational tools (git, terminal,
     - Understand the difference between `git` (version control) and `gh` (GitHub CLI)
     - Create branches, pull requests, and issues on GitHub
 
-<!-- ## Recording
-
 <div class="embed-container">
   <iframe
-    src="https://www.youtube.com/embed/VIDEO_ID_HERE"
+    src="https://www.youtube.com/embed/t7x8dU8_V3U"
     title="Week 1: Git, GitHub, and the Command Line"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>
   </iframe>
-</div> -->
+</div>
 
 ## Slides
 

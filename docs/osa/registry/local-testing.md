@@ -40,16 +40,44 @@ Common validation errors and fixes:
 
 ## 2. Set Environment Variables
 
-```bash
-# Required: OpenRouter API key for LLM calls
-export OPENROUTER_API_KEY="your-key-here"
+=== "macOS"
 
-# Optional: API keys for admin functions (sync triggers)
-export API_KEYS="test-key-123"
+    ```bash
+    # Required: OpenRouter API key for LLM calls
+    export OPENROUTER_API_KEY="your-key-here"
 
-# Optional: Community-specific key (if using BYOK)
-# export OPENROUTER_API_KEY_MY_TOOL="community-specific-key"
-```
+    # Optional: API keys for admin functions (sync triggers)
+    export API_KEYS="test-key-123"
+
+    # Optional: Community-specific key (if using BYOK)
+    # export OPENROUTER_API_KEY_MY_TOOL="community-specific-key"
+    ```
+
+=== "Linux"
+
+    ```bash
+    # Required: OpenRouter API key for LLM calls
+    export OPENROUTER_API_KEY="your-key-here"
+
+    # Optional: API keys for admin functions (sync triggers)
+    export API_KEYS="test-key-123"
+
+    # Optional: Community-specific key (if using BYOK)
+    # export OPENROUTER_API_KEY_MY_TOOL="community-specific-key"
+    ```
+
+=== "Windows"
+
+    ```powershell
+    # Required: OpenRouter API key for LLM calls
+    $env:OPENROUTER_API_KEY = "your-key-here"
+
+    # Optional: API keys for admin functions (sync triggers)
+    $env:API_KEYS = "test-key-123"
+
+    # Optional: Community-specific key (if using BYOK)
+    # $env:OPENROUTER_API_KEY_MY_TOOL = "community-specific-key"
+    ```
 
 ## 3. Start the Development Server
 
@@ -107,16 +135,44 @@ curl -X POST http://localhost:38528/my-tool/chat \
 
 The CLI is often easier for interactive testing:
 
-```bash
-# Set API key
-export OPENROUTER_API_KEY="your-key-here"
+=== "macOS"
 
-# Interactive chat (standalone mode, no server needed)
-uv run osa chat --community my-tool --standalone
+    ```bash
+    # Set API key
+    export OPENROUTER_API_KEY="your-key-here"
 
-# Single question
-uv run osa ask --community my-tool "What is My Tool?" --standalone
-```
+    # Interactive chat (standalone mode, no server needed)
+    uv run osa chat --community my-tool --standalone
+
+    # Single question
+    uv run osa ask --community my-tool "What is My Tool?" --standalone
+    ```
+
+=== "Linux"
+
+    ```bash
+    # Set API key
+    export OPENROUTER_API_KEY="your-key-here"
+
+    # Interactive chat (standalone mode, no server needed)
+    uv run osa chat --community my-tool --standalone
+
+    # Single question
+    uv run osa ask --community my-tool "What is My Tool?" --standalone
+    ```
+
+=== "Windows"
+
+    ```powershell
+    # Set API key
+    $env:OPENROUTER_API_KEY = "your-key-here"
+
+    # Interactive chat (standalone mode, no server needed)
+    uv run osa chat --community my-tool --standalone
+
+    # Single question
+    uv run osa ask --community my-tool "What is My Tool?" --standalone
+    ```
 
 The `--standalone` flag runs the assistant without needing the backend server.
 
@@ -187,13 +243,35 @@ curl -X POST http://localhost:38528/my-tool/ask \
 
 ### Server won't start
 
-```bash
-# Check if port is already in use
-lsof -i :38528
+=== "macOS"
 
-# Use a different port
-uv run uvicorn src.api.main:app --reload --port 38529
-```
+    ```bash
+    # Check if port is already in use
+    lsof -i :38528
+
+    # Use a different port
+    uv run uvicorn src.api.main:app --reload --port 38529
+    ```
+
+=== "Linux"
+
+    ```bash
+    # Check if port is already in use
+    lsof -i :38528
+
+    # Use a different port
+    uv run uvicorn src.api.main:app --reload --port 38529
+    ```
+
+=== "Windows"
+
+    ```powershell
+    # Check if port is already in use
+    netstat -ano | findstr :38528
+
+    # Use a different port
+    uv run uvicorn src.api.main:app --reload --port 38529
+    ```
 
 ### "Assistant not found" error
 

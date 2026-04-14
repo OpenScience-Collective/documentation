@@ -77,7 +77,9 @@ ls -la # List with details
 
 Package managers let you install software from the command line. Think of them as an app store for developer tools.
 
-=== "macOS: Homebrew"
+=== "macOS"
+
+    Install [Homebrew](https://brew.sh), the standard macOS package manager:
 
     ```bash
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -89,9 +91,17 @@ Package managers let you install software from the command line. Think of them a
     brew --version
     ```
 
-=== "Linux (Debian/Ubuntu) or WSL"
+=== "Linux"
 
     You already have `apt`. Update it:
+
+    ```bash
+    sudo apt update
+    ```
+
+=== "Windows"
+
+    Your WSL Ubuntu terminal already has `apt` (see Step 1). Update it:
 
     ```bash
     sudo apt update
@@ -107,7 +117,15 @@ You need two command-line tools: `git` for version control and `gh` (the GitHub 
     brew install git gh
     ```
 
-=== "Linux or WSL"
+=== "Linux"
+
+    ```bash
+    sudo apt install git gh
+    ```
+
+=== "Windows"
+
+    In your WSL Ubuntu terminal:
 
     ```bash
     sudo apt install git gh
@@ -241,6 +259,21 @@ ssh-add ~/.ssh/id_ed25519
     # Select and copy the output manually
     ```
 
+=== "Windows"
+
+    In your WSL Ubuntu terminal:
+
+    ```bash
+    cat ~/.ssh/id_ed25519.pub
+    # Select and copy the output manually
+    ```
+
+    Or in PowerShell:
+
+    ```powershell
+    Get-Content ~\.ssh\id_ed25519.pub | Set-Clipboard
+    ```
+
 Then add it to GitHub:
 
 1. Go to [github.com/settings/keys](https://github.com/settings/keys)
@@ -371,13 +404,21 @@ If all of these work, you are ready for Week 2.
 !!! note "Install Claude Code"
     Before Week 2, install [Claude Code](https://claude.ai/claude-code):
 
-    === "macOS / Linux"
+    === "macOS"
 
         ```bash
         brew install claude-code
         ```
 
-    === "Official installer"
+    === "Linux"
+
+        ```bash
+        curl -fsSL https://claude.ai/install-cli | sh
+        ```
+
+    === "Windows"
+
+        In your WSL Ubuntu terminal:
 
         ```bash
         curl -fsSL https://claude.ai/install-cli | sh

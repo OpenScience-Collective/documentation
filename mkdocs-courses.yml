@@ -13,6 +13,7 @@ repo_url: https://github.com/OpenScience-Collective
 copyright: Copyright &copy; 2026 Open Science Collective
 
 docs_dir: courses
+site_dir: site-courses
 
 theme:
   name: material

@@ -30,8 +30,16 @@ osa init
 You'll need an [OpenRouter API key](https://openrouter.ai/keys). The setup will:
 
 1. Prompt for your API key
-2. Save it securely to `~/.config/osa/credentials.yaml` (permissions 600)
+2. Save it securely to your config directory (see paths below)
 3. Test the connection to the API
+
+Config directory by platform:
+
+| Platform | Path |
+|----------|------|
+| macOS | `~/Library/Application Support/osa/` |
+| Linux | `~/.config/osa/` |
+| Windows | `%APPDATA%\osa\` |
 
 Alternatively, pass the key directly:
 
@@ -63,10 +71,26 @@ osa ask -a hed "What is HED?" --api-key sk-or-v1-your-key
 
 Or set it via environment variable:
 
-```bash
-export OPENROUTER_API_KEY=sk-or-v1-your-key
-osa ask -a hed "What is HED?"
-```
+=== "macOS"
+
+    ```bash
+    export OPENROUTER_API_KEY=sk-or-v1-your-key
+    osa ask -a hed "What is HED?"
+    ```
+
+=== "Linux"
+
+    ```bash
+    export OPENROUTER_API_KEY=sk-or-v1-your-key
+    osa ask -a hed "What is HED?"
+    ```
+
+=== "Windows"
+
+    ```powershell
+    $env:OPENROUTER_API_KEY = "sk-or-v1-your-key"
+    osa ask -a hed "What is HED?"
+    ```
 
 ## For Developers (Server)
 
@@ -93,9 +117,23 @@ uv run pre-commit install
 
 Copy the example environment file:
 
-```bash
-cp .env.example .env
-```
+=== "macOS"
+
+    ```bash
+    cp .env.example .env
+    ```
+
+=== "Linux"
+
+    ```bash
+    cp .env.example .env
+    ```
+
+=== "Windows"
+
+    ```powershell
+    Copy-Item .env.example .env
+    ```
 
 Edit `.env` with your settings:
 

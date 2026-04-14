@@ -365,8 +365,26 @@ osa ask -a hed "What is HED?" -o json | jq '.answer'
 
 ### Using with Environment Variable
 
-```bash
-export OPENROUTER_API_KEY=sk-or-v1-your-key
-osa ask -a hed "What is HED?"
-osa chat -a bids
-```
+=== "macOS"
+
+    ```bash
+    export OPENROUTER_API_KEY=sk-or-v1-your-key
+    osa ask -a hed "What is HED?"
+    osa chat -a bids
+    ```
+
+=== "Linux"
+
+    ```bash
+    export OPENROUTER_API_KEY=sk-or-v1-your-key
+    osa ask -a hed "What is HED?"
+    osa chat -a bids
+    ```
+
+=== "Windows"
+
+    ```powershell
+    $env:OPENROUTER_API_KEY = "sk-or-v1-your-key"
+    osa ask -a hed "What is HED?"
+    osa chat -a bids
+    ```

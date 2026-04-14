@@ -38,9 +38,27 @@ uv sync
 # Install pre-commit hooks
 uv run pre-commit install
 
-# Copy environment file
-cp .env.example .env
+# Copy environment file (see OS-specific command below)
 # Edit .env with your API keys
+```
+
+=== "macOS"
+
+    ```bash
+    cp .env.example .env
+    ```
+
+=== "Linux"
+
+    ```bash
+    cp .env.example .env
+    ```
+
+=== "Windows"
+
+    ```powershell
+    Copy-Item .env.example .env
+    ```
 ```
 
 ## Testing

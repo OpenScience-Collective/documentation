@@ -14,10 +14,27 @@ Before diving into specific errors:
    ```
 
 2. **Check environment variables:**
-   ```bash
-   echo $OPENROUTER_API_KEY_YOUR_COMMUNITY
-   # Should print your API key, not empty
-   ```
+
+    === "macOS"
+
+        ```bash
+        echo $OPENROUTER_API_KEY_YOUR_COMMUNITY
+        # Should print your API key, not empty
+        ```
+
+    === "Linux"
+
+        ```bash
+        echo $OPENROUTER_API_KEY_YOUR_COMMUNITY
+        # Should print your API key, not empty
+        ```
+
+    === "Windows"
+
+        ```powershell
+        echo $env:OPENROUTER_API_KEY_YOUR_COMMUNITY
+        # Should print your API key, not empty
+        ```
 
 3. **Test API key:**
    ```bash
@@ -260,22 +277,46 @@ Validation passed with warnings
 **Solution:**
 
 **For local testing:**
-```bash
-# Add to shell profile (~/.zshrc or ~/.bashrc)
-echo 'export OPENROUTER_API_KEY_MYPROJECT="sk-or-v1-..."' >> ~/.zshrc
-source ~/.zshrc
 
-# Verify
-echo $OPENROUTER_API_KEY_MYPROJECT
-```
+=== "macOS"
+
+    ```bash
+    # Add to shell profile
+    echo 'export OPENROUTER_API_KEY_MYPROJECT="sk-or-v1-..."' >> ~/.zshrc
+    source ~/.zshrc
+
+    # Verify
+    echo $OPENROUTER_API_KEY_MYPROJECT
+    ```
+
+=== "Linux"
+
+    ```bash
+    # Add to shell profile
+    echo 'export OPENROUTER_API_KEY_MYPROJECT="sk-or-v1-..."' >> ~/.bashrc
+    source ~/.bashrc
+
+    # Verify
+    echo $OPENROUTER_API_KEY_MYPROJECT
+    ```
+
+=== "Windows"
+
+    ```powershell
+    # Set for current session
+    $env:OPENROUTER_API_KEY_MYPROJECT = "sk-or-v1-..."
+
+    # Set permanently (persists across sessions)
+    [Environment]::SetEnvironmentVariable("OPENROUTER_API_KEY_MYPROJECT", "sk-or-v1-...", "User")
+
+    # Verify
+    echo $env:OPENROUTER_API_KEY_MYPROJECT
+    ```
 
 **For production (server):**
 ```bash
 # Add to .env file
 echo 'OPENROUTER_API_KEY_MYPROJECT="sk-or-v1-..."' >> .env
-
-# Or add to environment
-export OPENROUTER_API_KEY_MYPROJECT="sk-or-v1-..."
 ```
 
 **Verify:**
@@ -301,10 +342,27 @@ Invalid API key (401 Unauthorized)
 **Solution:**
 
 1. **Verify key format:**
-   ```bash
-   echo $OPENROUTER_API_KEY_MYPROJECT
-   # Should start with: sk-or-v1-
-   ```
+
+    === "macOS"
+
+        ```bash
+        echo $OPENROUTER_API_KEY_MYPROJECT
+        # Should start with: sk-or-v1-
+        ```
+
+    === "Linux"
+
+        ```bash
+        echo $OPENROUTER_API_KEY_MYPROJECT
+        # Should start with: sk-or-v1-
+        ```
+
+    === "Windows"
+
+        ```powershell
+        echo $env:OPENROUTER_API_KEY_MYPROJECT
+        # Should start with: sk-or-v1-
+        ```
 
 2. **Check key on OpenRouter:**
    - Visit https://openrouter.ai/keys

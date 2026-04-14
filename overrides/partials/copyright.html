@@ -1,0 +1,23 @@
+{# Custom copyright partial with cross-site navigation links #}
+<div class="md-copyright">
+  <div class="md-copyright__highlight md-osc-sitelinks">
+    <a href="https://osc.earth">osc.earth</a>
+    <span aria-hidden="true">·</span>
+    <a href="https://docs.osc.earth">docs.osc.earth</a>
+    <span aria-hidden="true">·</span>
+    <a href="https://courses.osc.earth">courses.osc.earth</a>
+  </div>
+  {% if config.copyright %}
+    <div class="md-copyright__copyright">
+      {{ config.copyright }}
+    </div>
+  {% endif %}
+  {% if not config.extra.generator == false %}
+    <div class="md-copyright__generator">
+      Made with
+      <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+        Material for MkDocs
+      </a>
+    </div>
+  {% endif %}
+</div>

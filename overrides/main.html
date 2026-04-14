@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <style>
+    .md-osc-sitelinks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem 0.6rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+    .md-osc-sitelinks a {
+      color: var(--md-footer-fg-color);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 120ms ease;
+    }
+    .md-osc-sitelinks a:hover,
+    .md-osc-sitelinks a:focus {
+      border-bottom-color: currentColor;
+    }
+    .md-osc-sitelinks span {
+      opacity: 0.5;
+    }
+  </style>
+{% endblock %}
+
+{% block libs %}
+  {{ super() }}
+  <script>
+    (function () {
+      var HOME = "https://osc.earth";
+      function applyLogoLink() {
+        var selectors = [
+          "a.md-header__button.md-logo",
+          "a.md-header__title"
+        ];
+        selectors.forEach(function (sel) {
+          document.querySelectorAll(sel).forEach(function (el) {
+            el.setAttribute("href", HOME);
+          });
+        });
+      }
+      if (typeof document$ !== "undefined" && document$.subscribe) {
+        document$.subscribe(applyLogoLink);
+      } else {
+        document.addEventListener("DOMContentLoaded", applyLogoLink);
+      }
+    })();
+  </script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <style>
+    .md-osc-sitelinks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem 0.6rem;
+      margin: 0 0 0.4rem;
+      padding: 0;
+      list-style: none;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+    .md-osc-sitelinks li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .md-osc-sitelinks li + li::before {
+      content: "·";
+      opacity: 0.5;
+    }
+    .md-osc-sitelinks a {
+      color: var(--md-footer-fg-color);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 120ms ease;
+    }
+    .md-osc-sitelinks a:hover,
+    .md-osc-sitelinks a:focus {
+      border-bottom-color: currentColor;
+    }
+  </style>
+{% endblock %}

@@ -402,18 +402,26 @@ If all of these work, you are ready for Week 2.
 ## Before Next Session
 
 !!! note "Install Claude Code"
-    Before Week 2, install [Claude Code](https://claude.ai/claude-code):
+    Before Week 2, install [Claude Code](https://code.claude.com/docs/en/overview):
 
     === "macOS"
 
+        Native install (recommended, auto-updates):
+
         ```bash
-        brew install claude-code
+        curl -fsSL https://claude.ai/install.sh | bash
+        ```
+
+        Or via Homebrew:
+
+        ```bash
+        brew install --cask claude-code
         ```
 
     === "Linux"
 
         ```bash
-        curl -fsSL https://claude.ai/install-cli | sh
+        curl -fsSL https://claude.ai/install.sh | bash
         ```
 
     === "Windows"
@@ -421,7 +429,13 @@ If all of these work, you are ready for Week 2.
         In your WSL Ubuntu terminal:
 
         ```bash
-        curl -fsSL https://claude.ai/install-cli | sh
+        curl -fsSL https://claude.ai/install.sh | bash
+        ```
+
+        Or directly in PowerShell (requires [Git for Windows](https://git-scm.com/downloads/win)):
+
+        ```powershell
+        irm https://claude.ai/install.ps1 | iex
         ```
 
     Verify:

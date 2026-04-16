@@ -16,8 +16,15 @@ The session is structured around one key insight from Anthropic's own documentat
     - Set up the `.context/` directory pattern for tracking project state across sessions
     - Identify the nonprofit pricing option available to 501(c)(3) university labs
 
-!!! info "Video coming soon"
-    The session recording will be posted here after the live session on Wednesday April 15, 2026. In the meantime, the slides below cover the same material.
+<div class="embed-container">
+  <iframe
+    src="https://www.youtube.com/embed/NKTMUjTHNFg"
+    title="Week 1: Git, GitHub, and the Command Line"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
 
 ## Slides
 

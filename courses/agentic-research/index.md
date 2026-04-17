@@ -9,6 +9,7 @@ A 10-week live course teaching researchers how to use Claude Code and AI coding 
 - **Dates:** April 8 -- June 9, 2026
 - **Zoom:** [Join via Zoom](https://ucsd.zoom.us/j/93199206194)
 - **Nextcloud Talk:** [Join via Nextcloud](https://skynas.tail75926.ts.net/call/z2qi8v6g) (alternative for those without Zoom access)
+- **Office Hours:** Fridays 9-10 am PT, [Join via Zoom](https://ucsd.zoom.us/j/91024610601)
 - **Recordings:** Uploaded to [YouTube](https://www.youtube.com/@neuromechanist) after each session
 - **Community:** [Discord](https://discord.gg/5dWJCUmUww) (OpenScience Collective)
 - **Plugin:** [research-skills](https://github.com/neuromechanist/research-skills) (free, open source)

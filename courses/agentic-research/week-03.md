@@ -6,7 +6,7 @@ Week 2 installed the agent. This week is about organizing research work so the a
 
 With no structure, the agent's speed compounds into technical debt: plausible code that silently does the wrong thing, discovered three weeks later during peer review. With steps, checks, and balances, the agent's speed compounds into output: one reviewable chunk at a time, reshape the plan before code is committed, catch anything missed with pull request (PR) review, and end with a pipeline you can hand to a collaborator.
 
-Everything in this guide is anchored to the course practicum: a study-level ERP analysis on the Healthy Brain Network (HBN) EEG Release 3 dataset, comparing shots in "The Present" Pixar short that open with the boy visible against shots that open with the puppy visible.
+Everything in this guide is anchored to the course practicum: a study-level ERSP analysis on the [Healthy Brain Network (HBN) EEG Release 3](https://nemar.org/dataexplorer/detail?dataset_id=ds005507) dataset. The research question is real and open: **does the group-level EEG response in the first 500 ms after a movie shot change depend on what is in the shot?** We answer a concrete instance of that question by comparing shots in *"The Present"* that open with the boy visible against shots that open with the puppy visible. The contrast has not been published for this dataset; the pipeline we build this week is the first half of a publishable analysis.
 
 !!! abstract "Learning Objectives"
     - Write a structured problem definition (Goal, Rough steps, Checks, Success criteria, Quality control) before any code

@@ -39,9 +39,20 @@ A 10-week live course teaching researchers how to use Claude Code and AI coding 
 - A [GitHub](https://github.com) account (free)
 - No prior coding experience required for Weeks 1-2
 
-## Practicum
+## Practicum: A Real Research Project
 
-The course includes a running practicum analyzing Healthy Brain Network (HBN) EEG data for movie shot-change events. The instructor demonstrates each workflow live using EEGLAB + [matlab-mcp-tools](https://github.com/neuromechanist/matlab-mcp-tools) (Claude Code drives MATLAB). Students are encouraged to bring their own projects.
+Every workflow in this course is demonstrated against an actual open research question, not a toy dataset. The practicum asks: **is there a group-level electroencephalography (EEG) signature locked to movie shot changes, and does it depend on what is in the shot?**
+
+Concretely, we compare event-related spectral perturbation (ERSP) in the first 500 ms after shot onset between shots in the Pixar short *"The Present"* that open with the boy visible against shots that open with the puppy visible. The contrast isolates content-driven brain responses (animacy, social attention) from low-level visual-onset effects that every shot change shares.
+
+The dataset is the published [Healthy Brain Network (HBN) EEG Release 3](https://nemar.org/dataexplorer/detail?dataset_id=ds005507) on NEMAR and OpenNeuro: 183 children and adolescents watching *The Present*, 128-channel high-density EEG, formatted with Brain Imaging Data Structure (BIDS) and annotated with Hierarchical Event Descriptors (HED). Shot-level annotations come from the EventFormer project (Shirazi lab): 56 shots with frame-level descriptions, log-luminance-ratio, and content flags (`has_boy`, `has_puppy`).
+
+This is not a reproduction of an existing result. The boy-versus-puppy ERSP contrast has not been published for this dataset, and the animacy-of-opening-shot question is genuinely open. The deliverable is a reproducible pipeline (BIDS import -> cleaning -> adaptive mixture independent component analysis (AMICA) -> IClabel -> shot-aligned epoching -> ERSP -> cluster-level statistics) plus a publication-quality figure of the group contrast. The instructor drives the analysis live each week using EEGLAB plus [matlab-mcp-tools](https://github.com/neuromechanist/matlab-mcp-tools) (Claude Code drives MATLAB).
+
+Students are welcome to bring their own research projects and apply the same workflow in parallel. The scaffolding transfers: structured problem definition, epic/phase decomposition, plan mode, pull request review.
+
+!!! tip "Practicum repository"
+    Starter materials (the structured problem brief and the shot-events table) live at [sessions/week-03/practicum/](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-03/practicum) in the course repo. The practicum itself is built live during the Week 3 session at [OpenScience-Collective/agentic-research-practicum](https://github.com/OpenScience-Collective/agentic-research-practicum).
 
 ## Instructor
 

@@ -19,18 +19,8 @@ Everything in this guide is anchored to the course practicum: a study-level ERP 
     - Run `/review-pr` against every PR and address every finding
     - Walk the HBN practicum end to end: from `git init` to a merged Phase 1 preprocessing PR
 
-<div class="embed-container">
-  <iframe
-    src="https://www.youtube.com/embed/NKTMUjTHNFg"
-    title="Week 2: Setting Up Claude Code for Research"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-  </iframe>
-</div>
-
-!!! info "Video"
-    The Week 3 recording will appear here once it is published to YouTube. The embed above shows the Week 2 session for context.
+!!! info "Recording"
+    The Week 3 session recording will be posted to [neuromechanist on YouTube](https://www.youtube.com/@neuromechanist) after the live session on **Tuesday, April 21, 2026**.
 
 ## Slides
 
@@ -366,3 +356,35 @@ At the end of the session, you have a private repository, a structured brief, an
 ---
 
 *Licensed [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt this guide with attribution. Source in the [course repository](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/blog).*
+
+<style>
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+.embed-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+.slide-hint {
+  margin: -0.5rem 0 1.5rem 0;
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--lighter);
+}
+.slide-hint kbd {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 3px;
+  background: var(--md-code-bg-color);
+}
+</style>

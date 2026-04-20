@@ -19,15 +19,8 @@ Setup is a one-time investment of 20 to 30 minutes per project. It pays back eve
     - Prompt Claude specifically enough that the first response is usable
     - Identify the nonprofit pricing option available to 501(c)(3) labs
 
-<div class="embed-container">
-  <iframe
-    src="https://www.youtube.com/embed/NKTMUjTHNFg"
-    title="Week 1: Git, GitHub, and the Command Line"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-  </iframe>
-</div>
+!!! info "Recording"
+    The Week 2 session recording will be posted to [neuromechanist on YouTube](https://www.youtube.com/@neuromechanist). Swap the YouTube video identifier into this page when the upload is ready.
 
 ## Slides
 

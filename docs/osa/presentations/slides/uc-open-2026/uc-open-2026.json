@@ -1,0 +1,344 @@
+{
+  "presentation": {
+    "metadata": {
+      "title": "Open Science Assistant at UC Open 2026",
+      "author": "Seyed Yahya Shirazi",
+      "description": "A community-owned AI model for research tools. 15-minute talk at the UC Open 2026 summit, Berkeley.",
+      "theme": "light",
+      "aspectRatio": "16:9",
+      "controls": {
+        "slideNumbers": true,
+        "progress": true,
+        "showNotes": false
+      },
+      "customTheme": {
+        "colors": {
+          "primary": "#1D4ED8",
+          "background": "#FFFFFF",
+          "text": "#0F172A",
+          "accent": "#059669"
+        },
+        "fonts": {
+          "heading": "Inter, system-ui, sans-serif",
+          "body": "Inter, system-ui, sans-serif"
+        }
+      }
+    },
+    "slides": [
+      {
+        "id": "title",
+        "layout": "title",
+        "background": "#F0F4FF",
+        "transition": "fade",
+        "elements": [
+          {
+            "type": "image",
+            "src": "./images/ai-icon-brain-eeg.png",
+            "alt": "Research community icon",
+            "width": "130px",
+            "position": { "area": "center", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "# Open Science Assistant",
+            "style": { "fontSize": "xxl", "alignment": "center", "fontWeight": "bold", "color": "#1D4ED8" },
+            "position": { "area": "center", "order": 1 }
+          },
+          {
+            "type": "text",
+            "content": "A community-owned AI model for research tools",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#334155" },
+            "position": { "area": "center", "order": 2 }
+          },
+          {
+            "type": "text",
+            "content": "**Seyed Yahya Shirazi** · Open Science Collective (OSC)\n\nUC Open 2026 · Berkeley · April 2026 · **docs.osc.earth/osa**",
+            "style": { "fontSize": "medium", "alignment": "center", "color": "#475569" },
+            "position": { "area": "center", "order": 3 }
+          }
+        ],
+        "speakerNotes": "Hi, I'm Yahya with the Open Science Collective. In the next 15 minutes I want to show you a pattern we've been building at OSC: a single platform that lets any research community stand up a precise, citation-backed AI assistant in under a day. We call the exemplar Open Science Assistant, or OSA. I'll cover what OSC is doing and why the model works, what OSA looks like in practice across seven live communities, why the architecture avoids the failure modes of plain retrieval systems, the YAML that actually onboards a community, and how you can join."
+      },
+      {
+        "id": "osc-model",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Open Science Collective (OSC)",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "Academic research runs on open-source software that is **chronically underfunded**. Single-maintainer dropouts collapse entire ecosystems.\n\nOSC builds **shared infrastructure** so small communities don't each reinvent the same stack.\n\n**Open Science Assistant (OSA)** is one exemplar: the AI-assistant layer for research tools.",
+            "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/osc-home.png",
+            "alt": "Open Science Collective homepage: 0.1% of grant funding could solve this; 1-2 maintainer losses collapse ecosystems; $180M yearly would fund all research software",
+            "width": "100%",
+            "position": { "area": "right", "order": 0 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "**Your community could be next.** The platform is open source, the onboarding is one YAML file, and the running cost is bounded.",
+            "position": { "area": "footer", "order": 0 }
+          }
+        ],
+        "speakerNotes": "The backdrop: academic software is under-funded at a structural level. A fraction of a percent of grant money would fund every piece of research software we depend on, yet most tools rely on one or two maintainers. When they burn out, everything downstream breaks. OSC's pitch is shared infrastructure: instead of every community rebuilding deployment, observability, auth, and now AI, we build it once and let communities own their part. OSA is the AI layer of that shared infrastructure. The 'your community could be next' line is literal; I'll show you the YAML that onboards a new community at the end."
+      },
+      {
+        "id": "friction",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## The friction we keep hitting",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "### Communities moving slowly on AI",
+            "style": { "fontSize": "large", "fontWeight": "bold", "color": "#DC2626" },
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              "**Docs rot**, forums overload, 20 years of scattered archives",
+              "No resources to build a bespoke assistant",
+              "Users still ask the same questions every week"
+            ],
+            "style": { "fontSize": "large" },
+            "position": { "area": "left", "order": 1 }
+          },
+          {
+            "type": "text",
+            "content": "### General AI moving too fast",
+            "style": { "fontSize": "large", "fontWeight": "bold", "color": "#DC2626" },
+            "position": { "area": "right", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              "Hallucinates tool-specific answers with confidence",
+              "No citations, no source of truth",
+              "Trust erodes after one bad reply"
+            ],
+            "style": { "fontSize": "large" },
+            "position": { "area": "right", "order": 1 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "note",
+            "content": "Researchers want **precise, citation-backed answers** from the tools they already trust. Not creative guesses.",
+            "position": { "area": "footer", "order": 0 }
+          }
+        ],
+        "speakerNotes": "Two failure modes we see constantly. On one side: communities whose documentation is good but scattered across 20 years of PRs, forum posts, mailing lists, and papers. They'd love an assistant but can't spare the engineer-years. On the other side: general-purpose AI that will happily hallucinate a MATLAB function signature or invent a BIDS validation rule that doesn't exist. Both fail the researcher who just wants a reliable answer. We think there's a narrow middle path: precise, community-scoped, citation-backed assistants. That's what the rest of this talk is about."
+      },
+      {
+        "id": "one-platform",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## One platform, many communities",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/demo-home.png",
+            "alt": "Seven live assistant cards: BIDS, EEGLAB, FieldTrip, HED, MetaBCI, MNE-Python, NEMAR",
+            "width": "100%",
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/ai-icon-hub.png",
+            "alt": "Platform hub with satellite communities",
+            "width": "140px",
+            "position": { "area": "right", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "**Seven live assistants**, one stack:\n\n- BIDS · Brain Imaging Data Structure\n- EEGLAB · MATLAB EEG toolbox\n- FieldTrip · MEG / EEG / iEEG\n- HED · Hierarchical Event Descriptors\n- MetaBCI · Brain-Computer Interfaces\n- MNE-Python · neurophysiology\n- NEMAR · BIDS data archive\n\n*Same onboarding. Each community keeps its own expertise.*",
+            "style": { "fontSize": "medium" },
+            "position": { "area": "right", "order": 1 }
+          }
+        ],
+        "speakerNotes": "Here are the seven live assistants as of this week. They span very different tools and audiences, but they all run on the same platform. Same deployment, same observability, same cost controls. What changes per community is the YAML config and any domain-specific tools, which I'll show in a minute. The point: each community keeps its expertise, we don't homogenize their voice, and the marginal cost of adding the next community is roughly one afternoon of config work."
+      },
+      {
+        "id": "architecture",
+        "layout": "single-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Architecture: why not plain retrieval?",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/architecture.svg",
+            "alt": "Architecture diagram: researcher to widget to edge worker to FastAPI plus LangGraph agent; agent queries SQLite FTS5 per-community database; sources (GitHub, docs, papers, mailing lists, FAQs) sync into the database on every PR, issue, and doc update; answer with citations returns to researcher",
+            "width": "78%",
+            "position": { "area": "content", "order": 0 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "info",
+            "content": "**Not pure RAG.** Source of truth is the live community. No stale embeddings; the agent cites the document it read.",
+            "position": { "area": "footer", "order": 0 }
+          }
+        ],
+        "speakerNotes": "Four things make this architecture work for small communities. First, it's a single-instance deployment: edge worker in front for CORS and rate-limits, one FastAPI backend, one SQLite database per community. No Kubernetes, no vector DB, no multi-tenant distributed state. Second, the knowledge store is SQLite with full-text search, not a vector database. That means we can reindex the whole community in minutes instead of reprocessing embeddings. Third, the agent has tools, not just retrieval: it can search GitHub issues, search papers, look up FAQs, retrieve specific docs by path. Every tool call is logged, every answer links back to a source. Fourth, this is not classic Retrieval-Augmented Generation. The source of truth lives in the community's own systems, and we re-sync on every PR, issue, and doc change. That kills the usual RAG failure mode where embeddings drift out of date."
+      },
+      {
+        "id": "pipeline-dashboard",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Knowledge pipeline & public status",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/status-overview.png",
+            "alt": "Status dashboard showing 2,437 questions answered, 7 active communities, 98.1% success rate",
+            "width": "100%",
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/ai-icon-sync.png",
+            "alt": "Continuous sync between document sources",
+            "width": "80px",
+            "position": { "area": "right", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              "Synced sources: **GitHub, docs, papers, mailing lists, FAQs**",
+              "Every PR, issue, or doc change triggers re-index",
+              "Anthropic **prompt caching ~90%** cost cut on system + repeat prompts",
+              "Per-community budget caps, maintainer alerts",
+              "**status.osc.earth/osa** — public trust signal"
+            ],
+            "style": { "fontSize": "medium" },
+            "position": { "area": "right", "order": 1 }
+          }
+        ],
+        "speakerNotes": "Public status page is non-negotiable for us. If you're asking a community to trust an AI assistant over their own judgment, they deserve to see the machine's vital signs. Every sync run, every failure, every community's request count, and per-tool usage is on status.osc.earth/osa. You can check it right now. The pipeline pulls from five sources: GitHub items, documentation pages, research papers via OpenAlex, community mailing lists, and community FAQs. The FAQ generation uses a two-stage LLM pipeline that cut inference cost about 85 percent compared to a naive approach. Budget caps are per-community with maintainer alerts; if a runaway script is hammering the assistant, the maintainer gets paged before the bill does."
+      },
+      {
+        "id": "yaml-onboarding",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## Onboarding is one YAML file",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/yaml-snippet.png",
+            "alt": "EEGLAB YAML configuration: id eeglab, name EEGLAB, default_model claude-haiku-4.5, links with homepage documentation repository, widget with title and suggested questions, maintainers arnodelorme, budget daily_limit_usd 5.00, system_prompt the community voice",
+            "width": "100%",
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/ai-icon-yaml.png",
+            "alt": "YAML config with gear icon",
+            "width": "90px",
+            "position": { "area": "right", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              "**Identity & model** choice",
+              "**Links** drive knowledge sync",
+              "**Widget** + suggested prompts",
+              "**Maintainers** own admin + alerts",
+              "**Budget** caps cost per community",
+              "**System prompt** = the voice"
+            ],
+            "style": { "fontSize": "large" },
+            "position": { "area": "right", "order": 1 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "**One merged PR** creates the assistant, the API routes, the widget, and the knowledge sync.",
+            "position": { "area": "footer", "order": 0 }
+          }
+        ],
+        "speakerNotes": "This is a real excerpt from the EEGLAB config, verbatim except for comments I stripped for the slide. Every community gets a file like this. The identity fields and default model are obvious. Links under 'homepage, documentation, repository' are what the knowledge sync job follows to build the community database. The widget block configures the chat UI, including the three or four suggested questions that anchor new users. Maintainers get scoped admin on the status dashboard and receive alerts. Budget caps prevent runaway costs. System prompt is the voice; it's the only place we encode community-specific guidance like 'always start with the GUI approach for beginners.' One merged PR to the registry creates the assistant end to end. This is what we mean when we say your community could be next."
+      },
+      {
+        "id": "usage-join",
+        "layout": "two-column",
+        "transition": "slide",
+        "elements": [
+          {
+            "type": "text",
+            "content": "## It works, and we want you in",
+            "style": { "fontSize": "xxl", "alignment": "left", "color": "#1D4ED8" },
+            "position": { "area": "header", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/status-activity.png",
+            "alt": "EEGLAB daily request chart, Feb-April 2026: peaks over 100 requests per day, with red error bars near zero",
+            "width": "100%",
+            "position": { "area": "left", "order": 0 }
+          },
+          {
+            "type": "image",
+            "src": "./images/ai-icon-chat.png",
+            "alt": "Chat bubble with checkmark",
+            "width": "100px",
+            "position": { "area": "right", "order": 0 }
+          },
+          {
+            "type": "bullets",
+            "items": [
+              "**EEGLAB**: 1,638 questions · **99% success**",
+              "Peaks **>100 questions/day** on active days",
+              "Six more communities live and ramping",
+              "**github.com/OpenScience-Collective/osa**",
+              "**docs.osc.earth/osa**",
+              "**demo.osc.earth** — try any assistant live"
+            ],
+            "style": { "fontSize": "large" },
+            "position": { "area": "right", "order": 1 }
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "**Bring your community.** File an issue, drop into the Discord, or write a YAML. We will help you onboard.",
+            "position": { "area": "footer", "order": 0 }
+          }
+        ],
+        "speakerNotes": "Real usage, live today. EEGLAB alone has answered over sixteen hundred questions in ten weeks with a ninety-nine percent success rate. On active days we clear a hundred questions. Six other communities are live and ramping; some are new enough that numbers are still small, which is fine. The platform scales down gracefully to a community with a dozen users. If you're here and you maintain a research tool, or you work with a community that wants one of these, come talk to me after the session. The code is open source, the docs are at docs.osc.earth/osa, and you can try any live assistant right now at demo.osc.earth. Thanks."
+      }
+    ]
+  }
+}

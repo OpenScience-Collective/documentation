@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 90 1400 570" width="1400" height="570" font-family="Inter, system-ui, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1D4ED8"/>
+    </marker>
+    <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669"/>
+    </marker>
+    <style>
+      .box { fill: #fff; stroke: #1D4ED8; stroke-width: 2.5; }
+      .box-blue { fill: #1D4ED8; stroke: #1D4ED8; stroke-width: 2.5; }
+      .box-green { fill: #059669; stroke: #059669; stroke-width: 2.5; }
+      .txt { font-size: 22px; font-weight: 600; fill: #0F172A; }
+      .txt-w { font-size: 22px; font-weight: 600; fill: #fff; }
+      .txt-sub { font-size: 17px; font-weight: 400; fill: #475569; }
+      .txt-sub-w { font-size: 17px; font-weight: 400; fill: #E0E7FF; }
+      .line { stroke: #1D4ED8; stroke-width: 3; fill: none; }
+      .line-g { stroke: #059669; stroke-width: 3; fill: none; }
+      .label { font-size: 17px; font-weight: 600; fill: #1D4ED8; }
+      .label-g { font-size: 17px; font-weight: 600; fill: #059669; }
+    </style>
+  </defs>
+
+  <!-- Main row -->
+  <rect class="box" x="30" y="300" width="200" height="110" rx="16"/>
+  <text class="txt" x="130" y="350" text-anchor="middle">Researcher</text>
+  <text class="txt-sub" x="130" y="380" text-anchor="middle">(your community)</text>
+
+  <rect class="box" x="280" y="300" width="220" height="110" rx="14"/>
+  <text class="txt" x="390" y="350" text-anchor="middle">Embeddable</text>
+  <text class="txt" x="390" y="382" text-anchor="middle">widget</text>
+
+  <rect class="box" x="550" y="300" width="220" height="110" rx="14"/>
+  <text class="txt" x="660" y="345" text-anchor="middle">Edge worker</text>
+  <text class="txt-sub" x="660" y="375" text-anchor="middle">CORS, rate-limits</text>
+  <text class="txt-sub" x="660" y="398" text-anchor="middle">bot protection</text>
+
+  <rect class="box-blue" x="820" y="260" width="270" height="200" rx="18"/>
+  <text class="txt-w" x="955" y="300" text-anchor="middle" font-size="24">FastAPI + LangGraph</text>
+  <text class="txt-sub-w" x="955" y="328" text-anchor="middle">agent loop · tool calls</text>
+  <line x1="850" y1="350" x2="1060" y2="350" stroke="#93C5FD" stroke-width="1.5"/>
+  <text class="txt-sub-w" x="955" y="380" text-anchor="middle">prompt caching</text>
+  <text class="txt-sub-w" x="955" y="405" text-anchor="middle">per-community tools</text>
+  <text class="txt-sub-w" x="955" y="430" text-anchor="middle">citations by construction</text>
+
+  <!-- DB -->
+  <g>
+    <ellipse cx="1240" cy="155" rx="85" ry="18" fill="#1D4ED8" stroke="#1D4ED8" stroke-width="2.5"/>
+    <path d="M1155 155 L1155 235 Q1155 253 1240 253 Q1325 253 1325 235 L1325 155" fill="#1D4ED8" stroke="#1D4ED8" stroke-width="2.5"/>
+    <ellipse cx="1240" cy="155" rx="85" ry="18" fill="#1D4ED8" stroke="#1D4ED8" stroke-width="2.5"/>
+    <text class="txt-w" x="1240" y="195" text-anchor="middle">SQLite FTS5</text>
+    <text class="txt-sub-w" x="1240" y="225" text-anchor="middle">per-community DB</text>
+  </g>
+
+  <!-- Sources -->
+  <rect class="box-green" x="1155" y="495" width="210" height="155" rx="16"/>
+  <text class="txt-w" x="1260" y="530" text-anchor="middle">Sources</text>
+  <text class="txt-sub-w" x="1260" y="560" text-anchor="middle">GitHub · Docs</text>
+  <text class="txt-sub-w" x="1260" y="585" text-anchor="middle">Papers · Mailing</text>
+  <text class="txt-sub-w" x="1260" y="610" text-anchor="middle">FAQs (auto-gen)</text>
+
+  <!-- ARROWS, routed to avoid crossings -->
+  <!-- Researcher -> Widget -->
+  <path d="M230 345 L280 345" class="line" marker-end="url(#arr)"/>
+  <text class="label" x="240" y="330">ask</text>
+
+  <!-- Widget -> Edge -->
+  <path d="M500 345 L550 345" class="line" marker-end="url(#arr)"/>
+  <text class="label" x="508" y="330">HTTP</text>
+
+  <!-- Edge -> Agent -->
+  <path d="M770 345 L820 345" class="line" marker-end="url(#arr)"/>
+  <text class="label" x="778" y="330">API</text>
+
+  <!-- Agent -> DB (exits TOP of agent, goes up and right to LEFT of cylinder) -->
+  <path d="M1060 260 C 1100 230 1110 180 1155 170" class="line" marker-end="url(#arr)"/>
+  <text class="label" x="1062" y="215">query</text>
+
+  <!-- DB -> Agent (exits BOTTOM of cylinder, comes down and left to TOP-RIGHT of agent) -->
+  <path d="M1240 253 C 1240 290 1170 290 1090 290" class="line" marker-end="url(#arr)"/>
+  <text class="label" x="1150" y="278">docs</text>
+
+  <!-- Sources -> DB sync (green dashed, vertical) -->
+  <path d="M1260 495 L1260 275" class="line-g" stroke-dasharray="10 6" marker-end="url(#arrG)"/>
+  <text class="label-g" x="1108" y="395">sync on every</text>
+  <text class="label-g" x="1108" y="416">PR / issue / doc</text>
+
+  <!-- Agent -> Researcher (single clean return along bottom) -->
+  <path d="M955 460 L955 560 L130 560 L130 410" class="line-g" marker-end="url(#arrG)"/>
+  <text class="label-g" x="540" y="545" text-anchor="middle">answer with citations</text>
+</svg>

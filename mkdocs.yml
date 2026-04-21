@@ -181,6 +181,7 @@ nav:
           - NEMAR Tools: osa/tools/nemar.md
       - Presentations:
           - osa/presentations/index.md
+          - UC Open 2026: osa/presentations/uc-open-2026.md
           - OSA Platform Overview: osa/presentations/osa-platform.md
       - Development: osa/development.md
       - Version Management: osa/version-management.md

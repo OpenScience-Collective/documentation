@@ -353,6 +353,46 @@
           }
         ],
         "speakerNotes": "Real usage, live today. EEGLAB alone has answered over sixteen hundred questions in ten weeks with a ninety-nine percent success rate. On active days we clear a hundred questions. Six other communities are live and ramping; some are new enough that numbers are still small, which is fine. The platform scales down gracefully to a community with a dozen users. If you're here and you maintain a research tool, or you work with a community that wants one of these, come talk to me after the session. The code is open source, the docs are at docs.osc.earth/osa, and you can try any live assistant right now at demo.osc.earth. Thanks."
+      },
+      {
+        "id": "thank-you",
+        "layout": "title",
+        "background": "#F0F4FF",
+        "transition": "fade",
+        "elements": [
+          {
+            "type": "image",
+            "src": "./images/ai-icon-chat.png",
+            "alt": "Chat bubble with checkmark",
+            "width": "120px",
+            "position": { "area": "center", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "# Thank you",
+            "style": { "fontSize": "xxl", "alignment": "center", "fontWeight": "bold", "color": "#1D4ED8" },
+            "position": { "area": "center", "order": 1 }
+          },
+          {
+            "type": "text",
+            "content": "To the OSC team, the maintainers of **HED, BIDS, EEGLAB, MNE-Python, NEMAR, FieldTrip, MetaBCI**, and the UC Open community.",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#334155" },
+            "position": { "area": "center", "order": 2 }
+          },
+          {
+            "type": "text",
+            "content": "**Questions?**\n\n**docs.osc.earth/osa** · **demo.osc.earth** · **status.osc.earth/osa**\n\n**github.com/OpenScience-Collective/osa**",
+            "style": { "fontSize": "medium", "alignment": "center", "color": "#475569" },
+            "position": { "area": "center", "order": 3 }
+          },
+          {
+            "type": "text",
+            "content": "Seyed Yahya Shirazi · shirazi@ieee.org",
+            "style": { "fontSize": "medium", "alignment": "center", "color": "#1D4ED8" },
+            "position": { "area": "center", "order": 4 }
+          }
+        ],
+        "speakerNotes": "Thank you. A quick note of gratitude to the OSC team and to every maintainer in the communities running on OSA today; they carry the domain expertise that makes the assistants trustworthy. If you want to continue the conversation after this session, the docs, demo, and status pages are all linked, and the code is on GitHub under OpenScience-Collective. Happy to take questions."
       }
     ]
   }

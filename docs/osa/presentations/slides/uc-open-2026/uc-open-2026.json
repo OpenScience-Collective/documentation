@@ -72,9 +72,24 @@
           },
           {
             "type": "text",
-            "content": "Academic research runs on open-source software that is **chronically underfunded**. Single-maintainer dropouts collapse entire ecosystems.\n\nOSC builds **shared infrastructure** so small communities don't each reinvent the same stack.\n\n**Open Science Assistant (OSA)** is one exemplar: the AI-assistant layer for research tools.",
+            "content": "Academic research runs on open-source software that is **chronically underfunded**. Single-maintainer dropouts collapse entire ecosystems.",
             "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
-            "position": { "area": "left", "order": 0 }
+            "position": { "area": "left", "order": 0 },
+            "animation": { "fragment": true, "type": "fade", "index": 0 }
+          },
+          {
+            "type": "text",
+            "content": "OSC builds **shared infrastructure** so small communities don't each reinvent the same stack.",
+            "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
+            "position": { "area": "left", "order": 1 },
+            "animation": { "fragment": true, "type": "fade", "index": 1 }
+          },
+          {
+            "type": "text",
+            "content": "**Open Science Assistant (OSA)** is one exemplar: the AI-assistant layer for research tools.",
+            "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
+            "position": { "area": "left", "order": 2 },
+            "animation": { "fragment": true, "type": "fade", "index": 2 }
           },
           {
             "type": "image",
@@ -112,9 +127,9 @@
           {
             "type": "bullets",
             "items": [
-              "**Docs rot**, forums overload, 20 years of scattered archives",
-              "No resources to build a bespoke assistant",
-              "Users still ask the same questions every week"
+              { "text": "**Docs rot**, forums overload, 20 years of scattered archives", "animation": { "fragment": true, "type": "fade", "index": 0 } },
+              { "text": "No resources to build a bespoke assistant", "animation": { "fragment": true, "type": "fade", "index": 2 } },
+              { "text": "Users still ask the same questions every week", "animation": { "fragment": true, "type": "fade", "index": 4 } }
             ],
             "style": { "fontSize": "large" },
             "position": { "area": "left", "order": 1 }
@@ -128,9 +143,9 @@
           {
             "type": "bullets",
             "items": [
-              "Hallucinates tool-specific answers with confidence",
-              "No citations, no source of truth",
-              "Trust erodes after one bad reply"
+              { "text": "Hallucinates tool-specific answers with confidence", "animation": { "fragment": true, "type": "fade", "index": 1 } },
+              { "text": "No citations, no source of truth", "animation": { "fragment": true, "type": "fade", "index": 3 } },
+              { "text": "Trust erodes after one bad reply", "animation": { "fragment": true, "type": "fade", "index": 5 } }
             ],
             "style": { "fontSize": "large" },
             "position": { "area": "right", "order": 1 }
@@ -199,7 +214,7 @@
           {
             "type": "callout",
             "calloutType": "info",
-            "content": "**Not pure RAG.** Source of truth is the live community. No stale embeddings; the agent cites the document it read.",
+            "content": "**Not pure Retrieval-Augmented Generation (RAG).** Source of truth is the live community. No stale embeddings; the agent cites the document it read.",
             "position": { "area": "footer", "order": 0 }
           }
         ],
@@ -233,11 +248,11 @@
           {
             "type": "bullets",
             "items": [
-              "Synced sources: **GitHub, docs, papers, mailing lists, FAQs**",
-              "Every PR, issue, or doc change triggers re-index",
-              "Anthropic **prompt caching ~90%** cost cut on system + repeat prompts",
-              "Per-community budget caps, maintainer alerts",
-              "**status.osc.earth/osa** — public trust signal"
+              { "text": "Synced sources: **GitHub, docs, papers, mailing lists, FAQs**", "animation": { "fragment": true, "type": "fade", "index": 0 } },
+              { "text": "Every PR, issue, or doc change triggers re-index", "animation": { "fragment": true, "type": "fade", "index": 1 } },
+              { "text": "Anthropic **prompt caching ~90%** cost cut on system + repeat prompts", "animation": { "fragment": true, "type": "fade", "index": 2 } },
+              { "text": "Per-community budget caps, maintainer alerts", "animation": { "fragment": true, "type": "fade", "index": 3 } },
+              { "text": "**status.osc.earth/osa**, public trust signal", "animation": { "fragment": true, "type": "fade", "index": 4 } }
             ],
             "style": { "fontSize": "medium" },
             "position": { "area": "right", "order": 1 }
@@ -273,12 +288,12 @@
           {
             "type": "bullets",
             "items": [
-              "**Identity & model** choice",
-              "**Links** drive knowledge sync",
-              "**Widget** + suggested prompts",
-              "**Maintainers** own admin + alerts",
-              "**Budget** caps cost per community",
-              "**System prompt** = the voice"
+              { "text": "**Identity & model** choice", "animation": { "fragment": true, "type": "fade", "index": 0 } },
+              { "text": "**Links** drive knowledge sync", "animation": { "fragment": true, "type": "fade", "index": 1 } },
+              { "text": "**Widget** + suggested prompts", "animation": { "fragment": true, "type": "fade", "index": 2 } },
+              { "text": "**Maintainers** own admin + alerts", "animation": { "fragment": true, "type": "fade", "index": 3 } },
+              { "text": "**Budget** caps cost per community", "animation": { "fragment": true, "type": "fade", "index": 4 } },
+              { "text": "**System prompt** = the voice", "animation": { "fragment": true, "type": "fade", "index": 5 } }
             ],
             "style": { "fontSize": "large" },
             "position": { "area": "right", "order": 1 }
@@ -320,12 +335,12 @@
           {
             "type": "bullets",
             "items": [
-              "**EEGLAB**: 1,638 questions · **99% success**",
-              "Peaks **>100 questions/day** on active days",
-              "Six more communities live and ramping",
-              "**github.com/OpenScience-Collective/osa**",
-              "**docs.osc.earth/osa**",
-              "**demo.osc.earth** — try any assistant live"
+              { "text": "**EEGLAB**: 1,638 questions · **99% success**", "animation": { "fragment": true, "type": "fade", "index": 0 } },
+              { "text": "Peaks **>100 questions/day** on active days", "animation": { "fragment": true, "type": "fade", "index": 1 } },
+              { "text": "Six more communities live and ramping", "animation": { "fragment": true, "type": "fade", "index": 2 } },
+              { "text": "**github.com/OpenScience-Collective/osa**", "animation": { "fragment": true, "type": "fade", "index": 3 } },
+              { "text": "**docs.osc.earth/osa**", "animation": { "fragment": true, "type": "fade", "index": 4 } },
+              { "text": "**demo.osc.earth**, try any assistant live", "animation": { "fragment": true, "type": "fade", "index": 5 } }
             ],
             "style": { "fontSize": "large" },
             "position": { "area": "right", "order": 1 }
@@ -338,6 +353,46 @@
           }
         ],
         "speakerNotes": "Real usage, live today. EEGLAB alone has answered over sixteen hundred questions in ten weeks with a ninety-nine percent success rate. On active days we clear a hundred questions. Six other communities are live and ramping; some are new enough that numbers are still small, which is fine. The platform scales down gracefully to a community with a dozen users. If you're here and you maintain a research tool, or you work with a community that wants one of these, come talk to me after the session. The code is open source, the docs are at docs.osc.earth/osa, and you can try any live assistant right now at demo.osc.earth. Thanks."
+      },
+      {
+        "id": "thank-you",
+        "layout": "title",
+        "background": "#F0F4FF",
+        "transition": "fade",
+        "elements": [
+          {
+            "type": "image",
+            "src": "./images/ai-icon-chat.png",
+            "alt": "Chat bubble with checkmark",
+            "width": "120px",
+            "position": { "area": "center", "order": 0 }
+          },
+          {
+            "type": "text",
+            "content": "# Thank you",
+            "style": { "fontSize": "xxl", "alignment": "center", "fontWeight": "bold", "color": "#1D4ED8" },
+            "position": { "area": "center", "order": 1 }
+          },
+          {
+            "type": "text",
+            "content": "To the OSC team, the maintainers of **HED, BIDS, EEGLAB, MNE-Python, NEMAR, FieldTrip, MetaBCI**, and the UC Open community.",
+            "style": { "fontSize": "large", "alignment": "center", "color": "#334155" },
+            "position": { "area": "center", "order": 2 }
+          },
+          {
+            "type": "text",
+            "content": "**Questions?**\n\n**docs.osc.earth/osa** · **demo.osc.earth** · **status.osc.earth/osa**\n\n**github.com/OpenScience-Collective/osa**",
+            "style": { "fontSize": "medium", "alignment": "center", "color": "#475569" },
+            "position": { "area": "center", "order": 3 }
+          },
+          {
+            "type": "text",
+            "content": "Seyed Yahya Shirazi · shirazi@ieee.org",
+            "style": { "fontSize": "medium", "alignment": "center", "color": "#1D4ED8" },
+            "position": { "area": "center", "order": 4 }
+          }
+        ],
+        "speakerNotes": "Thank you. A quick note of gratitude to the OSC team and to every maintainer in the communities running on OSA today; they carry the domain expertise that makes the assistants trustworthy. If you want to continue the conversation after this session, the docs, demo, and status pages are all linked, and the code is on GitHub under OpenScience-Collective. Happy to take questions."
       }
     ]
   }

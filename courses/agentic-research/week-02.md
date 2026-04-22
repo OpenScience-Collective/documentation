@@ -22,7 +22,7 @@ Setup is a one-time investment of 20 to 30 minutes per project. It pays back eve
 <div class="embed-container">
   <iframe
     src="https://www.youtube.com/embed/NKTMUjTHNFg"
-    title="Week 1: Git, GitHub, and the Command Line"
+    title="Week 2: Setting Up Claude Code for Research"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>

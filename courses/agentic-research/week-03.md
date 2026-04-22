@@ -19,8 +19,15 @@ Everything in this guide is anchored to the course practicum: a study-level ERSP
     - Run `/review-pr` against every PR and address every finding
     - Walk the HBN practicum end to end: from `git init` to a merged Phase 1 preprocessing PR
 
-!!! info "Recording"
-    The Week 3 session recording will be posted to [neuromechanist on YouTube](https://www.youtube.com/@neuromechanist) after the live session on **Tuesday, April 21, 2026**.
+<div class="embed-container">
+  <iframe
+    src="https://www.youtube.com/embed/Y3S-3PkvkaE"
+    title="Week 1: Git, GitHub, and the Command Line"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
 
 ## Slides
 

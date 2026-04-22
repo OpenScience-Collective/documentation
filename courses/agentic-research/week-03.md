@@ -22,7 +22,7 @@ Everything in this guide is anchored to the course practicum: a study-level ERSP
 <div class="embed-container">
   <iframe
     src="https://www.youtube.com/embed/Y3S-3PkvkaE"
-    title="Week 1: Git, GitHub, and the Command Line"
+    title="Week 3: Project Management with AI"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>

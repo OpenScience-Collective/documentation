@@ -73,21 +73,21 @@
           {
             "type": "text",
             "content": "**Open-source research software is underfunded.** One maintainer often holds up a whole field.",
-            "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
+            "style": { "fontSize": "xl", "alignment": "left", "color": "#0F172A" },
             "position": { "area": "left", "order": 0 },
             "animation": { "fragment": true, "type": "fade", "index": 0 }
           },
           {
             "type": "text",
             "content": "**OSC thesis:** a small overhead on grant budgets funds it forever.",
-            "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
+            "style": { "fontSize": "xl", "alignment": "left", "color": "#0F172A" },
             "position": { "area": "left", "order": 1 },
             "animation": { "fragment": true, "type": "fade", "index": 1 }
           },
           {
             "type": "text",
             "content": "**Share the stack.** Pool dev money for tools everyone uses, like this assistant.",
-            "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
+            "style": { "fontSize": "xl", "alignment": "left", "color": "#0F172A" },
             "position": { "area": "left", "order": 2 },
             "animation": { "fragment": true, "type": "fade", "index": 2 }
           },
@@ -189,7 +189,7 @@
           {
             "type": "text",
             "content": "**Seven live assistants**, one stack:\n\n- BIDS · Brain Imaging Data Structure\n- EEGLAB · MATLAB EEG toolbox\n- FieldTrip · MEG / EEG / iEEG\n- HED · Hierarchical Event Descriptors\n- MetaBCI · Brain-Computer Interfaces\n- MNE-Python · neurophysiology\n- NEMAR · BIDS data archive\n\n*Same onboarding. Each community keeps its own expertise.*",
-            "style": { "fontSize": "medium" },
+            "style": { "fontSize": "xl" },
             "position": { "area": "right", "order": 1 }
           }
         ],

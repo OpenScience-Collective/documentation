@@ -72,21 +72,21 @@
           },
           {
             "type": "text",
-            "content": "Academic research runs on open-source software that is **chronically underfunded**. Single-maintainer dropouts collapse entire ecosystems.",
+            "content": "**Open-source research software is underfunded.** One maintainer often holds up a whole field.",
             "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
             "position": { "area": "left", "order": 0 },
             "animation": { "fragment": true, "type": "fade", "index": 0 }
           },
           {
             "type": "text",
-            "content": "OSC builds **shared infrastructure** so small communities don't each reinvent the same stack.",
+            "content": "**OSC thesis:** a small overhead on grant budgets funds it forever.",
             "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
             "position": { "area": "left", "order": 1 },
             "animation": { "fragment": true, "type": "fade", "index": 1 }
           },
           {
             "type": "text",
-            "content": "**Open Science Assistant (OSA)** is one exemplar: the AI-assistant layer for research tools.",
+            "content": "**Share the stack.** Pool dev money for tools everyone uses, like this assistant.",
             "style": { "fontSize": "large", "alignment": "left", "color": "#0F172A" },
             "position": { "area": "left", "order": 2 },
             "animation": { "fragment": true, "type": "fade", "index": 2 }
@@ -102,10 +102,11 @@
             "type": "callout",
             "calloutType": "tip",
             "content": "**Your community could be next.** The platform is open source, the onboarding is one YAML file, and the running cost is bounded.",
-            "position": { "area": "footer", "order": 0 }
+            "position": { "area": "footer", "order": 0 },
+            "animation": { "fragment": true, "type": "fade", "index": 3 }
           }
         ],
-        "speakerNotes": "The backdrop: academic software is under-funded at a structural level. A fraction of a percent of grant money would fund every piece of research software we depend on, yet most tools rely on one or two maintainers. When they burn out, everything downstream breaks. OSC's pitch is shared infrastructure: instead of every community rebuilding deployment, observability, auth, and now AI, we build it once and let communities own their part. OSA is the AI layer of that shared infrastructure. The 'your community could be next' line is literal; I'll show you the YAML that onboards a new community at the end."
+        "speakerNotes": "Three beats. First: the tools we all depend on are critically underfunded, and most rely on one or two maintainers. When one burns out, a whole field feels it. Second: OSC's thesis is that a tiny overhead on grant budgets, well under one percent, would fund this work forever. Third: the way we make that math work is by sharing the stack. Instead of every community rebuilding deployment, auth, observability, and now AI, we build it once and let each community own their part. OSA, the assistant you're about to see, is one piece of that shared stack. 'Your community could be next' is literal; I'll show you the YAML at the end."
       },
       {
         "id": "friction",
@@ -154,7 +155,8 @@
             "type": "callout",
             "calloutType": "note",
             "content": "Researchers want **precise, citation-backed answers** from the tools they already trust. Not creative guesses.",
-            "position": { "area": "footer", "order": 0 }
+            "position": { "area": "footer", "order": 0 },
+            "animation": { "fragment": true, "type": "fade", "index": 6 }
           }
         ],
         "speakerNotes": "Two failure modes we see constantly. On one side: communities whose documentation is good but scattered across 20 years of PRs, forum posts, mailing lists, and papers. They'd love an assistant but can't spare the engineer-years. On the other side: general-purpose AI that will happily hallucinate a MATLAB function signature or invent a BIDS validation rule that doesn't exist. Both fail the researcher who just wants a reliable answer. We think there's a narrow middle path: precise, community-scoped, citation-backed assistants. That's what the rest of this talk is about."
@@ -302,7 +304,8 @@
             "type": "callout",
             "calloutType": "tip",
             "content": "**One merged PR** creates the assistant, the API routes, the widget, and the knowledge sync.",
-            "position": { "area": "footer", "order": 0 }
+            "position": { "area": "footer", "order": 0 },
+            "animation": { "fragment": true, "type": "fade", "index": 6 }
           }
         ],
         "speakerNotes": "This is a real excerpt from the EEGLAB config, verbatim except for comments I stripped for the slide. Every community gets a file like this. The identity fields and default model are obvious. Links under 'homepage, documentation, repository' are what the knowledge sync job follows to build the community database. The widget block configures the chat UI, including the three or four suggested questions that anchor new users. Maintainers get scoped admin on the status dashboard and receive alerts. Budget caps prevent runaway costs. System prompt is the voice; it's the only place we encode community-specific guidance like 'always start with the GUI approach for beginners.' One merged PR to the registry creates the assistant end to end. This is what we mean when we say your community could be next."
@@ -349,7 +352,8 @@
             "type": "callout",
             "calloutType": "tip",
             "content": "**Bring your community.** File an issue, drop into the Discord, or write a YAML. We will help you onboard.",
-            "position": { "area": "footer", "order": 0 }
+            "position": { "area": "footer", "order": 0 },
+            "animation": { "fragment": true, "type": "fade", "index": 6 }
           }
         ],
         "speakerNotes": "Real usage, live today. EEGLAB alone has answered over sixteen hundred questions in ten weeks with a ninety-nine percent success rate. On active days we clear a hundred questions. Six other communities are live and ramping; some are new enough that numbers are still small, which is fine. The platform scales down gracefully to a community with a dozen users. If you're here and you maintain a research tool, or you work with a community that wants one of these, come talk to me after the session. The code is open source, the docs are at docs.osc.earth/osa, and you can try any live assistant right now at demo.osc.earth. Thanks."

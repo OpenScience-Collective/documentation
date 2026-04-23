@@ -132,7 +132,7 @@
               { "text": "No resources to build a bespoke assistant", "animation": { "fragment": true, "type": "fade", "index": 2 } },
               { "text": "Users still ask the same questions every week", "animation": { "fragment": true, "type": "fade", "index": 4 } }
             ],
-            "style": { "fontSize": "large" },
+            "style": { "fontSize": "xl" },
             "position": { "area": "left", "order": 1 }
           },
           {
@@ -148,7 +148,7 @@
               { "text": "No citations, no source of truth", "animation": { "fragment": true, "type": "fade", "index": 3 } },
               { "text": "Trust erodes after one bad reply", "animation": { "fragment": true, "type": "fade", "index": 5 } }
             ],
-            "style": { "fontSize": "large" },
+            "style": { "fontSize": "xl" },
             "position": { "area": "right", "order": 1 }
           },
           {
@@ -256,7 +256,7 @@
               { "text": "Per-community budget caps, maintainer alerts", "animation": { "fragment": true, "type": "fade", "index": 3 } },
               { "text": "**status.osc.earth/osa**, public trust signal", "animation": { "fragment": true, "type": "fade", "index": 4 } }
             ],
-            "style": { "fontSize": "medium" },
+            "style": { "fontSize": "xl" },
             "position": { "area": "right", "order": 1 }
           }
         ],
@@ -297,7 +297,7 @@
               { "text": "**Budget** caps cost per community", "animation": { "fragment": true, "type": "fade", "index": 4 } },
               { "text": "**System prompt** = the voice", "animation": { "fragment": true, "type": "fade", "index": 5 } }
             ],
-            "style": { "fontSize": "large" },
+            "style": { "fontSize": "xl" },
             "position": { "area": "right", "order": 1 }
           },
           {
@@ -345,7 +345,7 @@
               { "text": "**docs.osc.earth/osa**", "animation": { "fragment": true, "type": "fade", "index": 4 } },
               { "text": "**demo.osc.earth**, try any assistant live", "animation": { "fragment": true, "type": "fade", "index": 5 } }
             ],
-            "style": { "fontSize": "large" },
+            "style": { "fontSize": "xl" },
             "position": { "area": "right", "order": 1 }
           },
           {

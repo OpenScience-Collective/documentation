@@ -33,8 +33,8 @@
         "elements": [
           {
             "type": "image",
-            "src": "./images/ai-icon-brain-eeg.png",
-            "alt": "Research community icon",
+            "src": "./images/ai-icon-title-a.png",
+            "alt": "Chat bubble above a stack of research papers, representing an AI assistant answering from community literature",
             "width": "130px",
             "position": { "area": "center", "order": 0 }
           },

@@ -388,3 +388,35 @@ Week 5 is the first pure-research week of the course: literature search with the
 - [ty documentation](https://docs.astral.sh/ty/)
 - [Bun documentation](https://bun.sh/docs)
 - [Biome documentation](https://biomejs.dev/)
+
+<style>
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+.embed-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+.slide-hint {
+  margin: -0.5rem 0 1.5rem 0;
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--lighter);
+}
+.slide-hint kbd {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 3px;
+  background: var(--md-code-bg-color);
+}
+</style>

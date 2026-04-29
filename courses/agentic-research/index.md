@@ -25,7 +25,7 @@ A 10-week live course teaching researchers how to use Claude Code and AI coding 
 | Wed April 8 | [Week 1](week-01.md) | Git, GitHub, and the Command Line |
 | Wed April 15 | [Week 2](week-02.md) | Setting Up Claude Code for Research |
 | **Tue** April 21 | [Week 3](week-03.md) | Project Management with AI |
-| Wed April 29 | Week 4 | CI/CD and Code Quality |
+| Wed April 29 | [Week 4](week-04.md) | CI/CD and Code Quality |
 | Wed May 6 | Week 5 | Literature Search and Review |
 | Wed May 13 | Week 6 | Grant Proposal Writing |
 | Wed May 20 | Week 7 | Manuscript Preparation and Peer Review |

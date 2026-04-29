@@ -125,3 +125,4 @@ nav:
       - "Week 1: Git, GitHub, CLI": agentic-research/week-01.md
       - "Week 2: Claude Code Setup": agentic-research/week-02.md
       - "Week 3: Project Management with AI": agentic-research/week-03.md
+      - "Week 4: CI/CD and Code Quality": agentic-research/week-04.md

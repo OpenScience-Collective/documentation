@@ -16,6 +16,17 @@ The walkthrough at the end of this session adds a CI pipeline to the Healthy Bra
     - Scaffold a complete CI pipeline with `/project:setup-ci` in one command
     - Watch CI catch a deliberate typo and a deliberate type error in the practicum
 
+<div class="embed-container">
+  <iframe
+    src="https://www.youtube.com/embed/_-YHZwVynkQ"
+    title="Week 4: CI/CD and Code Quality"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+
+
 ## Slides
 
 <div class="embed-container">

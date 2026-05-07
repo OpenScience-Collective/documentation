@@ -16,6 +16,17 @@ The single most useful idea in this session: **a literature review has a Definit
     - Run `/manuscript:paper-review` and treat reviewer findings as a **boomerang** that re-enters the pipeline at the direction or collection stage
     - Recognise the failure modes that make AI-assisted reviews look credible but are not, and the mechanical disciplines that prevent each
 
+<div class="embed-container">
+  <iframe
+    src="https://www.youtube.com/embed/3SiigHNZMMs"
+    title="Week 4: CI/CD and Code Quality"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+
+
 ## Slides
 
 <div class="embed-container">
@@ -28,6 +39,7 @@ The single most useful idea in this session: **a literature review has a Definit
 </div>
 
 <p class="slide-hint">Use arrow keys to navigate. Press <kbd>F</kbd> for fullscreen, <kbd>?</kbd> for shortcuts.</p>
+
 
 ---
 

@@ -333,3 +333,54 @@ Three live actions:
 - Make sure your repo has a long-lived branch (`develop` or equivalent) where the lit review epic can land separately from `main`.
 
 Week 6 starts from the corpus produced here. A grant Specific Aims page is, structurally, a literature review condensed into one page; the cards and bibliography from this week feed directly into next week's drafting.
+
+---
+
+## Resources
+
+**Course materials**
+
+- [Week 5 session](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-05)
+- [Week 5 practicum](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-05/practicum)
+- [Week 5 blog (markdown source)](https://github.com/OpenScience-Collective/agentic-research-course/blob/main/blog/week-05-literature-review.md)
+- [Course repository](https://github.com/OpenScience-Collective/agentic-research-course)
+- [research-skills plugin](https://github.com/neuromechanist/research-skills) (bundles `opencite`, `manuscript`, `project`)
+
+**External references**
+
+- [opencite CLI](https://github.com/neuromechanist/opencite)
+- [Annotation Garden Initiative research foundation epic](https://github.com/Annotation-Garden/management/issues/3) (full-scale worked example)
+- [AGI direction papers](https://github.com/Annotation-Garden/management/tree/main/direction-papers)
+- [Open Science Collective Discord](https://discord.gg/5dWJCUmUww)
+
+<style>
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+.embed-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+.slide-hint {
+  margin: -0.5rem 0 1.5rem 0;
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--lighter);
+}
+.slide-hint kbd {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 3px;
+  background: var(--md-code-bg-color);
+}
+</style>

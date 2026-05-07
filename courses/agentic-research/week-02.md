@@ -600,6 +600,16 @@ claude
 
 ## Resources
 
+**Course materials**
+
+- [Week 2 session](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-02)
+- [Week 2 blog (markdown source)](https://github.com/OpenScience-Collective/agentic-research-course/blob/main/blog/week-02-claude-code-setup.md)
+- [Course repository](https://github.com/OpenScience-Collective/agentic-research-course)
+- [research-skills plugin](https://github.com/neuromechanist/research-skills) (course companion)
+- [matlab-mcp-tools](https://github.com/neuromechanist/matlab-mcp-tools) (EEGLAB integration for the practicum)
+
+**External references**
+
 - [Claude Code documentation](https://code.claude.com/docs) (official)
 - [Best practices](https://code.claude.com/docs/en/best-practices) (Anthropic)
 - [Memory / CLAUDE.md](https://code.claude.com/docs/en/memory)
@@ -609,11 +619,7 @@ claude
 - [Hooks](https://code.claude.com/docs/en/hooks)
 - [Subagents](https://code.claude.com/docs/en/sub-agents)
 - [Nonprofit pricing](https://claude.com/solutions/nonprofits) (for 501(c)(3) labs)
-- [Course repository](https://github.com/OpenScience-Collective/agentic-research-course)
-- [Week 2 blog (plain markdown source)](https://github.com/OpenScience-Collective/agentic-research-course/blob/main/blog/week-02-claude-code-setup.md)
 - [Open Science Collective Discord](https://discord.gg/5dWJCUmUww)
-- [research-skills plugin](https://github.com/neuromechanist/research-skills) (course companion)
-- [matlab-mcp-tools](https://github.com/neuromechanist/matlab-mcp-tools) (EEGLAB integration for the practicum)
 
 <style>
 .embed-container {

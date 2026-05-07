@@ -764,14 +764,19 @@ Issue  ->  Branch  ->  Commits  ->  Pull Request  ->  Review  ->  Merge  ->  Pul
 
 ## Resources
 
+**Course materials**
+
+- [Week 1 session](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-01)
+- [Week 1 blog (markdown source)](https://github.com/OpenScience-Collective/agentic-research-course/blob/main/blog/week-01-setup-guide.md)
+- [Course repository](https://github.com/OpenScience-Collective/agentic-research-course)
+- [research-skills plugin](https://github.com/neuromechanist/research-skills)
+
+**External references**
+
 - [Git documentation](https://git-scm.com/doc)
 - [Pro Git book](https://git-scm.com/book/en/v2) (free, covers the three states in depth)
 - [GitHub Skills](https://skills.github.com/) (free interactive courses)
-- [Course repository](https://github.com/OpenScience-Collective/agentic-research-course)
-- [Week 1 blog (plain markdown source)](https://github.com/OpenScience-Collective/agentic-research-course/blob/main/blog/week-01-setup-guide.md)
-- [Week 2 setup guide](./week-02.md) (Claude Code, CLAUDE.md, prompting)
 - [Open Science Collective Discord](https://discord.gg/5dWJCUmUww)
-- [research-skills plugin](https://github.com/neuromechanist/research-skills)
 
 <style>
 .embed-container {

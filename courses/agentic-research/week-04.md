@@ -390,15 +390,24 @@ Week 5 is the first pure-research week of the course: literature search with the
 
 ## Resources
 
-- [Week 4 session repository](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-04)
-- [Week 4 blog post (markdown source)](https://github.com/OpenScience-Collective/agentic-research-course/blob/main/blog/week-04-cicd.md)
+**Course materials**
+
+- [Week 4 session](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-04)
+- [Week 3 practicum](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-03/practicum) (the HBN epic the Week 4 walkthrough adds CI to)
+- [Week 4 blog (markdown source)](https://github.com/OpenScience-Collective/agentic-research-course/blob/main/blog/week-04-cicd.md)
+- [Course repository](https://github.com/OpenScience-Collective/agentic-research-course)
 - [research-skills plugin](https://github.com/neuromechanist/research-skills) (provides `/project:setup-ci`)
+- [matlab-mcp-tools](https://github.com/neuromechanist/matlab-mcp-tools) (drives MATLAB/EEGLAB from Claude Code)
+
+**External references**
+
 - [matlab-actions/setup-matlab](https://github.com/matlab-actions/setup-matlab)
 - [UV documentation](https://docs.astral.sh/uv/)
 - [ruff documentation](https://docs.astral.sh/ruff/)
 - [ty documentation](https://docs.astral.sh/ty/)
 - [Bun documentation](https://bun.sh/docs)
 - [Biome documentation](https://biomejs.dev/)
+- [Open Science Collective Discord](https://discord.gg/5dWJCUmUww)
 
 <style>
 .embed-container {

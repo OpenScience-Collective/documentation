@@ -351,14 +351,25 @@ At the end of the session, you have a private repository, a structured brief, an
 - Create a worktree for the epic and one phase. Work one phase end to end: `/plan`, implement, PR, `/review-pr`, address findings, merge.
 - Read the [GitHub Actions quickstart](https://docs.github.com/en/actions/quickstart). Week 4 layers CI/CD on top of this workflow.
 
-## Further Reading
+## Resources
 
-- [Week 3 session README on GitHub](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-03) -- objectives, outline, pre-session prep
-- [Session-starter materials](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-03/practicum) -- `project_brief.md` and `shot_events.tsv`
+**Course materials**
+
+- [Week 3 session](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-03) (objectives, outline, pre-session prep)
+- [Week 3 practicum](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-03/practicum) (`project_brief.md` and `shot_events.tsv`)
+- [Week 3 blog (markdown source)](https://github.com/OpenScience-Collective/agentic-research-course/blob/main/blog/week-03-project-management.md)
+- [Course repository](https://github.com/OpenScience-Collective/agentic-research-course)
+- [research-skills plugin](https://github.com/neuromechanist/research-skills) (provides `/project:init-project`, `/project:epic-dev`)
+- [matlab-mcp-tools](https://github.com/neuromechanist/matlab-mcp-tools) (drives MATLAB/EEGLAB from Claude Code)
+
+**External references**
+
 - [`gh sub-issue` extension](https://github.com/agbiotech/gh-sub-issue)
 - [Git worktree documentation](https://git-scm.com/docs/git-worktree)
 - [HBN-EEG dataset overview](https://neuromechanist.github.io/data/hbn/)
-- Anthropic docs: [plan mode](https://code.claude.com/docs/plan-mode), [permissions](https://code.claude.com/docs/en/permissions)
+- [Claude Code plan mode](https://code.claude.com/docs/plan-mode)
+- [Claude Code permissions](https://code.claude.com/docs/en/permissions)
+- [Open Science Collective Discord](https://discord.gg/5dWJCUmUww)
 
 ---
 

@@ -36,3 +36,4 @@ node_modules/
 
 # Planning files (scratch only)
 scratch_notes.md
+.gstack/

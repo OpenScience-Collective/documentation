@@ -60,12 +60,7 @@ Second, **fonts shrank below readable thresholds**. When a panel's content overf
 
 ### 2. The 5-Step scientific-figure Pipeline
 
-```text
-[ 1. Plan ] -> [ 2. Build ] -> [ 3. Compose ] -> [ 4. Validate ] -> [ 5. Export ]
-                    ^                                   |
-                    +-----------------------------------+
-                         boomerang on font failure
-```
+![5-step scientific-figure pipeline: Plan, Build, Compose, Validate, Export, with a boomerang from Validate back to Build on font failure](../../slides/agentic-research/week-08/assets/icons/figures-pipeline.svg){ .figure-diagram }
 
 Five steps, enforced order. Composing before planning produces dimension drift; exporting before validating produces journal rejections.
 
@@ -370,5 +365,16 @@ Week 9 starts where Week 8 left off: BIDS, Hierarchical Event Descriptors (HED),
   border: 1px solid var(--md-default-fg-color--lightest);
   border-radius: 3px;
   background: var(--md-code-bg-color);
+}
+.figure-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 920px;
+  margin: 1rem auto;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  padding: 0.5rem;
+  background: #ffffff;
 }
 </style>

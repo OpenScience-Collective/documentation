@@ -71,15 +71,7 @@ The whole talk hinges on this reframe. Today's work is not a new shape; it is We
 
 ### 3. The 5-Stage Manuscript Pipeline
 
-```text
-[ 1. Lit review ] -> [ 2. Draft ] -> [ 3. Figures ] -> [ 4. Self-review ] -> [ 5. Format & submit ]
-        ^                                                       |
-        +-------------------------------------------------------+
-                              boomerang on findings
-
-  ============================== agent loop ==============================|=== human loop ===
-                              ( GitHub-native )                              ( Overleaf )
-```
+![5-stage manuscript pipeline: Lit review, Draft, Figures, Self-review, Format and submit, with a boomerang from Self-review back to Stages 1-3, and a vertical divider between Stages 4 and 5 labelled agent loop and human loop](../../slides/agentic-research/week-07/assets/icons/manuscript-pipeline.svg){ .figure-diagram }
 
 Five stages, enforced order. Drafting before the lit review produces unsupported claims; formatting before the self-review polishes a draft that may still get cycled.
 
@@ -361,5 +353,16 @@ Week 8 starts where this week's Stage 3 left off: composition, palette, panel la
   border: 1px solid var(--md-default-fg-color--lightest);
   border-radius: 3px;
   background: var(--md-code-bg-color);
+}
+.figure-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 920px;
+  margin: 1rem auto;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  padding: 0.5rem;
+  background: #ffffff;
 }
 </style>

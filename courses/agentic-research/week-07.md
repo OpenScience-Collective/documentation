@@ -18,7 +18,7 @@ The pipeline shape is the same as Week 5 (lit review) and Week 6 (grant proposal
 
 <div class="embed-container">
   <iframe
-    src="https://www.youtube.com/embed/placeholder-week-07"
+    src="https://www.youtube.com/embed/h8vDjBs8N2c"
     title="Week 7: Manuscript Preparation and Peer Review"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

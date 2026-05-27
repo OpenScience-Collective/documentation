@@ -18,7 +18,7 @@ The pipeline shape is the same as Weeks 5-7. What is new this week is the **phys
 
 <div class="embed-container">
   <iframe
-    src="https://www.youtube.com/embed/placeholder-week-08"
+    src="https://www.youtube.com/embed/qvmzyyQVZyY"
     title="Week 8: Scientific Figures"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

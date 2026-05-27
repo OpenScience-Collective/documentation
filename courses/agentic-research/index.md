@@ -28,7 +28,7 @@ A 10-week live course teaching researchers how to use Claude Code and AI coding 
 | Wed April 29 | [Week 4](week-04.md) | CI/CD and Code Quality |
 | Wed May 6 | [Week 5](week-05.md) | Literature Search and Review |
 | Wed May 13 | [Week 6](week-06.md) | Grant Proposal Writing |
-| Wed May 20 | Week 7 | Manuscript Preparation and Peer Review |
+| Wed May 20 | [Week 7](week-07.md) | Manuscript Preparation and Peer Review |
 | Wed May 27 | Week 8 | Scientific Figures |
 | Wed June 3 | Week 9 | Neuroinformatics |
 | **Tue** June 9 | Week 10 | Building Your Own Plugins |

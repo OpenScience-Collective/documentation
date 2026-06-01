@@ -18,7 +18,7 @@ Three additional shifts make this week different from earlier ones. First, the `
 
 <div class="embed-container">
   <iframe
-    src="https://www.youtube.com/embed/placeholder-week-06"
+    src="https://www.youtube.com/embed/bs4A6mrQiQY"
     title="Week 6: Grant Proposal Writing"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

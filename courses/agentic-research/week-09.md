@@ -2,7 +2,7 @@
 
 ## Overview
 
-A finished analysis is not a finished contribution. The data behind it has to be reproducible, shareable, and citable, or the work dies with the paper. Two standards carry the weight: the Brain Imaging Data Structure (BIDS) answers where everything lives (structure), and Hierarchical Event Descriptors (HED) answer what every event meant (semantics). The single most useful idea this week: the bar for a complete annotation is concrete and falsifiable. **A language model should be able to reconstruct the stimulus, or the experiment, from the annotation alone.** That is not a metaphor; it is exactly the test demonstrated in the HBN-EEG paper (Shirazi et al., 2024, Figure 9), where Claude Sonnet 3.5 regenerated the Surround Suppression stimulus from its HED description with no image.
+A finished analysis is not a finished contribution. The data behind it has to be reproducible, shareable, and citable, or the work dies with the paper. Two standards carry the weight: the Brain Imaging Data Structure (BIDS) answers where everything lives (structure), and Hierarchical Event Descriptors (HED) answer what every event meant (semantics). The single most useful idea this week: the bar for a complete annotation is concrete and falsifiable. **A language model should be able to reconstruct the stimulus, or the experiment, from the annotation alone.** That is not a metaphor; it is exactly the test demonstrated in the Healthy Brain Network EEG (HBN-EEG) paper (Shirazi et al., 2024, Figure 9), where Claude Sonnet 3.5 regenerated the Surround Suppression stimulus from its HED description with no image.
 
 The dataset throughout is HBN-EEG, the very data the course has analyzed since Week 3. It is itself a BIDS + HED dataset published on both OpenNeuro and NEMAR with exactly the tools this session teaches: the loop closes, the data you analyzed is the worked example for how to share data.
 
@@ -154,7 +154,7 @@ The agent runs the BIDS validator, categorizes findings, applies fixes with conf
 ```text
 ## BIDS Validation Report
 Subjects: 12   Modalities: eeg
-Errors fixed: 3
+Errors fixed: 2
   [FIXED] missing dataset_description.json
   [FIXED] _eeg.json missing PowerLineFrequency -> 60
 Remaining warnings: 2
@@ -184,7 +184,7 @@ nemar dataset validate ./my-dataset
 The full path, and the collaboration model:
 
 ```bash
-nemar auth login                          # one-time, token cached
+nemar auth login                          # one-time, API key cached
 nemar dataset validate ./my-dataset       # BIDS check, must pass
 nemar dataset upload ./my-dataset         # creates a private GitHub repo
 nemar dataset publish request nm000XXX    # admin approves -> public + DOI
@@ -196,7 +196,7 @@ nemar dataset publish request nm000XXX    # admin approves -> public + DOI
 
 ![DOI minting and ORCID auto-linking: authors to ORCID iDs to DataCite DOI to each author's ORCID record](../../slides/agentic-research/week-09/assets/icons/doi-orcid.svg){ .figure-diagram }
 
-On publish, `nemar-cli` mints a **concept DOI** (one stable citation across all versions) plus per-version DOIs, via EZID writing DataCite kernel-4 metadata, and **auto-links every author's ORCID iD**. The dataset then appears on each author's ORCID record automatically. OpenNeuro does not link authors to ORCID on the DOI yet.
+On publish, `nemar-cli` mints a **concept DOI** (one stable citation across all versions) plus per-version DOIs, via EZID writing DataCite kernel-4 metadata (the DOIs carry the `10.82901/NEMAR.<id>` prefix), and **auto-links every author's ORCID iD**. The dataset then appears on each author's ORCID record automatically. OpenNeuro does not link authors to ORCID on the DOI yet.
 
 ### 13. The Metadata Gap: Proof on a Real Dataset
 

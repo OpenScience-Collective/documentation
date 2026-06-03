@@ -18,7 +18,7 @@ The dataset throughout is HBN-EEG, the very data the course has analyzed since W
 
 <div class="embed-container">
   <iframe
-    src="https://www.youtube.com/embed/placeholder-week-09"
+    src="https://www.youtube.com/embed/VGmDrIOZ8zY"
     title="Week 9: Neuroinformatics -- Standards, Sharing, and Credit"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

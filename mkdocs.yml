@@ -164,6 +164,7 @@ nav:
           - Local Testing: osa/registry/local-testing.md
           - Schema Reference: osa/registry/schema-reference.md
           - Extensions: osa/registry/extensions.md
+          - Merging Community Changes: osa/registry/maintainer-merge.md
       - CLI Reference: osa/cli-reference.md
       - API Reference: osa/api-reference.md
       - Database Mirrors: osa/mirrors.md

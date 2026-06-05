@@ -31,7 +31,7 @@ A 10-week live course teaching researchers how to use Claude Code and AI coding 
 | Wed May 20 | [Week 7](week-07.md) | Manuscript Preparation and Peer Review |
 | Wed May 27 | [Week 8](week-08.md) | Scientific Figures |
 | Wed June 3 | [Week 9](week-09.md) | Neuroinformatics: Standards, Sharing, and Credit |
-| **Tue** June 9 | Week 10 | Building Your Own Plugins |
+| **Tue** June 9 | [Week 10](week-10.md) | Building Your Own Plugins |
 
 ## Prerequisites
 

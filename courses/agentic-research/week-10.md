@@ -84,7 +84,7 @@ From this course: `scientific-figure` is a skill you use directly; `figure-qa` i
 
 A skill teaches Claude *how to do* something with tools it already has. An **MCP server** gives Claude *new tools* by wiring it to an external system. You used one all course: `matlab-mcp` is what let Claude drive MATLAB and EEGLAB.
 
-![Claude wired through an MCP server to external systems: MATLAB and EEGLAB, a database, a web API, a browser](../../slides/agentic-research/week-10/assets/icons/mcp-wire.svg){ .figure-diagram }
+![Claude wired through an MCP server to external systems: MATLAB and EEGLAB, a database, a web application programming interface (API), a browser](../../slides/agentic-research/week-10/assets/icons/mcp-wire.svg){ .figure-diagram }
 
 !!! note "The test"
     If the job needs the outside world (a program, a database, an application programming interface, a browser), it is an MCP server, not a skill.
@@ -239,3 +239,67 @@ What is next:
 - Help the next cohort. You now know the whole pipeline.
 
 You arrived a tool user. You leave a tool builder. Thank you for ten weeks.
+
+---
+
+## Resources
+
+**Course materials**
+
+- [Week 10 session](https://github.com/OpenScience-Collective/agentic-research-course/tree/main/sessions/week-10)
+- [Week 10 blog (markdown source)](https://github.com/OpenScience-Collective/agentic-research-course/blob/main/blog/week-10-building-plugins.md)
+- [Course repository](https://github.com/OpenScience-Collective/agentic-research-course)
+- [research-skills marketplace](https://github.com/neuromechanist/research-skills) (the seven plugins you fork and extend)
+
+**Building your own**
+
+- [Claude Code](https://claude.com/claude-code) (plugins, skills, agents, hooks, MCP servers)
+- [Model Context Protocol](https://modelcontextprotocol.io/) (the MCP standard)
+- [matlab-mcp-tools](https://github.com/neuromechanist/matlab-mcp-tools) (the MCP server used in the practicum)
+
+**Reference**
+
+- [Open Science Collective Discord](https://discord.gg/5dWJCUmUww)
+
+<style>
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+.embed-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+.slide-hint {
+  margin: -0.5rem 0 1.5rem 0;
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--lighter);
+}
+.slide-hint kbd {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 3px;
+  background: var(--md-code-bg-color);
+}
+.figure-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 920px;
+  margin: 1rem auto;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  padding: 0.5rem;
+  background: #ffffff;
+}
+</style>

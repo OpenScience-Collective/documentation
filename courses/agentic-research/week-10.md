@@ -17,7 +17,7 @@ The single most useful idea: **a skill is an onboarding guide written for the ne
 
 <div class="embed-container">
   <iframe
-    src="https://www.youtube.com/embed/placeholder-week-10"
+    src="https://www.youtube.com/embed/WFltLzYJzFg"
     title="Week 10: Build Your Own -- Skills, Agents, and the Researcher's Plugin"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

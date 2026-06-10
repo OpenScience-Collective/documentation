@@ -207,6 +207,126 @@ Ephemeral database mirror management. See [Database Mirrors](mirrors.md) for ful
 | `POST` | `/mirrors/{id}/sync` | Run sync pipeline |
 | `GET` | `/mirrors/{id}/download/{community}` | Download SQLite file |
 
+## Public Data Feeds
+
+Communities can expose two **read-only, unauthenticated** JSON feeds for building
+their own frontends (dashboards, widgets, citation badges). Both are **opt-in per
+community** via the `public_feeds` config block and return **404** when the feed is
+not enabled. Responses are cacheable (`Cache-Control: public, max-age=3600`).
+
+Currently enabled: **EEGLAB** (FAQ + citations) and **BIDS** (citations).
+
+### FAQ Feed
+
+Synthesized question/answer entries generated from a community's mailing-list and
+forum archives.
+
+```
+GET /{community}/faq
+```
+
+No authentication required. Returns **404** if `public_feeds.faq` is not enabled.
+
+Query parameters:
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `q` | string | – | Full-text search phrase. Omit to browse all entries. |
+| `category` | string | – | Filter by category (`how-to`, `troubleshooting`, `reference`, `bug-report`, `feature-request`, `discussion`). |
+| `min_quality` | float | `0.0` | Minimum quality score (0.0–1.0). |
+| `limit` | int | `50` | Page size (1–200). |
+| `offset` | int | `0` | Pagination offset (ignored when `q` is set). |
+
+Response:
+
+```json
+{
+  "community_id": "eeglab",
+  "total": 1990,
+  "limit": 50,
+  "offset": 0,
+  "entries": [
+    {
+      "question": "How do I run ICA in EEGLAB?",
+      "answer": "Use runica from the Tools menu...",
+      "tags": ["ica", "preprocessing"],
+      "category": "how-to",
+      "quality_score": 0.95,
+      "message_count": 4,
+      "first_message_date": "2020-03-11",
+      "thread_url": "https://sccn.ucsd.edu/pipermail/eeglablist/..."
+    }
+  ]
+}
+```
+
+`total` is the count of entries matching the filters (before pagination). Email
+addresses are redacted from `question`, `answer`, and `tags`.
+
+```bash
+# Browse the highest-quality how-to entries
+curl "https://api.osc.earth/osa/eeglab/faq?category=how-to&min_quality=0.8&limit=10"
+
+# Search
+curl "https://api.osc.earth/osa/eeglab/faq?q=ICA%20components"
+```
+
+### Citations Feed
+
+Per-year citation counts for a community's canonical papers, suitable for a stacked
+"citations per year" chart. Counts come from OpenAlex (complete and uncapped); a
+paper's preprint and published versions are merged and deduplicated, and counts are
+floored at the paper's earliest publication year.
+
+```
+GET /{community}/citations
+```
+
+No authentication required. Returns **404** if `public_feeds.citations` is not
+enabled. Takes no query parameters.
+
+Response:
+
+```json
+{
+  "community_id": "bids",
+  "total": 3098,
+  "per_year": { "2016": 22, "2017": 48, "...": 0, "2025": 502 },
+  "by_paper": {
+    "10.1038/sdata.2016.44": { "2016": 22, "2017": 48, "...": 0 },
+    "10.1038/s41597-019-0104-8": { "2019": 12, "...": 0 }
+  },
+  "canonical_dois": ["10.1038/sdata.2016.44", "10.1038/s41597-019-0104-8"],
+  "labels": {
+    "10.1038/sdata.2016.44": "BIDS (Gorgolewski 2016)",
+    "10.1038/s41597-019-0104-8": "EEG-BIDS (Pernet 2019)"
+  }
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `total` | Total citing works across all canonical papers. |
+| `per_year` | Citing-work count per publication year, summed across papers. |
+| `by_paper` | Stacked breakdown: canonical DOI → year → count. |
+| `canonical_dois` | The DOIs tracked for this community (config order). |
+| `labels` | Human-readable label per DOI for chart legends (when configured). |
+
+```bash
+curl "https://api.osc.earth/osa/bids/citations"
+```
+
+```python
+import httpx
+
+data = httpx.get("https://api.osc.earth/osa/bids/citations").json()
+years = sorted(data["per_year"])
+for doi, by_year in data["by_paper"].items():
+    label = data["labels"].get(doi, doi)
+    series = [by_year.get(y, 0) for y in years]
+    print(label, series)
+```
+
 ## Request Parameters
 
 ### Ask Request

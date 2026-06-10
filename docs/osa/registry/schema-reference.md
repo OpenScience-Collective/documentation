@@ -20,6 +20,7 @@ Complete reference for the community `config.yaml` file format.
 | `documentation` | list | No | `[]` | Documentation sources |
 | `github` | object | No | `null` | GitHub sync configuration |
 | `citations` | object | No | `null` | Paper/citation search config |
+| `public_feeds` | object | No | `null` | Opt-in public read-only JSON feeds (FAQ, citations) |
 | `docstrings` | object | No | `null` | Code docstring extraction config |
 | `mailman` | list | No | `[]` | Mailing list archive configs |
 | `faq_generation` | object | No | `null` | LLM-based FAQ generation config |
@@ -222,6 +223,9 @@ Paper search and citation tracking configuration for the knowledge database.
 |-------|------|----------|---------|-------------|
 | `queries` | list[string] | No | `[]` | Search queries for OpenALEX |
 | `dois` | list[string] | No | `[]` | Core paper DOIs to track (format: `10.xxxx/yyyy`) |
+| `live_search` | bool | No | `false` | Expose an on-demand live paper-search tool |
+| `paper_labels` | map[string, string] | No | `{}` | Human-readable label per DOI for the citations dashboard legend |
+| `aliases` | map[string, list[string]] | No | `{}` | Version DOIs (preprint, etc.) to merge into a primary DOI's citation count |
 
 ```yaml
 citations:
@@ -231,9 +235,44 @@ citations:
   dois:
     - "10.1016/j.neuroimage.2021.118766"
     - "10.1007/s12021-023-09628-4"
+  # Labels shown in the public citations chart legend
+  paper_labels:
+    "10.1016/j.neuroimage.2021.118766": "HED-NeuroImage (2021)"
+  # Merge a preprint into the published paper's citation count (deduplicated)
+  aliases:
+    "10.1016/j.neuroimage.2021.118766":
+      - "10.1101/2021.01.01.000000"
 ```
 
-DOIs are validated against the `10.xxxx/yyyy` pattern. Common URL prefixes (`https://doi.org/`, `https://dx.doi.org/`) are automatically stripped.
+DOIs are validated against the `10.xxxx/yyyy` pattern. Common URL prefixes (`https://doi.org/`, `https://dx.doi.org/`) are automatically stripped. The same normalization and validation apply to `paper_labels` keys and `aliases` keys/values; every `aliases` primary key must also appear in `dois`.
+
+**`aliases` — why:** OpenAlex keeps separate records for a paper's preprint and published versions and splits citations across them. Listing the version DOIs under `aliases` makes the citation sync query them together (OR-joined, deduplicated) and attribute the merged per-year counts to the primary DOI. Counts are floored at the earliest version's publication year, so no paper reports citations before it existed.
+
+`paper_labels` and `aliases` feed the public [citations dashboard](#public_feeds) and the `GET /{community}/citations` endpoint.
+
+## `public_feeds`
+
+Opt-in flags that expose community data as **public, read-only JSON feeds** so
+communities can build their own frontends. Both are **off by default**.
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `faq` | bool | No | `false` | Expose generated FAQ entries at `GET /{community}/faq` |
+| `citations` | bool | No | `false` | Expose citation counts at `GET /{community}/citations` |
+
+```yaml
+public_feeds:
+  faq: true
+  citations: true
+```
+
+- `faq: true` requires a configured FAQ pipeline (`mailman` + `faq_generation`) with
+  synced entries; otherwise the feed is empty.
+- `citations: true` requires `citations.dois`; counts populate on the next citation
+  sync.
+
+See the [API Reference](../api-reference.md#public-data-feeds) for the endpoint
+shapes, query parameters, and examples.
 
 ## `maintainers`
 

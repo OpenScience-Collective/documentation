@@ -10,6 +10,7 @@ The new dashboard includes:
 
 - **Aggregate overview** with total requests, error rates, and community breakdown
 - **Per-community views** with usage charts and tool statistics
+- **Publication citations** chart (stacked by canonical paper, per year) for communities that expose the [citations feed](api-reference.md#citations-feed)
 - **Sync health status** for GitHub and papers knowledge sources
 - **Admin section** for token usage and cost metrics (requires API key)
 

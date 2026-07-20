@@ -1,3 +1,6 @@
 [submodule "osa"]
 	path = osa
 	url = https://github.com/OpenScience-Collective/osa.git
+[submodule "oscar"]
+	path = oscar
+	url = https://github.com/OpenScience-Collective/oscar.git

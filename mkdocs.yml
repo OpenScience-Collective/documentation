@@ -67,6 +67,10 @@ plugins:
   - minify:
       minify_html: true
   - section-index
+  # OSCAR doctrine, rendered from the oscar/ submodule at build time.
+  - gen-files:
+      scripts:
+        - scripts/gen_oscar.py
   # API Reference Generation
   # --------------------------
   # These plugins auto-generate API documentation from OSA source code.
@@ -186,3 +190,17 @@ nav:
           - OSA Platform Overview: osa/presentations/osa-platform.md
       - Development: osa/development.md
       - Version Management: osa/version-management.md
+  - OSCAR:
+      - oscar/index.md
+      - Grounding: oscar/grounding.md
+      - Principles: oscar/principles.md
+      - Archetypes:
+          - Website & docs sites: oscar/archetypes/website.md
+          - Command-line tools: oscar/archetypes/cli.md
+          - Libraries & toolboxes: oscar/archetypes/library.md
+          - Web apps & APIs: oscar/archetypes/web-app-api.md
+          - Data archives: oscar/archetypes/data-archive.md
+          - Research lab sites: oscar/archetypes/lab-website.md
+          - Standards & specs: oscar/archetypes/standard.md
+      - Checklist: oscar/checklist.md
+      - Templates & examples: https://github.com/OpenScience-Collective/oscar

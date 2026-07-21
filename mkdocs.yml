@@ -203,4 +203,10 @@ nav:
           - Research lab sites: oscar/archetypes/lab-website.md
           - Standards & specs: oscar/archetypes/standard.md
       - Checklist: oscar/checklist.md
-      - Templates & examples: https://github.com/OpenScience-Collective/oscar
+      - Examples:
+          - oscar/examples/index.md
+          - NEMAR: oscar/examples/nemar/index.md
+          - HED: oscar/examples/hed/index.md
+          - EEGLAB: oscar/examples/eeglab/index.md
+          - HEDit: oscar/examples/hedit/index.md
+      - Templates: https://github.com/OpenScience-Collective/oscar/tree/main/templates

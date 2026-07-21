@@ -11,8 +11,8 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write   # push the submodule bump to main
+      actions: write    # dispatch the deploy workflow
 
     steps:
       - name: Checkout
@@ -24,17 +24,22 @@ jobs:
       - name: Update OSCAR submodule
         run: |
           git submodule update --remote oscar
-          echo "Updated OSCAR submodule to $(git -C oscar rev-parse --short HEAD)"
+          echo "OSCAR now at $(git -C oscar rev-parse --short HEAD)"
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          commit-message: "sync: update OSCAR submodule to latest"
-          title: "sync: update OSCAR submodule to latest"
-          body: |
-            Automated update of the OSCAR submodule to track latest changes.
-
-            Triggered by: ${{ github.event_name }}
-          branch: sync/oscar-submodule
-          labels: sync
-          delete-branch: true
+      - name: Commit, push, and deploy if changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- oscar; then
+            echo "Submodule already up to date; nothing to do."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add oscar
+          git commit -m "sync: update OSCAR submodule to $(git -C oscar rev-parse --short HEAD)"
+          git push origin HEAD:main
+          echo "Pushed submodule bump; triggering deploy."
+          # A GITHUB_TOKEN push does not trigger deploy.yml (recursion guard),
+          # so dispatch it explicitly. workflow_dispatch is exempt from that guard.
+          gh workflow run deploy.yml --ref main

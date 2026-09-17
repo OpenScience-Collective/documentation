@@ -180,7 +180,7 @@
             "rows": [
               ["Agent Orchestration", "LangGraph", "State machine for tool-calling loops"],
               ["API Server", "FastAPI", "Async, auto-docs, type-safe"],
-              ["LLM Access", "LiteLLM + OpenRouter", "Unified provider interface, BYOK"],
+              ["LLM Access", "Claude Platform on AWS", "Native citations, prompt caching, BYOK"],
               ["Knowledge Store", "SQLite + FTS5", "Zero-config, per-community DBs"],
               ["Edge Proxy", "Cloudflare Worker", "Global CDN, bot protection, CORS"],
               ["Frontend", "Embeddable JS Widget", "Drop-in for any website"],
@@ -399,14 +399,14 @@
             "type": "bullets",
             "items": [
               {
-                "text": "**Stage 1: Evaluation** (cheap model, Qwen3-235B FP8)",
+                "text": "**Stage 1: Evaluation** (Claude Haiku 4.5, scoring prompt returns one number)",
                 "children": [
                   "Score each mailing list thread for quality",
                   "Threads below 0.7 threshold are skipped (~85% of threads)"
                 ]
               },
               {
-                "text": "**Stage 2: Summarization** (quality model, Claude Haiku 4.5)",
+                "text": "**Stage 2: Summarization** (Claude Haiku 4.5, whole thread in context)",
                 "children": [
                   "Only high-scoring threads get summarized",
                   "Generates structured FAQ entries with citations"
@@ -424,7 +424,7 @@
             "position": { "area": "footer", "order": 0 }
           }
         ],
-        "speakerNotes": "Cost-efficient FAQ generation: cheap eval model scores thread quality first, quality summary model only processes high-scoring threads. Reduced EEGLAB processing costs by ~85%."
+        "speakerNotes": "Cost-efficient FAQ generation: both stages run Haiku 4.5, so the saving comes from what the second stage never sees. Scoring is a short prompt that returns a single number; summarizing sends a whole thread and gets a structured entry back. Only the ~15% of threads that clear the 0.7 threshold are summarized, so EEGLAB's archives cost about 85% less than summarizing everything."
       },
       {
         "id": "widget",

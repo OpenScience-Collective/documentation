@@ -27,16 +27,21 @@ Interactive setup to configure your API key and preferences.
 osa init
 
 # Non-interactive setup
-osa init --api-key sk-or-v1-your-key
+osa init --api-key sk-ant-your-key
 
 # With custom API URL
-osa init --api-key sk-or-v1-your-key --api-url https://custom-server.example.com
+osa init --api-key sk-ant-your-key --api-url https://custom-server.example.com
 ```
 
 Options:
 
-- `--api-key, -k`: OpenRouter API key
+- `--api-key, -k`: Anthropic (`sk-ant-...`) or OpenRouter (`sk-or-...`) API key
 - `--api-url`: Override API URL
+
+Which provider the key belongs to is read from the key itself, so there is
+nothing to choose. Get an Anthropic key at
+[platform.claude.com/settings/keys](https://platform.claude.com/settings/keys),
+or an OpenRouter key at [openrouter.ai/keys](https://openrouter.ai/keys).
 
 ### `osa ask`
 
@@ -60,7 +65,7 @@ Options:
 
 - `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
 - `--mirror, -m`: Mirror ID for ephemeral database routing (see [Database Mirrors](mirrors.md))
-- `--api-key, -k`: OpenRouter API key (overrides saved config)
+- `--api-key, -k`: Anthropic or OpenRouter API key (overrides saved config, and wins over both env vars)
 - `--api-url`: Override API URL
 - `--output, -o`: Output format: rich, json, plain. Default: rich
 - `--no-stream`: Disable streaming (get full response at once)
@@ -84,7 +89,7 @@ Options:
 
 - `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
 - `--mirror, -m`: Mirror ID for ephemeral database routing (see [Database Mirrors](mirrors.md))
-- `--api-key, -k`: OpenRouter API key (overrides saved config)
+- `--api-key, -k`: Anthropic or OpenRouter API key (overrides saved config, and wins over both env vars)
 - `--api-url`: Override API URL
 - `--no-stream`: Disable streaming
 
@@ -139,7 +144,10 @@ Update configuration settings.
 # Set API URL
 osa config set --api-url https://custom-server.example.com
 
-# Set OpenRouter API key
+# Set the Claude Platform key
+osa config set --anthropic-key sk-ant-your-key
+
+# Set an OpenRouter key instead, or as well
 osa config set --openrouter-key sk-or-v1-your-key
 
 # Set output format
@@ -152,6 +160,7 @@ osa config set --no-streaming
 Options:
 
 - `--api-url`: API URL
+- `--anthropic-key`: Anthropic API key
 - `--openrouter-key`: OpenRouter API key
 - `--output, -o`: Output format (rich, json, plain)
 - `--verbose/--no-verbose, -v`: Enable/disable verbose output
@@ -270,11 +279,17 @@ osa sync search "validation error" --community hed
 
 ### API Key Priority
 
-The CLI resolves API keys in this order:
+The CLI carries one key per provider, and `-k/--api-key` selects its provider
+from the key's own prefix.
 
-1. `--api-key` command-line flag (highest priority)
-2. `OPENROUTER_API_KEY` environment variable
+1. `--api-key` command-line flag: wins outright, and leaves the other provider
+   unset for that invocation, so an exported `ANTHROPIC_API_KEY` cannot
+   override an OpenRouter key you just typed
+2. `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY` environment variable
 3. Saved credentials in `~/.config/osa/credentials.yaml`
+
+With no flag, each provider resolves independently through steps 2 and 3.
+When both end up set, Anthropic is used: it is the platform's own provider.
 
 ### Config Files
 
@@ -306,6 +321,7 @@ output:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
+| `ANTHROPIC_API_KEY` | Claude Platform API key, used in preference to OpenRouter's | None |
 | `OPENROUTER_API_KEY` | OpenRouter API key | None |
 
 ### Environment Variables (Server)
@@ -314,7 +330,11 @@ These are only relevant when running the server (`osa serve`):
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `OPENROUTER_API_KEY` | Server-side LLM API key | Required |
+| `ANTHROPIC_API_KEY` | Server-side Claude Platform key | Required |
+| `ANTHROPIC_BASE_URL` | AWS Marketplace endpoint; must be set with `ANTHROPIC_WORKSPACE_ID` | First-party default |
+| `ANTHROPIC_WORKSPACE_ID` | Workspace the key is authorized on (`wrkspc_...`) | None |
+| `DEFAULT_MODEL` | `claude-haiku-4-5` or `claude-sonnet-5` | `claude-haiku-4-5` |
+| `OPENROUTER_API_KEY` | Server-side OpenRouter key, for a deployment funded that way instead | Optional |
 | `LANGFUSE_PUBLIC_KEY` | LangFuse public key | Optional |
 | `LANGFUSE_SECRET_KEY` | LangFuse secret key | Optional |
 | `SYNC_ENABLED` | Enable automated knowledge sync | `true` |
@@ -368,7 +388,7 @@ osa ask -a hed "What is HED?" -o json | jq '.answer'
 === "macOS"
 
     ```bash
-    export OPENROUTER_API_KEY=sk-or-v1-your-key
+    export ANTHROPIC_API_KEY=sk-ant-your-key
     osa ask -a hed "What is HED?"
     osa chat -a bids
     ```
@@ -376,7 +396,7 @@ osa ask -a hed "What is HED?" -o json | jq '.answer'
 === "Linux"
 
     ```bash
-    export OPENROUTER_API_KEY=sk-or-v1-your-key
+    export ANTHROPIC_API_KEY=sk-ant-your-key
     osa ask -a hed "What is HED?"
     osa chat -a bids
     ```
@@ -384,7 +404,7 @@ osa ask -a hed "What is HED?" -o json | jq '.answer'
 === "Windows"
 
     ```powershell
-    $env:OPENROUTER_API_KEY = "sk-or-v1-your-key"
+    $env:ANTHROPIC_API_KEY = "sk-ant-your-key"
     osa ask -a hed "What is HED?"
     osa chat -a bids
     ```

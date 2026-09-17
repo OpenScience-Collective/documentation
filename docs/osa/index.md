@@ -42,7 +42,10 @@ osa ask -a hed "How do I annotate a button press?"
 osa chat -a hed
 ```
 
-Get an OpenRouter API key at [openrouter.ai/keys](https://openrouter.ai/keys).
+You will need your own API key: Anthropic at
+[platform.claude.com/settings/keys](https://platform.claude.com/settings/keys)
+(recommended), or OpenRouter at [openrouter.ai/keys](https://openrouter.ai/keys).
+`osa init` reads the provider off the key's prefix.
 
 ### As a Developer
 

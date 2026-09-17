@@ -12,9 +12,10 @@ Complete reference for the community `config.yaml` file format.
 | `status` | enum | No | `available` | One of: `available`, `beta`, `coming_soon` |
 | `system_prompt` | string | No | Built-in default | Custom system prompt template |
 | `cors_origins` | list[string] | No | `[]` | Allowed CORS origins for widget embedding |
-| `openrouter_api_key_env_var` | string | No | Platform key | Env var name for community API key |
-| `default_model` | string | No | Platform default | Default LLM model (OpenRouter format) |
-| `default_model_provider` | string | No | OpenRouter default | Provider routing preference |
+| `anthropic_api_key_env_var` | string | No | Platform key | Env var name for the community's own Claude Platform key |
+| `openrouter_api_key_env_var` | string | No | Platform key | Env var name for the community's own OpenRouter key |
+| `default_model` | string | No | Platform default | Default Claude model (`claude-haiku-4-5` or `claude-sonnet-5`) |
+| `default_model_provider` | string | No | None | OpenRouter-only provider routing hint; ignored on the Claude Platform |
 | `enable_page_context` | boolean | No | `true` | Enable page context tool for widget embedding |
 | `maintainers` | list[string] | No | `[]` | Community maintainer GitHub usernames |
 | `documentation` | list | No | `[]` | Documentation sources |
@@ -106,9 +107,26 @@ cors_origins:
     - Wildcards only for preview environments
     - Never use `*` alone
 
+## `anthropic_api_key_env_var`
+
+Environment variable name holding your community's own Claude Platform key.
+This enables per-community cost attribution.
+
+```yaml
+anthropic_api_key_env_var: ANTHROPIC_API_KEY_HED
+```
+
+Setup on the server:
+```bash
+export ANTHROPIC_API_KEY_HED="sk-ant-your-api-key-here"
+```
+
+Without a community key, costs are billed to the platform's shared key with shared rate limits.
+
 ## `openrouter_api_key_env_var`
 
-Environment variable name containing your community's OpenRouter API key. This enables per-community cost attribution.
+Environment variable name holding your community's OpenRouter API key,
+for a community that funds itself through OpenRouter rather than the Claude Platform.
 
 ```yaml
 openrouter_api_key_env_var: OPENROUTER_API_KEY_HED
@@ -119,36 +137,50 @@ Setup on the server:
 export OPENROUTER_API_KEY_HED="sk-or-v1-your-api-key-here"
 ```
 
-Without a community key, costs are billed to the platform's shared key with shared rate limits.
+This is only reached when `anthropic_api_key_env_var` is unset:
+the Claude Platform key is checked first.
+Setting both is not an error, but the OpenRouter one will never be used.
+
+!!! warning "OpenRouter answers carry no inline citations"
+
+    Source citations are produced by the Claude Platform's native
+    `search_result` blocks.
+    A community routed through OpenRouter falls back to a prompt instruction
+    asking the model to link its sources, which is a request rather than a
+    guarantee.
+    See the [`citations` response field](../api-reference.md#response-fields).
 
 ## `default_model`
 
-Default LLM model in OpenRouter format (`creator/model-name`).
+One of the two offered Claude models.
+Legacy OpenRouter-style identifiers such as `anthropic/claude-haiku-4.5`
+are still accepted and normalized, so an older `config.yaml` keeps working,
+but new configs should use the first-party id.
 
 ```yaml
-# Cost-effective (recommended for most communities)
-default_model: anthropic/claude-haiku-4.5
+# Cost-effective, with extended thinking on by default (recommended)
+default_model: claude-haiku-4-5
 
-# Balanced capability and cost
-default_model: anthropic/claude-sonnet-4.5
-
-# Maximum capability (expensive)
-default_model: anthropic/claude-opus-4.5
+# More capable, with adaptive thinking
+default_model: claude-sonnet-5
 ```
 
-| Model | Cost (per 1M tokens) | Use Case |
-|-------|---------------------|----------|
-| Haiku | ~$0.25 | General Q&A |
-| Sonnet | ~$3.00 | Complex tasks |
-| Opus | ~$15.00 | Critical accuracy |
+| Model | Input / output per 1M tokens | Use case |
+|-------|------------------------------|----------|
+| `claude-haiku-4-5` | $1.00 / $5.00 | General Q&A; the platform default |
+| `claude-sonnet-5` | $2.00 / $10.00 | Harder reasoning, longer synthesis |
+
+Any other value is rejected at startup with the list of offered models,
+rather than failing later at request time.
 
 ## `default_model_provider`
 
-Provider routing preference for performance optimization.
+An OpenRouter-only routing hint, kept for communities still on the OpenRouter path.
+It is ignored on the Claude Platform, which has no provider routing layer.
 
 ```yaml
 default_model: anthropic/claude-haiku-4.5
-default_model_provider: Cerebras    # Route to Cerebras for speed
+default_model_provider: Cerebras    # only meaningful with an OpenRouter key
 ```
 
 Common providers: `Cerebras` (ultra-fast), `Together` (balanced). Availability varies by model.
@@ -347,23 +379,31 @@ Configuration for the two-stage LLM pipeline that generates FAQ entries from mai
 
 | Field | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
-| `model` | string | Yes | - | Model in OpenRouter format |
-| `provider` | string | No | - | Provider routing preference |
-| `temperature` | float | No | `0.0` | LLM temperature |
+| `model` | string | Yes | - | `claude-haiku-4-5` or `claude-sonnet-5`, or a legacy alias of either |
+| `provider` | string | No | - | Deprecated OpenRouter routing hint; accepted and ignored |
+| `temperature` | float | No | `0.1` | Sampling temperature, honored only by `claude-haiku-4-5` |
 | `enable_caching` | bool | No | `true` | Enable prompt caching |
+
+Both agents run on the Claude Platform, using the community's own key when it
+has one and the platform key otherwise.
+Two things to know before choosing models here:
+
+- The evaluation agent scores *every* thread, so it is most of the bill;
+  `claude-sonnet-5` there costs roughly twice what `claude-haiku-4-5` does and defeats the point of splitting the pipeline in two.
+  `osa validate` warns if you do it anyway.
+- `claude-sonnet-5` accepts only its default temperature.
+  A `temperature` set alongside it is dropped rather than sent, which is also a warning from `osa validate`.
 
 ```yaml
 faq_generation:
   evaluation_agent:
-    model: qwen/qwen3-235b-a22b-2507
-    provider: DeepInfra/FP8
-    temperature: 0.0
+    model: claude-haiku-4-5
+    temperature: 0.0          # deterministic scoring
     enable_caching: true
 
   summary_agent:
-    model: anthropic/claude-haiku-4.5
-    provider: Anthropic
-    temperature: 0.1
+    model: claude-haiku-4-5
+    temperature: 0.1          # slightly creative FAQ phrasing
     enable_caching: true
 
   quality_threshold: 0.7

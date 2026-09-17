@@ -18,23 +18,27 @@ Before diving into specific errors:
     === "macOS"
 
         ```bash
-        echo $OPENROUTER_API_KEY_YOUR_COMMUNITY
+        echo $ANTHROPIC_API_KEY_YOUR_COMMUNITY
         # Should print your API key, not empty
         ```
 
     === "Linux"
 
         ```bash
-        echo $OPENROUTER_API_KEY_YOUR_COMMUNITY
+        echo $ANTHROPIC_API_KEY_YOUR_COMMUNITY
         # Should print your API key, not empty
         ```
 
     === "Windows"
 
         ```powershell
-        echo $env:OPENROUTER_API_KEY_YOUR_COMMUNITY
+        echo $env:ANTHROPIC_API_KEY_YOUR_COMMUNITY
         # Should print your API key, not empty
         ```
+
+    If your community funds itself through OpenRouter instead, the variable is
+    named `OPENROUTER_API_KEY_YOUR_COMMUNITY`; everything below works the same
+    way, against OpenRouter rather than Anthropic.
 
 3. **Test API key:**
    ```bash
@@ -265,7 +269,7 @@ citations:
 
 **Symptom:**
 ```
-OPENROUTER_API_KEY_MYPROJECT not set
+ANTHROPIC_API_KEY_MYPROJECT not set
 Validation passed with warnings
 ```
 
@@ -282,48 +286,56 @@ Validation passed with warnings
 
     ```bash
     # Add to shell profile
-    echo 'export OPENROUTER_API_KEY_MYPROJECT="sk-or-v1-..."' >> ~/.zshrc
+    echo 'export ANTHROPIC_API_KEY_MYPROJECT="sk-ant-..."' >> ~/.zshrc
     source ~/.zshrc
 
     # Verify
-    echo $OPENROUTER_API_KEY_MYPROJECT
+    echo $ANTHROPIC_API_KEY_MYPROJECT
     ```
 
 === "Linux"
 
     ```bash
     # Add to shell profile
-    echo 'export OPENROUTER_API_KEY_MYPROJECT="sk-or-v1-..."' >> ~/.bashrc
+    echo 'export ANTHROPIC_API_KEY_MYPROJECT="sk-ant-..."' >> ~/.bashrc
     source ~/.bashrc
 
     # Verify
-    echo $OPENROUTER_API_KEY_MYPROJECT
+    echo $ANTHROPIC_API_KEY_MYPROJECT
     ```
 
 === "Windows"
 
     ```powershell
     # Set for current session
-    $env:OPENROUTER_API_KEY_MYPROJECT = "sk-or-v1-..."
+    $env:ANTHROPIC_API_KEY_MYPROJECT = "sk-ant-..."
 
     # Set permanently (persists across sessions)
-    [Environment]::SetEnvironmentVariable("OPENROUTER_API_KEY_MYPROJECT", "sk-or-v1-...", "User")
+    [Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY_MYPROJECT", "sk-ant-...", "User")
 
     # Verify
-    echo $env:OPENROUTER_API_KEY_MYPROJECT
+    echo $env:ANTHROPIC_API_KEY_MYPROJECT
     ```
 
 **For production (server):**
 ```bash
 # Add to .env file
-echo 'OPENROUTER_API_KEY_MYPROJECT="sk-or-v1-..."' >> .env
+echo 'ANTHROPIC_API_KEY_MYPROJECT="sk-ant-..."' >> .env
 ```
 
 **Verify:**
 ```bash
 uv run osa validate src/assistants/myproject/config.yaml
-# Should show: "OPENROUTER_API_KEY_MYPROJECT is set"
+# Should show: "✓ ANTHROPIC_API_KEY_MYPROJECT is set (Anthropic)"
 ```
+
+The env var name must match `ANTHROPIC_API_KEY_[A-Z0-9_]+`, so that a config
+cannot point the assistant at an unrelated secret.
+A community whose config sets `openrouter_api_key_env_var` instead is reported
+the same way, as `(OpenRouter)`, and its variable must match
+`OPENROUTER_API_KEY_[A-Z0-9_]+`.
+If a config sets both, the Anthropic key is the one that pays, and the one
+`osa validate` reports.
 
 ---
 
@@ -337,7 +349,7 @@ Invalid API key (401 Unauthorized)
 **Causes:**
 - API key is invalid or expired
 - Wrong key format
-- Key not activated on OpenRouter
+- Key revoked in the Anthropic Console
 
 **Solution:**
 
@@ -346,40 +358,54 @@ Invalid API key (401 Unauthorized)
     === "macOS"
 
         ```bash
-        echo $OPENROUTER_API_KEY_MYPROJECT
-        # Should start with: sk-or-v1-
+        echo $ANTHROPIC_API_KEY_MYPROJECT
+        # Should start with: sk-ant-
         ```
 
     === "Linux"
 
         ```bash
-        echo $OPENROUTER_API_KEY_MYPROJECT
-        # Should start with: sk-or-v1-
+        echo $ANTHROPIC_API_KEY_MYPROJECT
+        # Should start with: sk-ant-
         ```
 
     === "Windows"
 
         ```powershell
-        echo $env:OPENROUTER_API_KEY_MYPROJECT
-        # Should start with: sk-or-v1-
+        echo $env:ANTHROPIC_API_KEY_MYPROJECT
+        # Should start with: sk-ant-
         ```
 
-2. **Check key on OpenRouter:**
-   - Visit https://openrouter.ai/keys
+2. **Check the key in the Anthropic Console:**
+   - Visit https://platform.claude.com/settings/keys
    - Verify key exists and is active
-   - Check usage limits not exceeded
+   - Check that the workspace it belongs to has not hit a spend limit
 
 3. **Generate new key if needed:**
-   - Go to https://openrouter.ai/keys
+   - Go to https://platform.claude.com/settings/keys
    - Create new API key
    - Update environment variable
 
 4. **Test directly:**
    ```bash
-   curl https://openrouter.ai/api/v1/models \
-     -H "Authorization: Bearer $OPENROUTER_API_KEY_MYPROJECT"
+   curl https://api.anthropic.com/v1/models \
+     -H "x-api-key: $ANTHROPIC_API_KEY_MYPROJECT" \
+     -H "anthropic-version: 2023-06-01"
    # Should return 200 OK with model list
    ```
+
+    A community key is used against Anthropic's own API rather than the
+    platform's endpoint on AWS, because it is not authorized on the platform's
+    workspace.
+    That is the endpoint `--test-api-key` probes too, so the curl above and the
+    validator agree.
+
+    For an OpenRouter community key, the equivalent is:
+
+    ```bash
+    curl https://openrouter.ai/api/v1/models \
+      -H "Authorization: Bearer $OPENROUTER_API_KEY_MYPROJECT"
+    ```
 
 ---
 
@@ -391,21 +417,22 @@ API key lacks permissions (403 Forbidden)
 ```
 
 **Cause:**
-API key doesn't have necessary permissions or credits exhausted.
+API key doesn't have necessary permissions, or the account has no funds left.
 
 **Solution:**
 
-1. **Check credits:**
-   - Visit https://openrouter.ai/credits
-   - Ensure account has credits available
+1. **Check the account balance:**
+   - Visit https://platform.claude.com/settings/billing
+   - Ensure the account has credit available
+   - For an OpenRouter community key, check https://openrouter.ai/credits instead
 
 2. **Check key permissions:**
-   - Some keys may be restricted to certain models
-   - Verify key has access to models you want to use
+   - A key scoped to one workspace cannot spend from another
+   - Verify the key has access to the models you want to use
 
-3. **Add credits:**
-   - Add credits to your OpenRouter account
-   - Test again after credits added
+3. **Add funds:**
+   - Top up the account, or raise the workspace spend limit
+   - Test again afterwards
 
 ---
 
@@ -559,8 +586,8 @@ Widget accepts input but shows loading spinner indefinitely.
 **Solutions:**
 
 **API key missing:**
-- Verify `openrouter_api_key_env_var` is set on server
-- Check env var exists: `echo $OPENROUTER_API_KEY_XXX`
+- Verify `anthropic_api_key_env_var` is set on server, or `openrouter_api_key_env_var` for a community funded through OpenRouter
+- Check env var exists: `echo $ANTHROPIC_API_KEY_XXX`
 - Restart server after adding env var
 
 **Network errors:**
@@ -570,8 +597,8 @@ Widget accepts input but shows loading spinner indefinitely.
 
 **Timeouts:**
 - May indicate model is slow or overloaded
-- Try different model (faster)
-- Check OpenRouter status
+- Try `claude-haiku-4-5`, which is the faster of the two offered models
+- Check [status.anthropic.com](https://status.anthropic.com), or OpenRouter's status page for an OpenRouter community
 
 ---
 
@@ -743,15 +770,18 @@ documentation:
     preload: false  # Fetch on-demand
 ```
 
-**Use faster model:**
+**Use the faster model:**
 ```yaml
-# Before - Opus is slow but capable
-default_model: anthropic/claude-opus-4.5
+# Before - Sonnet 5 is the more capable of the two, and the slower
+default_model: claude-sonnet-5
 
-# After - Haiku is fast
-default_model: anthropic/claude-haiku-4.5
-default_model_provider: Cerebras  # Route to fast provider
+# After - Haiku 4.5, the platform default
+default_model: claude-haiku-4-5
 ```
+
+Extended thinking also costs latency before the first token.
+Haiku thinks on a fixed budget and Sonnet decides per request, so a
+thinking-heavy question is slower on either model than a lookup is.
 
 **Check network:**
 ```bash
@@ -765,24 +795,25 @@ time curl https://api.osc.earth/osa/health
 ### Issue: High API costs
 
 **Symptoms:**
-- OpenRouter bill higher than expected
+- AWS Marketplace bill higher than expected
 - Usage exceeded budget
 
 **Causes:**
-1. Expensive model (Opus)
+1. `claude-sonnet-5` where `claude-haiku-4-5` would do
 2. Long conversations (context accumulation)
 3. Many users
 4. Preloaded docs increasing prompt size
+5. Prompt caching disabled, so the same system prompt is billed at full rate on every turn
 
 **Solutions:**
 
-**Use cheaper model:**
+**Use the cheaper model:**
 ```yaml
-# Opus: $15/1M tokens
-default_model: anthropic/claude-opus-4.5
+# Sonnet 5: twice Haiku's rate, worth it for genuinely hard questions
+default_model: claude-sonnet-5
 
-# Haiku: $0.25/1M tokens (60x cheaper!)
-default_model: anthropic/claude-haiku-4.5
+# Haiku 4.5: the default, and enough for documentation Q&A
+default_model: claude-haiku-4-5
 ```
 
 **Reduce preloaded docs:**
@@ -790,17 +821,23 @@ default_model: anthropic/claude-haiku-4.5
 - Move to on-demand retrieval
 - Keep preloaded docs minimal
 
+**Keep prompt caching on:**
+- Cache reads bill at a tenth of the input rate, and the system prompt is the largest repeated part of a request
+- A cache write costs more than an uncached read once, then pays for itself on the second turn
+
 **Monitor usage:**
-- Check OpenRouter dashboard regularly
-- Set up budget alerts
+- `GET /{community_id}/metrics` reports `total_estimated_cost` from the same pricing table the platform bills against (admin or community key required)
+- Set up budget alerts in AWS
 - Track usage by community ID
 
 **Cost Comparison:**
-| Model | Cost (per 1M tokens) | Use Case |
-|-------|---------------------|----------|
-| Haiku | $0.25 | General Q&A |
-| Sonnet | $3.00 | Complex tasks |
-| Opus | $15.00 | Critical accuracy |
+| Model | Input (per 1M tokens) | Output (per 1M tokens) | Use Case |
+|-------|----------------------|------------------------|----------|
+| `claude-haiku-4-5` | $1.00 | $5.00 | General Q&A, FAQ generation |
+| `claude-sonnet-5` | $2.00 | $10.00 | Complex reasoning, long threads |
+
+Opus is not offered here.
+The platform exposes two models on purpose, so a community's cost is predictable and the fallback is always the cheaper one.
 
 ---
 

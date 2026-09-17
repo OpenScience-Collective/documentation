@@ -70,7 +70,7 @@
   <rect x="740" y="102" width="310" height="56" rx="8" fill="#f0f9ff" stroke="#bfdbfe" stroke-width="1" stroke-dasharray="4,2"/>
   <text x="895" y="120" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">Authentication</text>
   <text x="895" y="134" text-anchor="middle" font-size="9.5" fill="#475569">X-API-Key (server key) or BYOK:</text>
-  <text x="895" y="148" text-anchor="middle" font-size="9.5" fill="#475569">X-OpenRouter-Key / X-OpenAI-API-Key / X-Anthropic-API-Key</text>
+  <text x="895" y="148" text-anchor="middle" font-size="9.5" fill="#475569">X-Anthropic-API-Key or X-OpenRouter-Key</text>
 
   <!-- ═══════════════════════════════════════════ -->
   <!-- EDGE / PROXY LAYER  y=192..282 -->
@@ -140,7 +140,7 @@
   <rect x="556" y="436" width="200" height="24" rx="4" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
   <text x="656" y="453" text-anchor="middle" font-size="10" fill="#166534">LangGraph (state machine)</text>
   <rect x="556" y="466" width="200" height="24" rx="4" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
-  <text x="656" y="483" text-anchor="middle" font-size="10" fill="#166534">LiteLLM (provider abstraction)</text>
+  <text x="656" y="483" text-anchor="middle" font-size="10" fill="#166534">langchain-anthropic (Messages API)</text>
   <rect x="556" y="496" width="200" height="12" rx="3" fill="#f0fdf9" stroke="#d1fae5" stroke-width="0.5"/>
   <text x="656" y="505" text-anchor="middle" font-size="8" fill="#6b7280">Prompt caching (Anthropic)</text>
 
@@ -206,9 +206,9 @@
   <text x="570" y="690" font-size="11" font-weight="600" fill="#991b1b" letter-spacing="1">EXTERNAL SERVICES</text>
 
   <rect x="570" y="700" width="140" height="56" rx="8" fill="white" stroke="#fca5a5" stroke-width="1" filter="url(#shadowLight)"/>
-  <text x="640" y="722" text-anchor="middle" font-size="12" font-weight="600" fill="#991b1b">OpenRouter</text>
-  <text x="640" y="736" text-anchor="middle" font-size="9" fill="#64748b">LLM providers</text>
-  <text x="640" y="748" text-anchor="middle" font-size="8.5" fill="#94a3b8">Qwen, Claude, GPT, etc.</text>
+  <text x="640" y="722" text-anchor="middle" font-size="12" font-weight="600" fill="#991b1b">Claude Platform</text>
+  <text x="640" y="736" text-anchor="middle" font-size="9" fill="#64748b">Messages API (AWS)</text>
+  <text x="640" y="748" text-anchor="middle" font-size="8.5" fill="#94a3b8">Haiku 4.5, Sonnet 5</text>
 
   <rect x="720" y="700" width="110" height="56" rx="8" fill="white" stroke="#fca5a5" stroke-width="1" filter="url(#shadowLight)"/>
   <text x="775" y="722" text-anchor="middle" font-size="12" font-weight="600" fill="#991b1b">LangFuse</text>
@@ -320,8 +320,8 @@
 
   <!-- === SERVER -> EXTERNAL SERVICES (orthogonal routing through corridor) === -->
 
-  <!-- Agent Stack -> OpenRouter (LLM calls) -->
-  <!-- Exit bottom of Agent Stack, go down to corridor lane 1, go right to OpenRouter, go down -->
+  <!-- Agent Stack -> Claude Platform (LLM calls) -->
+  <!-- Exit bottom of Agent Stack, go down to corridor lane 1, go right to the platform box, go down -->
   <path d="M 620,516 L 620,625 L 640,625 L 640,700"
         fill="none" stroke="#f87171" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowRed)"/>
   <text x="576" y="622" font-size="8.5" fill="#f87171">LLM calls</text>

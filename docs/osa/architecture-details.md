@@ -18,7 +18,8 @@ A typical request flows through the system as follows:
 3. **FastAPI** validates authentication (API key or BYOK headers) and CORS origin
 4. **Community router** (e.g., `/hed/ask`) handles the request using the community's configuration
 5. **LangGraph agent** runs the conversation loop:
-    - Sends messages to the LLM via **LiteLLM** (through OpenRouter)
+    - Sends messages to Claude on the **Claude Platform on AWS** via `langchain-anthropic`,
+      or through **LiteLLM** to OpenRouter when the caller brought an OpenRouter key
     - LLM may request **tool calls** (document retrieval, knowledge search, validation)
     - Tools query **SQLite + FTS5** databases or external APIs (GitHub, hedtools.org)
     - Loop continues until the agent produces a final response

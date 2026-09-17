@@ -22,16 +22,29 @@ curl -H "X-API-Key: your-server-key" https://api.osc.earth/osa/health
 
 ### BYOK (Bring Your Own Key)
 
-Pass your OpenRouter API key directly. This is the primary method for CLI and widget users:
+Pass your own LLM key in a header, one header per provider.
+This is the primary method for CLI and widget users:
 
 ```bash
-curl -H "X-OpenRouter-Key: your-openrouter-key" \
+# Claude Platform key
+curl -H "X-Anthropic-API-Key: sk-ant-your-key" \
+  https://api.osc.earth/osa/hed/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is HED?"}'
+
+# OpenRouter key
+curl -H "X-OpenRouter-Key: sk-or-v1-your-key" \
   https://api.osc.earth/osa/hed/ask \
   -H "Content-Type: application/json" \
   -d '{"question": "What is HED?"}'
 ```
 
 When using BYOK, no server API key is required. The user's key is forwarded to the LLM provider.
+Send both headers and the Anthropic one is used, since it is the platform's own
+provider.
+
+Without a BYOK header, a question is answered on the community's key if it has
+one, and the platform's otherwise.
 
 ## Endpoints
 
@@ -81,7 +94,7 @@ Response:
     },
     "links": {
       "homepage": "https://www.hedtags.org",
-      "documentation": "https://www.hed-resources.org",
+      "documentation": "https://www.hedtags.org/hed-resources",
       "repository": "https://github.com/hed-standard"
     }
   }
@@ -113,28 +126,51 @@ Ask a single question to a community assistant.
 ```
 POST /{community}/ask
 Content-Type: application/json
-X-OpenRouter-Key: your-key
+X-Anthropic-API-Key: sk-ant-your-key
 
 {
   "question": "How do I annotate a button press in HED?",
-  "stream": true
+  "stream": true,
+  "model": "claude-sonnet-5"
 }
 ```
+
+`model` is optional: `claude-haiku-4-5` or `claude-sonnet-5`, or a legacy alias
+of either. Any other id needs an OpenRouter key. Omit it to use the community's
+configured default.
 
 #### Non-streaming Response
 
-When `stream: false`:
+When `stream: false` (the default for `/ask`):
 
 ```json
 {
-  "answer": "To annotate a button press in HED...",
-  "tool_calls": []
+  "answer": "To annotate a button press in HED, use the Press tag [1]...",
+  "tool_calls": [],
+  "citations": [
+    {
+      "marker": 1,
+      "source": "https://www.hedtags.org/hed-resources/HedAnnotationQuickstart.html",
+      "title": "HED annotation quickstart",
+      "cited_text": "Agent-action tags describe what a participant did..."
+    }
+  ],
+  "request_id": "req_abc123",
+  "model": "claude-haiku-4-5"
 }
 ```
 
+`citations` backs the `[n]` markers in the answer, in marker order.
+One marker per unique source, so repeated claims from the same document share a
+number. It is empty when the model cited nothing, and on the OpenRouter path,
+which has no citation mechanism.
+`model` is the model that actually answered, which is worth reading rather than
+assuming: a cost guard or an alias may have resolved it to something other than
+what was requested.
+
 #### Streaming Response (SSE)
 
-When `stream: true` (default):
+When `stream: true`:
 
 ```
 data: {"event": "content", "content": "To"}
@@ -145,10 +181,17 @@ data: {"event": "tool_start", "name": "retrieve_hed_docs", "params": {...}}
 
 data: {"event": "tool_end", "name": "retrieve_hed_docs", "result": "..."}
 
-data: {"event": "content", "content": "..."}
+data: {"event": "content", "content": " use the Press tag [1]"}
 
-data: {"event": "done"}
+data: {"event": "citation", "marker": 1, "source": "...", "title": "...", "cited_text": "..."}
+
+data: {"event": "done", "request_id": "...", "model": "claude-haiku-4-5", "citations": [...]}
 ```
+
+A `citation` event arrives at the end of the span it annotates, right after the
+`content` chunk carrying its `[n]`, so a client that ignores the event still
+shows the marker in place. `done` repeats the full list, so a client that missed
+an event can still render the sources.
 
 ### Chat
 
@@ -157,7 +200,7 @@ Multi-turn chat with conversation history.
 ```
 POST /{community}/chat
 Content-Type: application/json
-X-OpenRouter-Key: your-key
+X-Anthropic-API-Key: sk-ant-your-key
 
 {
   "message": "How do I annotate a button press in HED?",
@@ -173,13 +216,25 @@ X-OpenRouter-Key: your-key
   "session_id": "abc123",
   "message": {
     "role": "assistant",
-    "content": "To annotate a button press..."
+    "content": "To annotate a button press... [1]"
   },
-  "tool_calls": []
+  "tool_calls": [],
+  "citations": [
+    {
+      "marker": 1,
+      "source": "https://www.hedtags.org/hed-resources/HedAnnotationQuickstart.html",
+      "title": "HED annotation quickstart",
+      "cited_text": "Agent-action tags describe what a participant did..."
+    }
+  ],
+  "request_id": "req_abc123",
+  "model": "claude-haiku-4-5"
 }
 ```
 
 #### Streaming Response (SSE)
+
+Streaming is the default for `/chat`.
 
 ```
 data: {"event": "session", "session_id": "abc123"}
@@ -188,9 +243,11 @@ data: {"event": "content", "content": "To"}
 
 data: {"event": "tool_start", "name": "retrieve_hed_docs"}
 
-data: {"event": "content", "content": " annotate"}
+data: {"event": "content", "content": " annotate... [1]"}
 
-data: {"event": "done", "session_id": "abc123"}
+data: {"event": "citation", "marker": 1, "source": "...", "title": "...", "cited_text": "..."}
+
+data: {"event": "done", "session_id": "abc123", "request_id": "...", "model": "claude-haiku-4-5", "citations": [...]}
 ```
 
 ### Mirrors
@@ -334,8 +391,9 @@ for doi, by_year in data["by_paper"].items():
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `question` | string | Yes | Question to ask |
-| `stream` | boolean | No | Enable SSE streaming (default: true) |
-| `model` | string | No | Custom LLM model (requires BYOK) |
+| `stream` | boolean | No | Enable SSE streaming (default: false) |
+| `model` | string | No | `claude-haiku-4-5` or `claude-sonnet-5`; any other id requires an OpenRouter key |
+| `page_context` | object | No | Page the widget is embedded in, so the assistant can answer about it |
 
 ### Chat Request
 
@@ -344,14 +402,27 @@ for doi, by_year in data["by_paper"].items():
 | `message` | string | Yes | User message |
 | `session_id` | string | No | Session ID for multi-turn chat |
 | `stream` | boolean | No | Enable SSE streaming (default: true) |
-| `model` | string | No | Custom LLM model (requires BYOK) |
+| `model` | string | No | `claude-haiku-4-5` or `claude-sonnet-5`; any other id requires an OpenRouter key |
+| `page_context` | object | No | Page the widget is embedded in, so the assistant can answer about it |
+
+## Response Fields
+
+Both endpoints return these alongside the answer:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `citations` | array | `marker`, `source`, `title`, `cited_text` per cited source, in marker order; empty when nothing was cited |
+| `tool_calls` | array | Tools called while answering |
+| `model` | string | The model that actually answered |
+| `request_id` | string | Identifier to attach to feedback about this answer |
 
 ## Headers
 
 | Header | Description | Required |
 |--------|-------------|----------|
-| `X-OpenRouter-Key` | OpenRouter API key (BYOK) | Yes (or X-API-Key) |
-| `X-API-Key` | Server admin API key | Yes (or BYOK) |
+| `X-Anthropic-API-Key` | Claude Platform API key (BYOK); preferred when both BYOK headers are sent | No |
+| `X-OpenRouter-Key` | OpenRouter API key (BYOK) | No |
+| `X-API-Key` | Server admin API key | Only where the deployment requires auth and no BYOK header is sent |
 | `X-User-ID` | User ID for cache optimization | No |
 | `X-Mirror-ID` | Route to an ephemeral database mirror (see [Database Mirrors](mirrors.md)) | No |
 | `Content-Type` | Must be `application/json` | Yes |
@@ -391,7 +462,7 @@ import httpx
 response = httpx.post(
     "https://api.osc.earth/osa/hed/ask",
     json={"question": "What is HED?", "stream": False},
-    headers={"X-OpenRouter-Key": "your-key"},
+    headers={"X-Anthropic-API-Key": "sk-ant-your-key"},
 )
 print(response.json()["answer"])
 ```
@@ -406,13 +477,15 @@ with httpx.Client() as client:
         "POST",
         "https://api.osc.earth/osa/hed/ask",
         json={"question": "What is HED?", "stream": True},
-        headers={"X-OpenRouter-Key": "your-key"},
+        headers={"X-Anthropic-API-Key": "sk-ant-your-key"},
     ) as response:
         for line in response.iter_lines():
             if line.startswith("data: "):
                 data = json.loads(line[6:])
                 if data["event"] == "content":
                     print(data["content"], end="", flush=True)
+                elif data["event"] == "citation":
+                    print(f"\n[{data['marker']}] {data['title']}: {data['source']}")
 ```
 
 ## cURL Examples
@@ -422,7 +495,7 @@ with httpx.Client() as client:
 ```bash
 curl -X POST https://api.osc.earth/osa/hed/ask \
   -H "Content-Type: application/json" \
-  -H "X-OpenRouter-Key: your-key" \
+  -H "X-Anthropic-API-Key: sk-ant-your-key" \
   -d '{"question": "What is HED?", "stream": false}'
 ```
 
@@ -431,8 +504,8 @@ curl -X POST https://api.osc.earth/osa/hed/ask \
 ```bash
 curl -N -X POST https://api.osc.earth/osa/hed/ask \
   -H "Content-Type: application/json" \
-  -H "X-OpenRouter-Key: your-key" \
-  -d '{"question": "What is HED?"}'
+  -H "X-Anthropic-API-Key: sk-ant-your-key" \
+  -d '{"question": "What is HED?", "stream": true}'
 ```
 
 ### Chat with Session
@@ -440,12 +513,12 @@ curl -N -X POST https://api.osc.earth/osa/hed/ask \
 ```bash
 curl -X POST https://api.osc.earth/osa/hed/chat \
   -H "Content-Type: application/json" \
-  -H "X-OpenRouter-Key: your-key" \
+  -H "X-Anthropic-API-Key: sk-ant-your-key" \
   -d '{"message": "What is HED?", "stream": false}'
 
 # Continue conversation with session_id from response
 curl -X POST https://api.osc.earth/osa/hed/chat \
   -H "Content-Type: application/json" \
-  -H "X-OpenRouter-Key: your-key" \
+  -H "X-Anthropic-API-Key: sk-ant-your-key" \
   -d '{"message": "Tell me more", "session_id": "abc123", "stream": false}'
 ```

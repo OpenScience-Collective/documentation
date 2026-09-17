@@ -88,7 +88,7 @@ osa mirror create -c hed --label "testing-new-prompt" --ttl 24
 | `--community, -c` | Community ID to include (repeatable) | Required |
 | `--label, -l` | Human-readable label | None |
 | `--ttl` | Hours until mirror expires (1-168) | 48 |
-| `--api-key, -k` | OpenRouter API key | From config |
+| `--api-key, -k` | Anthropic or OpenRouter API key | From config |
 | `--api-url` | Override API URL | From config |
 
 ### `osa mirror list`
@@ -164,7 +164,7 @@ All mirror endpoints require authentication (BYOK or admin key).
 ```bash
 curl -X POST https://api.osc.earth/osa/mirrors \
   -H "Content-Type: application/json" \
-  -H "X-OpenRouter-Key: your-key" \
+  -H "X-Anthropic-API-Key: your-key" \
   -d '{"community_ids": ["hed", "bids"], "ttl_hours": 48, "label": "my-test"}'
 ```
 
@@ -189,7 +189,7 @@ Include the `X-Mirror-ID` header with any existing endpoint:
 ```bash
 curl -X POST https://api.osc.earth/osa/hed/ask \
   -H "Content-Type: application/json" \
-  -H "X-OpenRouter-Key: your-key" \
+  -H "X-Anthropic-API-Key: your-key" \
   -H "X-Mirror-ID: abc123def456" \
   -d '{"question": "What is HED?"}'
 ```

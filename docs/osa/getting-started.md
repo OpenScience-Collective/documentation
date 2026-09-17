@@ -27,11 +27,20 @@ Run the interactive setup to configure your API key:
 osa init
 ```
 
-You'll need an [OpenRouter API key](https://openrouter.ai/keys). The setup will:
+You'll need your own API key.
+Either provider works:
+
+- **Anthropic** (recommended): [platform.claude.com/settings/keys](https://platform.claude.com/settings/keys).
+  Keys start with `sk-ant-`.
+- **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys).
+  Keys start with `sk-or-`.
+
+The setup will:
 
 1. Prompt for your API key
-2. Save it securely to your config directory (see paths below)
-3. Test the connection to the API
+2. Work out which provider it belongs to from the key's own prefix, so there is nothing to declare
+3. Save it securely to your config directory (see paths below)
+4. Test the connection to the API
 
 Config directory by platform:
 
@@ -44,7 +53,7 @@ Config directory by platform:
 Alternatively, pass the key directly:
 
 ```bash
-osa init --api-key sk-or-v1-your-key
+osa init --api-key sk-ant-your-key
 ```
 
 ### Usage
@@ -66,31 +75,38 @@ osa --help
 You can also pass an API key per-command without saving it:
 
 ```bash
-osa ask -a hed "What is HED?" --api-key sk-or-v1-your-key
+osa ask -a hed "What is HED?" --api-key sk-ant-your-key
 ```
 
-Or set it via environment variable:
+Or set it via environment variable.
+Each provider has its own variable, `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY`:
 
 === "macOS"
 
     ```bash
-    export OPENROUTER_API_KEY=sk-or-v1-your-key
+    export ANTHROPIC_API_KEY=sk-ant-your-key
     osa ask -a hed "What is HED?"
     ```
 
 === "Linux"
 
     ```bash
-    export OPENROUTER_API_KEY=sk-or-v1-your-key
+    export ANTHROPIC_API_KEY=sk-ant-your-key
     osa ask -a hed "What is HED?"
     ```
 
 === "Windows"
 
     ```powershell
-    $env:OPENROUTER_API_KEY = "sk-or-v1-your-key"
+    $env:ANTHROPIC_API_KEY = "sk-ant-your-key"
     osa ask -a hed "What is HED?"
     ```
+
+!!! warning "One key at a time"
+
+    If both variables are exported, the Anthropic key wins.
+    A key passed with `--api-key` overrides both, and its provider is read from its prefix,
+    so a typed OpenRouter key is not silently overridden by an exported `ANTHROPIC_API_KEY`.
 
 ## For Developers (Server)
 
@@ -138,14 +154,36 @@ Copy the example environment file:
 Edit `.env` with your settings:
 
 ```bash
-# LLM Provider (OpenRouter recommended)
-OPENROUTER_API_KEY=your-key-here
+# LLM provider: Claude Platform on AWS
+ANTHROPIC_API_KEY=your-key-here
+ANTHROPIC_BASE_URL=https://aws-external-anthropic.us-east-2.api.aws
+ANTHROPIC_WORKSPACE_ID=wrkspc_your-workspace-id
+
+# One of claude-haiku-4-5 (default) or claude-sonnet-5
+DEFAULT_MODEL=claude-haiku-4-5
 
 # Optional: LangFuse for observability
 LANGFUSE_PUBLIC_KEY=your-public-key
 LANGFUSE_SECRET_KEY=your-secret-key
 LANGFUSE_HOST=https://cloud.langfuse.com
 ```
+
+`ANTHROPIC_BASE_URL` and `ANTHROPIC_WORKSPACE_ID` go together:
+the AWS endpoint requires an `anthropic-workspace-id` header,
+so setting the base URL without the workspace id fails at request time.
+Leave both unset to talk to `api.anthropic.com` with a first-party key instead.
+
+!!! note "This is not Amazon Bedrock"
+
+    The Claude Platform on AWS is Anthropic's own Messages API,
+    billed through AWS Marketplace.
+    It takes an `ANTHROPIC_API_KEY`, not AWS credentials,
+    and OSA does not use the Bedrock SDK or Bedrock model identifiers.
+
+`OPENROUTER_API_KEY` is still read, but only as a bring-your-own-key path;
+it is never the platform default.
+See [`.env.example`](https://github.com/OpenScience-Collective/osa/blob/main/.env.example)
+for every variable with its own notes.
 
 ### Running the Server
 
@@ -168,7 +206,7 @@ uv run pytest tests/ -v
 # Run with coverage
 uv run pytest --cov
 
-# Run LLM integration tests (requires API key)
+# Run LLM integration tests (real paid calls; needs ANTHROPIC_API_KEY)
 uv run pytest -m llm
 ```
 

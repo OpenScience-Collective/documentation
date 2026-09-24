@@ -1,11 +1,12 @@
 # OpenNeuroPET Tools
 
-The OpenNeuroPET assistant provides tools for documentation retrieval and
-GitHub knowledge search, covering the OpenNeuroPET ecosystem of open and
-reproducible tools for Positron Emission Tomography (PET) imaging:
-PET2BIDS (DICOM/ECAT to BIDS conversion), petprep (a BIDS App for
-preprocessing), bloodstream (blood data analysis), petfit (kinetic
-modeling), and PetSurfer.
+The OpenNeuroPET assistant provides tools for documentation retrieval and GitHub knowledge search.
+It covers the OpenNeuroPET ecosystem of open and reproducible tools for Positron Emission Tomography (PET) imaging:
+PET2BIDS (converts Digital Imaging and Communications in Medicine (DICOM) and Emission Computed Axial Tomography (ECAT) scanner files to BIDS),
+petprep (a BIDS App for preprocessing),
+bloodstream (blood data analysis),
+petfit (kinetic modeling),
+and PetSurfer.
 
 ## Overview
 
@@ -23,8 +24,7 @@ or `search_openneuropet_faq`.
 
 ### `retrieve_openneuropet_docs`
 
-Fetches documentation from 23 configured sources across the OpenNeuroPET
-tool ecosystem.
+Fetches documentation from 23 configured sources across the OpenNeuroPET tool ecosystem.
 
 **Preloaded docs** (embedded in system prompt):
 
@@ -32,17 +32,14 @@ tool ecosystem.
 
 **On-demand docs (22):** organized by tool:
 
-- **petprep (6):** overview, installation, usage, workflows (motion
-  correction, partial volume correction, spatial normalization), outputs,
-  FAQ
-- **petfit (14):** overview, installation, quick start, usage guide,
-  region definition, plasma input modeling, reference tissue modeling,
-  supported models, reports, outputs, folder structure, Docker usage,
-  Apptainer usage, R API reference
-- **PetSurfer (1):** wiki (partial volume correction and kinetic
-  modeling using FreeSurfer)
-- **BIDS (1):** the PET extension to the Brain Imaging Data Structure
-  (BIDS) specification
+- **petprep (6):** overview, installation, usage,
+  workflows (motion correction, partial volume correction, spatial normalization),
+  outputs, FAQ
+- **petfit (14):** overview, installation, quick start, usage guide, region definition,
+  plasma input modeling, reference tissue modeling, supported models,
+  reports, outputs, folder structure, Docker usage, Apptainer usage, R API reference
+- **PetSurfer (1):** wiki (partial volume correction and kinetic modeling using FreeSurfer)
+- **BIDS (1):** the PET extension to the Brain Imaging Data Structure (BIDS) specification
 
 ## Knowledge Search Tools
 

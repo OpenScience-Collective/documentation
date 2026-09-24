@@ -473,6 +473,15 @@ Your website origin not listed in `cors_origins` config.
 - Port number missing (e.g., `:3000`)
 - Trailing slash in config (remove it)
 
+!!! note "This is not a Content Security Policy (CSP) error"
+    A CORS rejection comes from the *backend* deciding whether to answer your
+    origin, and is fixed in `cors_origins` as above. A CSP violation comes
+    from *your own page* blocking the request or script before it is sent,
+    and is fixed in your page's CSP header instead; see
+    [Content Security Policy (CSP)](deployment/widget.md#content-security-policy-csp)
+    in the Widget Deployment Guide. The two look similar in the console but
+    need different fixes.
+
 ---
 
 ### Error: Widget not loading
@@ -892,7 +901,7 @@ CSS conflicts with your site's styles.
 ```html
 <style>
   /* Adjust widget position */
-  #osa-widget-container {
+  .osa-chat-widget {
     bottom: 20px !important;
     right: 20px !important;
     z-index: 9999 !important;
@@ -903,7 +912,7 @@ CSS conflicts with your site's styles.
 **Check for conflicts:**
 ```javascript
 // In browser console
-console.log(getComputedStyle(document.getElementById('osa-widget-container')));
+console.log(getComputedStyle(document.querySelector('.osa-chat-widget')));
 ```
 
 ---

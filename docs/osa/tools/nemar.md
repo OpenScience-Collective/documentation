@@ -1,7 +1,7 @@
 # NEMAR Tools
 
 The NEMAR (NeuroElectroMagnetic Archive) assistant provides tools for documentation retrieval and dataset discovery.
-NEMAR hosts hundreds of Brain Imaging Data Structure (BIDS)-formatted EEG, MEG, and iEEG datasets sourced from [OpenNeuro](https://openneuro.org/).
+NEMAR hosts hundreds of Brain Imaging Data Structure (BIDS)-formatted EEG, MEG, and iEEG datasets, some deposited to NEMAR directly and some imported from [OpenNeuro](https://openneuro.org/).
 
 Dataset identifiers are `nm` or `on` followed by six digits, for example `nm000103`.
 They are not OpenNeuro `ds` accessions.
@@ -37,8 +37,13 @@ The community's `config.yaml` declares it under `extensions.mcp_servers`:
 extensions:
   mcp_servers:
     - name: nemar
-      url: https://mcp.nemar.org/mcp
+      url:
+        production: https://mcp.nemar.org/mcp
+        develop: https://mcp-test.nemar.org/mcp
 ```
+
+The URL is written per deployment: the develop deployment, which NEMAR's staging site embeds, reads NEMAR's staging server, since production's does not know staging's datasets.
+A community with one server for every deployment writes the URL as a single value.
 
 OSA prefixes every tool the server advertises with the server's `name`,
 so the MCP server's own `search_datasets` becomes `nemar_search_datasets` in the assistant's tool list, and likewise for the other five.
@@ -122,6 +127,14 @@ otherwise falls back to the recording's sibling `events.tsv` and flags the resul
 | `group` | string | - | Filter to one channel group's events by name |
 | `limit` | int | `1000` | Maximum event rows to return (capped at 5000) |
 | `offset` | int | `0` | Pagination offset |
+| `where` | object | - | Column name to the values to keep, compared as strings, for example `{"event_type": ["face"]}`; every named column must match. `total_count` counts the rows kept |
+| `columns` | list | - | The columns to return; `onset_s` and `sample_index` always come back |
+
+Every answer also carries `columns_summary`, each column of the recording's events with its distinct and null counts, and its values when it has at most 50.
+It is computed before `where`, so a call with `limit: 1` shows what a filter can ask for.
+A column that `where` or `columns` names and the recording does not have is refused with the columns it has.
+A server without these inputs ignores them, since the MCP server accepts an argument it does not declare, and answers every row with no `columns_summary`.
+[NEMAR Examples](nemar-examples.md) walks through them on a real recording.
 
 ### `nemar_render_overview`
 
@@ -175,5 +188,6 @@ Every response from `nemar_list_recordings`, `nemar_get_events`, `nemar_render_o
 
 - [NEMAR homepage](https://nemar.org)
 - [NEMAR dataset browser](https://nemar.org/discover)
-- [OpenNeuro](https://openneuro.org/) (source platform for all NEMAR datasets)
+- [OpenNeuro](https://openneuro.org/) (the source of NEMAR's `on` datasets)
+- [NEMAR Examples](nemar-examples.md) (a power spectrum and an ERP image, worked through)
 - [BIDS Specification](https://bids-specification.readthedocs.io/) (format standard for all NEMAR datasets)

@@ -63,7 +63,7 @@ osa ask -a hed "What is HED?" --no-stream
 
 Options:
 
-- `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
+- `--assistant, -a`: A community id, for example `hed` (see [Tools](tools/index.md) for the full list). Default: hed
 - `--mirror, -m`: Mirror ID for ephemeral database routing (see [Database Mirrors](mirrors.md))
 - `--api-key, -k`: Anthropic or OpenRouter API key (overrides saved config, and wins over both env vars)
 - `--api-url`: Override API URL
@@ -87,7 +87,7 @@ osa chat -a eeglab --no-stream
 
 Options:
 
-- `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
+- `--assistant, -a`: A community id, for example `hed` (see [Tools](tools/index.md) for the full list). Default: hed
 - `--mirror, -m`: Mirror ID for ephemeral database routing (see [Database Mirrors](mirrors.md))
 - `--api-key, -k`: Anthropic or OpenRouter API key (overrides saved config, and wins over both env vars)
 - `--api-url`: Override API URL

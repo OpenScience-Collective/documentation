@@ -15,26 +15,22 @@ Add two script tags to your HTML:
 </script>
 ```
 
-The `<script>` tag that loads the widget must come first, so that
-`window.OSAChatWidget` exists before the inline `setConfig()` call runs.
-Do not add `defer` or `async` to that tag unless you also add
-`data-no-auto-init` and call `OSAChatWidget.init()` yourself; see
-[Loading the Script Asynchronously](#loading-the-script-asynchronously).
+The `<script>` tag that loads the widget must come first, so that `window.OSAChatWidget` exists before the inline `setConfig()` call runs.
+Do not add `defer` or `async` to that tag unless you also add `data-no-auto-init` and call `OSAChatWidget.init()` yourself;
+see [Loading the Script Asynchronously](#loading-the-script-asynchronously).
 
 The widget appears as a chat bubble in the bottom-right corner of the page.
 
 !!! note "Existing embeds on osa-demo.pages.dev"
-    Sites that already load the widget from `https://osa-demo.pages.dev/osa-chat-widget.js`
-    keep working; that address is not going away.
+    Sites that already load the widget from `https://osa-demo.pages.dev/osa-chat-widget.js` keep working;
+    that address is not going away.
     New embeds should use `https://demo.osc.earth/osa-chat-widget.js` instead.
 
 ## Loading the Script Asynchronously
 
-The widget defines `window.OSAChatWidget` when its script runs, and it
-auto-initializes as soon as the page is ready. If you need to load the
-script with `defer` or `async` (for example, to keep it out of the
-critical rendering path), add `data-no-auto-init` to the script tag and
-call `setConfig()` and `init()` from an `onload` handler instead:
+The widget defines `window.OSAChatWidget` when its script runs, and it auto-initializes as soon as the page is ready.
+If you need to load the script with `defer` or `async` (for example, to keep it out of the critical rendering path),
+add `data-no-auto-init` to the script tag and call `setConfig()` and `init()` from an `onload` handler instead:
 
 ```html
 <script
@@ -45,17 +41,13 @@ call `setConfig()` and `init()` from an `onload` handler instead:
 </script>
 ```
 
-Do not add `defer` or `async` to the script tag while still relying on a
-separate inline `setConfig()` call: the deferred script has not run yet
-when the inline block executes, `window.OSAChatWidget` does not exist,
-and the call throws `ReferenceError: OSAChatWidget is not defined`.
+Do not add `defer` or `async` to the script tag while still relying on a separate inline `setConfig()` call:
+the deferred script has not run yet when the inline block executes, `window.OSAChatWidget` does not exist, and the call throws `ReferenceError: OSAChatWidget is not defined`.
 
 ## Pinning to a Release with Subresource Integrity
 
-Security-sensitive environments that require Subresource Integrity (SRI)
-can pin the widget to a specific release using a versioned jsDelivr URL.
-The `integrity` hash for each release is published on the
-[GitHub releases page](https://github.com/OpenScience-Collective/osa/releases).
+Security-sensitive environments that require Subresource Integrity (SRI) can pin the widget to a specific release using a versioned jsDelivr URL.
+The `integrity` hash for each release is published on the [GitHub releases page](https://github.com/OpenScience-Collective/osa/releases).
 
 ```html
 <!-- Replace vX.Y.Z and the integrity hash from the GitHub release notes -->
@@ -69,14 +61,12 @@ The `integrity` hash for each release is published on the
 </script>
 ```
 
-Do not add `defer` to the pinned `<script>` tag unless you also add
-`data-no-auto-init` and initialize the widget from an `onload` handler,
-per [Loading the Script Asynchronously](#loading-the-script-asynchronously)
-above; otherwise the inline `setConfig()` call runs before the script
-has defined `OSAChatWidget`.
+Do not add `defer` to the pinned `<script>` tag unless you also add `data-no-auto-init` and initialize the widget from an `onload` handler,
+per [Loading the Script Asynchronously](#loading-the-script-asynchronously) above;
+otherwise the inline `setConfig()` call runs before the script has defined `OSAChatWidget`.
 
-You must update the version tag by hand when upgrading; SRI pinning does
-not follow new releases automatically.
+You must update the version tag by hand when upgrading;
+SRI pinning does not follow new releases automatically.
 
 ## How Configuration Works
 
@@ -218,9 +208,8 @@ Assistant responses support full Markdown rendering including:
 
 ## Environment Detection
 
-The widget auto-detects its backend from the hostname of the page it is
-embedded on (`window.location.hostname`), not from where the widget script
-itself was loaded:
+The widget auto-detects its backend from the hostname of the page it is embedded on (`window.location.hostname`),
+not from where the widget script itself was loaded:
 
 | Embedding page's hostname | Backend |
 |---|---|
@@ -228,9 +217,8 @@ itself was loaded:
 | Ends with `-demo.osc.earth` or `.osa-demo.pages.dev`, or contains `localhost` or `127.0.0.1` | Develop: `https://develop-widget.osc.earth/osa` |
 | Anything else (an adopter's own domain) | Production: `https://widget.osc.earth/osa` |
 
-This means an adopter testing the widget on `localhost` talks to the develop
-backend by default. Set `apiEndpoint` explicitly to point at production
-instead:
+This means an adopter testing the widget on `localhost` talks to the develop backend by default.
+Set `apiEndpoint` explicitly to point at production instead:
 
 ```javascript
 OSAChatWidget.setConfig({
@@ -239,18 +227,13 @@ OSAChatWidget.setConfig({
 });
 ```
 
-`apiEndpoint` also accepts any other reachable OSA backend, such as a
-self-hosted deployment.
+`apiEndpoint` also accepts any other reachable OSA backend, such as a self-hosted deployment.
 
 ## Cross-Origin Requests (CORS)
 
-Without a bring-your-own key (see [Authentication](../api-reference.md#authentication)),
-the backend only answers a widget request whose `Origin` header is
-authorized for that community. Two platform origins,
-`https://demo.osc.earth` and `https://osa-demo.pages.dev`, are always
-authorized for every community. Any other origin, such as an adopter's
-own domain, must be added to that community's `cors_origins` in its
-`config.yaml`:
+Without a bring-your-own key (see [Authentication](../api-reference.md#authentication)), the backend only answers a widget request whose `Origin` header is authorized for that community.
+Two platform origins, `https://demo.osc.earth` and `https://osa-demo.pages.dev`, are always authorized for every community.
+Any other origin, such as an adopter's own domain, must be added to that community's `cors_origins` in its `config.yaml`:
 
 ```yaml
 cors_origins:
@@ -258,18 +241,13 @@ cors_origins:
   - https://www.mysite.com
 ```
 
-Without either a listed origin or a BYOK header, the backend responds
-with 403 and "API key required." Adding an origin requires a pull
-request to the community's `config.yaml`, so a new deployment should
-open one before going live on a new domain.
+Without either a listed origin or a BYOK header, the backend responds with 403 and "API key required."
+Adding an origin requires a pull request to the community's `config.yaml`, so a new deployment should open one before going live on a new domain.
 
 ## Content Security Policy (CSP)
 
-A page with a Content Security Policy needs to allow the widget's
-script host in both `script-src` and `connect-src`, the widget's
-backend, an inline script or event handler, and the community logo's
-host. For the default `demo.osc.earth`-hosted script talking to the
-production backend:
+A page with a Content Security Policy needs to allow the widget's script host in both `script-src` and `connect-src`, the widget's backend, an inline script or event handler, and the community logo's host.
+For the default `demo.osc.earth`-hosted script talking to the production backend:
 
 ```
 script-src 'self' 'unsafe-inline' https://demo.osc.earth;
@@ -278,40 +256,20 @@ style-src 'self' 'unsafe-inline';
 img-src 'self' data: https:;
 ```
 
-- `script-src` needs the host the widget script itself loads from
-  (`https://demo.osc.earth` for the quick-start snippet, or
-  `https://cdn.jsdelivr.net` when pinned to a release with SRI), and it
-  needs `'unsafe-inline'`.
-  Every embed pattern on this page configures the widget from an inline
-  script: the quick-start's inline `setConfig()` block, or the async
-  pattern's inline `onload` attribute.
-  Without `'unsafe-inline'`, that inline call is blocked, `setConfig()`
-  never runs, and the widget silently falls back to its default
-  community (`hed`) instead of the one you configured.
-  A page already using a nonce- or hash-based policy can replace
-  `'unsafe-inline'` with a matching `'nonce-...'` value on the inline
-  `<script>` block, or a `'sha256-...'` hash of its exact contents; the
-  inline `onload` attribute needs `'unsafe-hashes'` plus a hash of the
-  handler instead, since a nonce does not apply to event-handler
-  attributes.
-- `connect-src` needs both the widget's backend (`https://widget.osc.earth`
-  in production, or `https://develop-widget.osc.earth` in development;
-  see [Environment Detection](#environment-detection)) and the script's
-  own host.
-  The pop-out window re-fetches the widget script itself with
-  `fetch(document.currentScript.src)` so it can run in the new window,
-  and a `fetch()` call is governed by `connect-src`, not `script-src`.
+- `script-src` needs the host the widget script itself loads from (`https://demo.osc.earth` for the quick-start snippet, or `https://cdn.jsdelivr.net` when pinned to a release with SRI), and it needs `'unsafe-inline'`.
+  Every embed pattern on this page configures the widget from an inline script: the quick-start's inline `setConfig()` block, or the async pattern's inline `onload` attribute.
+  Without `'unsafe-inline'`, that inline call is blocked, `setConfig()` never runs, and the widget silently falls back to its default community (`hed`) instead of the one you configured.
+  A page already using a nonce- or hash-based policy can replace `'unsafe-inline'` with a matching `'nonce-...'` value on the inline `<script>` block, or a `'sha256-...'` hash of its exact contents;
+  the inline `onload` attribute needs `'unsafe-hashes'` plus a hash of the handler instead, since a nonce does not apply to event-handler attributes.
+- `connect-src` needs both the widget's backend (`https://widget.osc.earth` in production, or `https://develop-widget.osc.earth` in development; see [Environment Detection](#environment-detection)) and the script's own host.
+  The pop-out window re-fetches the widget script itself with `fetch(document.currentScript.src)` so it can run in the new window, and a `fetch()` call is governed by `connect-src`, not `script-src`.
   Omitting the script's host here does not stop the widget from loading;
   it only breaks the pop-out button, which fails with an alert.
-- `style-src` needs `'unsafe-inline'`: the widget injects its own
-  stylesheet at runtime rather than loading an external one.
-- `img-src` needs whichever host serves the community's logo, plus
-  `data:` if a logo is ever inlined.
+- `style-src` needs `'unsafe-inline'`: the widget injects its own stylesheet at runtime rather than loading an external one.
+- `img-src` needs whichever host serves the community's logo, plus `data:` if a logo is ever inlined.
 
-Pinned to a release via jsDelivr, `script-src` and `connect-src` both
-need `https://cdn.jsdelivr.net` instead of `https://demo.osc.earth`, for
-the same two reasons: it is where the script loads from, and where the
-pop-out re-fetches it from.
+Pinned to a release via jsDelivr, `script-src` and `connect-src` both need `https://cdn.jsdelivr.net` instead of `https://demo.osc.earth`, for the same two reasons:
+it is where the script loads from, and where the pop-out re-fetches it from.
 
 ```
 script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
@@ -391,9 +349,7 @@ To host the widget yourself:
 
 ## Demo Page
 
-The demo page at [demo.osc.earth](https://demo.osc.earth) (also served from the
-`osa-demo.pages.dev` address that existing embeds use) dynamically loads all available
-communities from the `/communities` API and showcases them with URL-based routing:
+The demo page at [demo.osc.earth](https://demo.osc.earth) (also served from the `osa-demo.pages.dev` address that existing embeds use) dynamically loads all available communities from the `/communities` API and showcases them with URL-based routing:
 
 - `/` - Landing page with community cards (populated from API)
 - `/{communityId}` - Community-specific assistant demo (e.g., `/hed`, `/bids`, `/eeglab`, `/fieldtrip`)

@@ -184,6 +184,8 @@ nav:
           - EEGLAB Tools: osa/tools/eeglab.md
           - MNE-Python Tools: osa/tools/mne.md
           - NEMAR Tools: osa/tools/nemar.md
+          - MetaBCI Tools: osa/tools/metabci.md
+          - OpenNeuroPET Tools: osa/tools/openneuropet.md
       - Presentations:
           - osa/presentations/index.md
           - UC Open 2026: osa/presentations/uc-open-2026.md

@@ -1,4 +1,4 @@
-# NEMAR Examples: a Power Spectrum and an ERP Image
+# NEMAR Examples: a Power Spectrum and an Event-Related Potential Image
 
 Two analyses the NEMAR assistant runs for a reader, worked through on ERP CORE (`nm000132`), a set of standard event-related potential (ERP) paradigms:
 the power spectrum of a recording's electroencephalography (EEG) channels, and an ERP image of its conditions.
@@ -9,14 +9,16 @@ For the same analyses with SciPy, in NEMAR's notebook or your own Python, see NE
 
 ## What to ask
 
-On a dataset page on [nemar.org](https://nemar.org), open the assistant and ask, for example:
+The assistant and its notebook reach [nemar.org](https://nemar.org)'s dataset pages with NEMAR's next release; nemar.org does not embed them yet.
+There, on a dataset page, open the assistant and ask, for example:
 
 - "Show the power spectrum of the EEG channels in sub-001's N170 recording from nm000132"
 - "Plot an ERP image of faces against scrambled faces at PO8 in sub-001's N170 recording from nm000132"
 
 On a dataset with a Zarr copy, the assistant's suggested questions include both, filled in with that dataset's first recording.
 It runs the code in your browser only after you approve it, and reads the recording from NEMAR's Zarr copy, which is lossy and may be downsampled:
-this one is 250 Hz, from 1024 Hz. For a published result, download the Brain Imaging Data Structure (BIDS) files.
+this one is 250 Hz, from 1024 Hz.
+For a published result, download the Brain Imaging Data Structure (BIDS) files.
 
 ## What the assistant does
 

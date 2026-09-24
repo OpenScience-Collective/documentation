@@ -127,10 +127,11 @@ otherwise falls back to the recording's sibling `events.tsv` and flags the resul
 | `group` | string | - | Filter to one channel group's events by name |
 | `limit` | int | `1000` | Maximum event rows to return (capped at 5000) |
 | `offset` | int | `0` | Pagination offset |
-| `where` | object | - | Column name to the values to keep, compared as strings, for example `{"event_type": ["face"]}`; every named column must match. `total_count` counts the rows kept |
-| `columns` | list | - | The columns to return; `onset_s` and `sample_index` always come back |
+| `where` | object | - | Column name to the values to keep, compared as strings, for example `{"event_type": ["face"]}`; every named column must match (1 to 8 columns, 1 to 100 values each). `total_count` counts the rows kept |
+| `columns` | list | - | The columns to return, capped at 32; `onset_s` and `sample_index` always come back |
 
-Every answer also carries `columns_summary`, each column of the recording's events with its distinct and null counts, and its values when it has at most 50.
+Every answer also carries `columns_summary`, each column of the recording's events with its distinct and null counts,
+and its values when it has at most 50 and none is longer than 100 characters.
 It is computed before `where`, so a call with `limit: 1` shows what a filter can ask for.
 A column that `where` or `columns` names and the recording does not have is refused with the columns it has.
 A server without these inputs ignores them, since the MCP server accepts an argument it does not declare, and answers every row with no `columns_summary`.

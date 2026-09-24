@@ -32,7 +32,9 @@ Tools for working with the EEGLAB analysis toolbox.
 
 Tools for working with the FieldTrip MEG/EEG/iEEG analysis toolbox.
 
-Uses the standard knowledge discovery tools (document retrieval, GitHub search, paper search, docstring search). No community-specific custom tools.
+Uses the standard knowledge discovery tools (document retrieval, GitHub
+search, paper search, docstring search including full-docstring lookup).
+No community-specific custom tools.
 
 **Status:** Available
 

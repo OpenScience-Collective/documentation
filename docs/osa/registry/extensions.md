@@ -131,8 +131,8 @@ __all__ = ["validate_config", "search_examples"]
 
 | Tool | Purpose | Data Source |
 |------|---------|-------------|
-| `search_eeglab_docstrings` | Search MATLAB/Python function docs | Synced docstrings database |
-| `search_eeglab_faqs` | Search mailing list FAQ entries | LLM-generated FAQ database |
+| `search_eeglab_code_docs` | Search MATLAB/Python function docs | Synced docstrings database |
+| `search_eeglab_faq` | Search mailing list FAQ entries | LLM-generated FAQ database |
 
 These tools provide domain-specific functionality that cannot be replicated in YAML configuration alone.
 

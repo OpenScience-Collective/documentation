@@ -242,6 +242,51 @@ OSAChatWidget.setConfig({
 `apiEndpoint` also accepts any other reachable OSA backend, such as a
 self-hosted deployment.
 
+## Cross-Origin Requests (CORS)
+
+Without a bring-your-own key (see [Authentication](../api-reference.md#authentication)),
+the backend only answers a widget request whose `Origin` header is
+authorized for that community. Two platform origins,
+`https://demo.osc.earth` and `https://osa-demo.pages.dev`, are always
+authorized for every community. Any other origin, such as an adopter's
+own domain, must be added to that community's `cors_origins` in its
+`config.yaml`:
+
+```yaml
+cors_origins:
+  - https://mysite.com
+  - https://www.mysite.com
+```
+
+Without either a listed origin or a BYOK header, the backend responds
+with 403 and "API key required." Adding an origin requires a pull
+request to the community's `config.yaml`, so a new deployment should
+open one before going live on a new domain.
+
+## Content Security Policy (CSP)
+
+A page with a Content Security Policy needs to allow the widget's script
+host, its API host, and the community logo's host. For the default
+`demo.osc.earth`-hosted script talking to the production backend:
+
+```
+script-src 'self' https://demo.osc.earth;
+connect-src 'self' https://widget.osc.earth;
+style-src 'self' 'unsafe-inline';
+img-src 'self' data: https:;
+```
+
+- `script-src` needs the host the widget script itself loads from:
+  `https://demo.osc.earth` for the quick-start snippet, or
+  `https://cdn.jsdelivr.net` when pinned to a release with SRI.
+- `connect-src` needs the widget's backend: `https://widget.osc.earth`
+  in production, or `https://develop-widget.osc.earth` in development
+  (see [Environment Detection](#environment-detection)).
+- `style-src` needs `'unsafe-inline'`: the widget injects its own
+  stylesheet at runtime rather than loading an external one.
+- `img-src` needs whichever host serves the community's logo, plus
+  `data:` if a logo is ever inlined.
+
 ## Bot Protection
 
 The widget supports Cloudflare Turnstile for bot protection:

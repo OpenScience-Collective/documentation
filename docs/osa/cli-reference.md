@@ -210,6 +210,34 @@ Options:
 - `--port, -p`: Port to bind to. Default: 38528
 - `--reload, -r`: Enable auto-reload
 
+### `osa validate`
+
+Validate a community configuration file. Requires server dependencies.
+
+```bash
+# File mode: YAML syntax, schema validation, env var checks
+osa validate src/assistants/my-tool/config.yaml
+
+# Also test the community's own API key against its provider
+osa validate src/assistants/my-tool/config.yaml --test-api-key
+
+# Community mode: full test suite, including URL accessibility and
+# GitHub repo validation
+osa validate --community hed
+
+# Verbose pytest output in community mode
+osa validate --community hed --verbose
+```
+
+Options:
+
+- `config_path` (argument): path to a community's `config.yaml` (file mode; mutually exclusive with `--community`)
+- `--community, -c`: community ID to validate with the full test suite instead of a single file
+- `--test-api-key`: test the community's own API key against its provider (Anthropic or OpenRouter)
+- `--verbose, -v`: show verbose pytest output when using `--community`
+
+Exit code is 0 on success, 1 on failure.
+
 ### `osa mirror`
 
 Manage ephemeral database mirrors for development. See [Database Mirrors](mirrors.md) for full documentation.

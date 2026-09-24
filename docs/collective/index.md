@@ -21,6 +21,11 @@ An extensible AI assistant platform for researchers working with open science to
 - **HED Assistant** - Hierarchical Event Descriptors, annotation standards
 - **BIDS Assistant** - Brain Imaging Data Structure, dataset organization
 - **EEGLAB Assistant** - EEG analysis, MATLAB toolbox guidance
+- **FieldTrip Assistant** - MEG/EEG/iEEG analysis toolbox
+- **MNE-Python Assistant** - M/EEG analysis toolbox
+- **NEMAR Assistant** - NeuroElectroMagnetic Archive, BIDS-formatted dataset discovery
+- **MetaBCI Assistant** - Brain-Computer Interface (BCI) research platform
+- **OpenNeuroPET Assistant** - Open, reproducible Positron Emission Tomography (PET) tools
 
 Visit the [OSA section](../osa/index.md) to explore the platform.
 

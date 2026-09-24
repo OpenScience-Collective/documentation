@@ -60,7 +60,7 @@ Response:
 ```json
 {
   "status": "healthy",
-  "version": "0.7.0",
+  "version": "X.Y.Z",
   "environment": "production"
 }
 ```

@@ -10,8 +10,8 @@ The EEGLAB assistant provides tools for documentation retrieval, knowledge searc
 | `search_eeglab_discussions` | Knowledge search | Search GitHub issues and PRs |
 | `list_eeglab_recent` | Knowledge search | List recent GitHub activity |
 | `search_eeglab_papers` | Knowledge search | Search academic papers |
-| `search_eeglab_docstrings` | EEGLAB-specific | Search MATLAB/Python function documentation |
-| `search_eeglab_faqs` | EEGLAB-specific | Search mailing list FAQ entries |
+| `search_eeglab_code_docs` | EEGLAB-specific | Search MATLAB/Python function documentation |
+| `search_eeglab_faq` | EEGLAB-specific | Search mailing list FAQ entries |
 
 ## Document Retrieval
 
@@ -84,7 +84,7 @@ Search academic papers related to EEGLAB.
 
 ## EEGLAB-Specific Tools
 
-### `search_eeglab_docstrings`
+### `search_eeglab_code_docs`
 
 Search function documentation from the EEGLAB codebase. This tool searches over MATLAB and Python docstrings extracted from EEGLAB and its plugins.
 
@@ -108,7 +108,7 @@ Search function documentation from the EEGLAB codebase. This tool searches over 
 
 ```
 User: "How do I use pop_loadset?"
-Agent: calls search_eeglab_docstrings(query="pop_loadset")
+Agent: calls search_eeglab_code_docs(query="pop_loadset")
 Response:
   Found 1 function(s):
 
@@ -122,7 +122,7 @@ Response:
 !!! note "Sync Required"
     Populate with `osa sync docstrings --community eeglab`.
 
-### `search_eeglab_faqs`
+### `search_eeglab_faq`
 
 Search FAQ entries generated from the EEGLAB mailing list archive (since 2004). The FAQ database is created using a two-agent Large Language Model (LLM) pipeline that evaluates thread quality and summarizes high-quality discussions.
 
@@ -146,7 +146,7 @@ Search FAQ entries generated from the EEGLAB mailing list archive (since 2004). 
 
 ```
 User: "How do I remove artifacts from EEG data?"
-Agent: calls search_eeglab_faqs(query="artifact removal")
+Agent: calls search_eeglab_faq(query="artifact removal")
 Response:
   Found 3 FAQ entries:
 

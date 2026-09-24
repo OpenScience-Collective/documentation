@@ -287,6 +287,9 @@ osa sync docstrings --community eeglab --language matlab
 # Sync mailing list archives
 osa sync mailman --community eeglab
 
+# Sync Discourse forum topics
+osa sync discourse --community mne
+
 # Generate FAQ from mailing list threads
 osa sync faq --community eeglab --estimate
 
@@ -302,6 +305,8 @@ osa sync status
 # Search knowledge database
 osa sync search "validation error" --community hed
 ```
+
+`osa sync discourse` is documented in full, including the `discourse` config block it reads, under [Knowledge Sync](knowledge-sync.md#osa-sync-discourse).
 
 ## Configuration
 

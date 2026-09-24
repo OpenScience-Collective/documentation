@@ -70,9 +70,12 @@ every other parameter narrows the result set, and they compose.
 | `modality` | string | Substring match against recorded modalities (e.g. `"eeg"`, `"meg"`) |
 | `task` | string | Substring match against task names |
 | `has_hed` | boolean | Filter to datasets with Hierarchical Event Descriptors (HED) annotations |
-| `has_zarr` | boolean | Filter to datasets with a converted Zarr serving copy |
+| `has_zarr` | boolean | Filter to datasets with a converted Zarr serving copy (converted, not necessarily fidelity-verified) |
+| `has_zarr_verified` | boolean | Filter to datasets whose Zarr copy passed the standing fidelity sweep; a strict narrowing of `has_zarr`, since a fresh conversion is `has_zarr` until the sweep reaches it |
 | `author` | string | Substring match against author names |
-| `has_doi` | boolean | Filter to datasets that carry a citable DOI |
+| `has_doi` | boolean | Filter to datasets that carry a citable Digital Object Identifier (DOI) |
+| `data_complete` | boolean | Filter to datasets verified to hold all of their declared content |
+| `recent` | int | Filter to datasets published within this many days |
 | `license` | string | Comma-separated license tiers: `public`, `attribution`, `sharealike`, `noncommercial`, `noderiv`, `unknown` |
 | `include_unknown` | boolean | Widen every active facet filter to also admit datasets whose value is unknown, rather than excluding them |
 | `limit` | int | Maximum results to return (default 20, capped at 100) |

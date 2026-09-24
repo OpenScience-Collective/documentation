@@ -7,7 +7,7 @@ The OSA Chat Widget is an embeddable JavaScript component that adds an AI assist
 Add two script tags to your HTML:
 
 ```html
-<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 <script>
   OSAChatWidget.setConfig({
     communityId: 'hed'
@@ -15,7 +15,18 @@ Add two script tags to your HTML:
 </script>
 ```
 
+The `<script>` tag that loads the widget must come first, so that
+`window.OSAChatWidget` exists before the inline `setConfig()` call runs.
+Do not add `defer` or `async` to that tag unless you also add
+`data-no-auto-init` and call `OSAChatWidget.init()` yourself; see
+[Loading the Script Asynchronously](#loading-the-script-asynchronously).
+
 The widget appears as a chat bubble in the bottom-right corner of the page.
+
+!!! note "Existing embeds on osa-demo.pages.dev"
+    Sites that already load the widget from `https://osa-demo.pages.dev/osa-chat-widget.js`
+    keep working; that address is not going away.
+    New embeds should use `https://demo.osc.earth/osa-chat-widget.js` instead.
 
 ## How Configuration Works
 
@@ -68,7 +79,7 @@ These fields are typically configured in the community's `config.yaml` and loade
 Only `communityId` is required. The widget fetches display settings (title, greeting, placeholder, suggested questions) from the `/communities` API automatically:
 
 ```html
-<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 <script>
   OSAChatWidget.setConfig({
     communityId: 'bids'
@@ -81,7 +92,7 @@ Only `communityId` is required. The widget fetches display settings (title, gree
 Use `widgetInstructions` to give the assistant context about the specific page where the widget is embedded. This is sent to the backend as part of the page context and helps the assistant provide more relevant answers:
 
 ```html
-<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 <script>
   OSAChatWidget.setConfig({
     communityId: 'hed',
@@ -95,7 +106,7 @@ This is useful when the same community assistant is embedded across multiple pag
 ### Full Configuration
 
 ```html
-<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 <script>
   OSAChatWidget.setConfig({
     communityId: 'hed',
@@ -245,7 +256,9 @@ To host the widget yourself:
 
 ## Demo Page
 
-The demo page at [osa-demo.pages.dev](https://osa-demo.pages.dev) dynamically loads all available communities from the `/communities` API and showcases them with URL-based routing:
+The demo page at [demo.osc.earth](https://demo.osc.earth) (also served from the
+`osa-demo.pages.dev` address that existing embeds use) dynamically loads all available
+communities from the `/communities` API and showcases them with URL-based routing:
 
 - `/` - Landing page with community cards (populated from API)
 - `/{communityId}` - Community-specific assistant demo (e.g., `/hed`, `/bids`, `/eeglab`, `/fieldtrip`)

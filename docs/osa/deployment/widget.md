@@ -168,22 +168,29 @@ Assistant responses support full Markdown rendering including:
 
 ## Environment Detection
 
-The widget auto-detects the environment based on the hostname:
+The widget auto-detects its backend from the hostname of the page it is
+embedded on (`window.location.hostname`), not from where the widget script
+itself was loaded:
 
-| Hostname Pattern | Backend |
-|-----------------|---------|
-| `develop.*` | Dev worker (`osa-worker-dev`) |
-| `localhost` / `127.0.0.1` | Dev worker |
-| Everything else | Production worker (`osa-worker`) |
+| Embedding page's hostname | Backend |
+|---|---|
+| `demo.osc.earth` or `osa-demo.pages.dev` | Production: `https://widget.osc.earth/osa` |
+| Ends with `-demo.osc.earth` or `.osa-demo.pages.dev`, or contains `localhost` or `127.0.0.1` | Develop: `https://develop-widget.osc.earth/osa` |
+| Anything else (an adopter's own domain) | Production: `https://widget.osc.earth/osa` |
 
-Override with `apiEndpoint`:
+This means an adopter testing the widget on `localhost` talks to the develop
+backend by default. Set `apiEndpoint` explicitly to point at production
+instead:
 
 ```javascript
 OSAChatWidget.setConfig({
   communityId: 'hed',
-  apiEndpoint: 'https://your-custom-backend.example.com'
+  apiEndpoint: 'https://widget.osc.earth/osa'
 });
 ```
+
+`apiEndpoint` also accepts any other reachable OSA backend, such as a
+self-hosted deployment.
 
 ## Bot Protection
 

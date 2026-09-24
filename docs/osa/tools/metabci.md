@@ -14,6 +14,7 @@ platform for Brain-Computer Interface (BCI) research covering Motor Imagery
 | `list_metabci_recent` | Knowledge search | List recent GitHub activity |
 | `search_metabci_papers` | Knowledge search | Search academic papers |
 | `search_metabci_code_docs` | Code docstrings | Search Python function/class documentation |
+| `get_metabci_full_docstring` | Code docstrings | Fetch a symbol's complete docstring |
 
 ## Document Retrieval
 
@@ -113,6 +114,22 @@ functions, classes, and methods across `brainda`, `brainflow`, and
 | Repository | Branch | Languages |
 |-----------|--------|-----------|
 | `TBC-TJU/MetaBCI` | `master` | Python |
+
+### `get_metabci_full_docstring`
+
+Fetch the complete stored docstring (up to about 10,000 characters) for
+one symbol. Use this as a follow-up to `search_metabci_code_docs` when
+the returned snippet is truncated and the user is asking about specific
+outputs, parameters, or examples.
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `symbol_name` | `str` | required | Exact symbol name (case-insensitive), e.g. `"ProcessWorker"` |
+
+Returns up to 5 matches when the same symbol name appears in more than
+one tracked repository.
 
 ## Sync Schedule
 

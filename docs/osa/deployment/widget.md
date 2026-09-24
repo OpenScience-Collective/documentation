@@ -61,7 +61,7 @@ These fields are typically configured in the community's `config.yaml` and loade
 | `storageKey` | string | Auto-derived | localStorage key for chat history |
 | `turnstileSiteKey` | string | `null` | Cloudflare Turnstile site key |
 | `showExperimentalBadge` | boolean | `true` | Show beta/experimental badge |
-| `repoUrl` | string | OSA GitHub URL | URL for the "Powered by" footer link |
+| `repoUrl` | string | `'https://osc.earth/osa/'` | URL for the "Powered by" footer link |
 | `repoName` | string | `'Open Science Assistant'` | Display name in footer |
 | `allowPageContext` | boolean | `true` | Show page context toggle |
 | `pageContextDefaultEnabled` | boolean | `true` | Default state of page context |
@@ -69,7 +69,7 @@ These fields are typically configured in the community's `config.yaml` and loade
 | `pageContextLabel` | string | `'Share page URL...'` | Label text for the page context checkbox |
 | `fullscreen` | boolean | `false` | Open chat in fullscreen mode |
 | `disclaimerEnabled` | boolean | `true` | Show AI disclaimer above footer |
-| `disclaimerText` | string | `'This is a multi-agent AI...'` | Disclaimer message text |
+| `disclaimerText` | string | `'This is an AI assistant and may make mistakes.'` | Disclaimer message text |
 | `disclaimerColor` | string | `'#9a3412'` | Disclaimer text color |
 | `disclaimerBackground` | string | `'#fff7ed'` | Disclaimer background color |
 | `widgetInstructions` | string | `null` | Per-page context hint sent to the assistant (max 2000 chars) |

@@ -265,27 +265,60 @@ open one before going live on a new domain.
 
 ## Content Security Policy (CSP)
 
-A page with a Content Security Policy needs to allow the widget's script
-host, its API host, and the community logo's host. For the default
-`demo.osc.earth`-hosted script talking to the production backend:
+A page with a Content Security Policy needs to allow the widget's
+script host in both `script-src` and `connect-src`, the widget's
+backend, an inline script or event handler, and the community logo's
+host. For the default `demo.osc.earth`-hosted script talking to the
+production backend:
 
 ```
-script-src 'self' https://demo.osc.earth;
-connect-src 'self' https://widget.osc.earth;
+script-src 'self' 'unsafe-inline' https://demo.osc.earth;
+connect-src 'self' https://widget.osc.earth https://demo.osc.earth;
 style-src 'self' 'unsafe-inline';
 img-src 'self' data: https:;
 ```
 
-- `script-src` needs the host the widget script itself loads from:
-  `https://demo.osc.earth` for the quick-start snippet, or
-  `https://cdn.jsdelivr.net` when pinned to a release with SRI.
-- `connect-src` needs the widget's backend: `https://widget.osc.earth`
-  in production, or `https://develop-widget.osc.earth` in development
-  (see [Environment Detection](#environment-detection)).
+- `script-src` needs the host the widget script itself loads from
+  (`https://demo.osc.earth` for the quick-start snippet, or
+  `https://cdn.jsdelivr.net` when pinned to a release with SRI), and it
+  needs `'unsafe-inline'`.
+  Every embed pattern on this page configures the widget from an inline
+  script: the quick-start's inline `setConfig()` block, or the async
+  pattern's inline `onload` attribute.
+  Without `'unsafe-inline'`, that inline call is blocked, `setConfig()`
+  never runs, and the widget silently falls back to its default
+  community (`hed`) instead of the one you configured.
+  A page already using a nonce- or hash-based policy can replace
+  `'unsafe-inline'` with a matching `'nonce-...'` value on the inline
+  `<script>` block, or a `'sha256-...'` hash of its exact contents; the
+  inline `onload` attribute needs `'unsafe-hashes'` plus a hash of the
+  handler instead, since a nonce does not apply to event-handler
+  attributes.
+- `connect-src` needs both the widget's backend (`https://widget.osc.earth`
+  in production, or `https://develop-widget.osc.earth` in development;
+  see [Environment Detection](#environment-detection)) and the script's
+  own host.
+  The pop-out window re-fetches the widget script itself with
+  `fetch(document.currentScript.src)` so it can run in the new window,
+  and a `fetch()` call is governed by `connect-src`, not `script-src`.
+  Omitting the script's host here does not stop the widget from loading;
+  it only breaks the pop-out button, which fails with an alert.
 - `style-src` needs `'unsafe-inline'`: the widget injects its own
   stylesheet at runtime rather than loading an external one.
 - `img-src` needs whichever host serves the community's logo, plus
   `data:` if a logo is ever inlined.
+
+Pinned to a release via jsDelivr, `script-src` and `connect-src` both
+need `https://cdn.jsdelivr.net` instead of `https://demo.osc.earth`, for
+the same two reasons: it is where the script loads from, and where the
+pop-out re-fetches it from.
+
+```
+script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+connect-src 'self' https://widget.osc.earth https://cdn.jsdelivr.net;
+style-src 'self' 'unsafe-inline';
+img-src 'self' data: https:;
+```
 
 ## Bot Protection
 

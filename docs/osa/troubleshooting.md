@@ -594,9 +594,16 @@ Widget accepts input but shows loading spinner indefinitely.
    - Look for timeout errors
 
 2. **Check API health:**
+   The widget's own traffic goes through `https://widget.osc.earth/osa`
+   (the Cloudflare Worker proxy in front of the backend), so check that
+   host first, not the backend it sits in front of:
    ```bash
-   curl https://api.osc.earth/osa/health
+   curl https://widget.osc.earth/osa/health
    ```
+   `https://api.osc.earth/osa/health` reaches the FastAPI backend behind
+   the worker directly, which is useful too, but a widget-specific issue
+   (CORS, rate limiting, Turnstile) shows up at `widget.osc.earth`, not
+   at `api.osc.earth`.
 
 3. **Check backend logs** (if you have access):
    ```bash
@@ -805,9 +812,10 @@ thinking-heavy question is slower on either model than a lookup is.
 
 **Check network:**
 ```bash
-# Test API latency
-time curl https://api.osc.earth/osa/health
-# Should be < 1 second
+# Test latency of the host the widget actually talks to
+time curl https://widget.osc.earth/osa/health
+# Should be < 1 second; https://api.osc.earth/osa is the FastAPI
+# backend behind this worker, useful for isolating worker vs. backend latency
 ```
 
 ---

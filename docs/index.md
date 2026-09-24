@@ -14,7 +14,7 @@ The Open Science Collective is a community-driven initiative dedicated to buildi
 
     ---
 
-    An extensible AI assistant platform for researchers working with open science tools. Provides domain-specific AI assistants for HED, BIDS, and EEGLAB with modular tools, open API, and extensible CLI.
+    An extensible AI assistant platform for researchers working with open science tools. Provides domain-specific AI assistants for tools such as HED, BIDS, and EEGLAB with modular tools, open API, and extensible CLI.
 
     [:octicons-arrow-right-24: OSA Documentation](osa/index.md)
 
@@ -67,3 +67,8 @@ OSA serves multiple small research communities, each with specific tool needs:
 | **HED** | Hierarchical Event Descriptors | hed-standard repos, hedtags.org |
 | **BIDS** | Brain Imaging Data Structure | bids-standard repos, Neurostars |
 | **EEGLAB** | EEG analysis toolbox | SCCN wiki, mailing lists |
+| **FieldTrip** | MEG/EEG/iEEG analysis toolbox | FieldTrip website, GitHub |
+| **MNE-Python** | M/EEG analysis toolbox | mne.tools, GitHub, Discourse forum |
+| **NEMAR** | NeuroElectroMagnetic Archive (EEG/MEG/iEEG datasets) | NEMAR's Model Context Protocol (MCP) server |
+| **MetaBCI** | Brain-Computer Interface (BCI) platform | MetaBCI docs and GitHub |
+| **OpenNeuroPET** | Open, reproducible Positron Emission Tomography (PET) tools | OpenNeuroPET wiki and GitHub |

@@ -474,13 +474,10 @@ Your website origin not listed in `cors_origins` config.
 - Trailing slash in config (remove it)
 
 !!! note "This is not a Content Security Policy (CSP) error"
-    A CORS rejection comes from the *backend* deciding whether to answer your
-    origin, and is fixed in `cors_origins` as above. A CSP violation comes
-    from *your own page* blocking the request or script before it is sent,
-    and is fixed in your page's CSP header instead; see
-    [Content Security Policy (CSP)](deployment/widget.md#content-security-policy-csp)
-    in the Widget Deployment Guide. The two look similar in the console but
-    need different fixes.
+    A CORS rejection comes from the *backend* deciding whether to answer your origin, and is fixed in `cors_origins` as above.
+    A CSP violation comes from *your own page* blocking the request or script before it is sent, and is fixed in your page's CSP header instead;
+    see [Content Security Policy (CSP)](deployment/widget.md#content-security-policy-csp) in the Widget Deployment Guide.
+    The two look similar in the console but need different fixes.
 
 ---
 
@@ -536,8 +533,8 @@ Widget icon doesn't appear or widget doesn't open.
 </script>
 ```
 
-There is no `OSAWidget` global and `init()` takes no arguments; all
-configuration goes through `setConfig()`.
+There is no `OSAWidget` global and `init()` takes no arguments;
+all configuration goes through `setConfig()`.
 
 **Script placement:**
 ```html
@@ -558,11 +555,9 @@ configuration goes through `setConfig()`.
 </body>
 ```
 
-The `<script src="...osa-chat-widget.js">` tag must come before the
-inline `setConfig()` call, and must never carry `defer` or `async`
-unless paired with `data-no-auto-init` and a manual
-`OSAChatWidget.init()` call afterward; see
-[Loading the Script Asynchronously](deployment/widget.md#loading-the-script-asynchronously).
+The `<script src="...osa-chat-widget.js">` tag must come before the inline `setConfig()` call,
+and must never carry `defer` or `async` unless paired with `data-no-auto-init` and a manual `OSAChatWidget.init()` call afterward;
+see [Loading the Script Asynchronously](deployment/widget.md#loading-the-script-asynchronously).
 
 **API endpoint:**
 ```javascript
@@ -594,16 +589,13 @@ Widget accepts input but shows loading spinner indefinitely.
    - Look for timeout errors
 
 2. **Check API health:**
-   The widget's own traffic goes through `https://widget.osc.earth/osa`
-   (the Cloudflare Worker proxy in front of the backend), so check that
-   host first, not the backend it sits in front of:
+   The widget's own traffic goes through `https://widget.osc.earth/osa` (the Cloudflare Worker proxy in front of the backend),
+   so check that host first, not the backend it sits in front of:
    ```bash
    curl https://widget.osc.earth/osa/health
    ```
-   `https://api.osc.earth/osa/health` reaches the FastAPI backend behind
-   the worker directly, which is useful too, but a widget-specific issue
-   (CORS, rate limiting, Turnstile) shows up at `widget.osc.earth`, not
-   at `api.osc.earth`.
+   `https://api.osc.earth/osa/health` reaches the FastAPI backend behind the worker directly, which is useful too,
+   but a widget-specific issue (CORS, rate limiting, Turnstile) shows up at `widget.osc.earth`, not at `api.osc.earth`.
 
 3. **Check backend logs** (if you have access):
    ```bash

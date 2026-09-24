@@ -491,19 +491,19 @@ Widget icon doesn't appear or widget doesn't open.
 1. **Check browser console** (F12 -> Console):
    ```
    Look for errors like:
-   - Failed to load widget.js
-   - OSAWidget is not defined
+   - Failed to load osa-chat-widget.js
+   - OSAChatWidget is not defined (see Script placement below)
    - Community 'xxx' not found
    ```
 
 2. **Verify script loads:**
    ```html
    <!-- Check this in your HTML -->
-   <script src="https://api.osc.earth/osa/widget.js"></script>
+   <script src="https://demo.osc.earth/osa-chat-widget.js"></script>
    ```
 
 3. **Check network tab:**
-   - Widget.js should load (200 OK)
+   - `osa-chat-widget.js` should load (200 OK)
    - API requests should succeed
 
 **Solutions:**
@@ -511,43 +511,54 @@ Widget icon doesn't appear or widget doesn't open.
 **Wrong community ID:**
 ```html
 <!-- Wrong - ID doesn't match config -->
+<script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 <script>
-    OSAWidget.init({
+    OSAChatWidget.setConfig({
         communityId: 'wrong-id'  // Check this matches config.yaml
     });
 </script>
 
 <!-- Correct -->
+<script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 <script>
-    OSAWidget.init({
+    OSAChatWidget.setConfig({
         communityId: 'hed'  // Must match config.yaml id field
     });
 </script>
 ```
 
+There is no `OSAWidget` global and `init()` takes no arguments; all
+configuration goes through `setConfig()`.
+
 **Script placement:**
 ```html
-<!-- Wrong - script in <head> before widget init -->
+<!-- Wrong - setConfig() runs before the widget script defines OSAChatWidget -->
 <head>
     <script>
-        OSAWidget.init({ communityId: 'hed' });
+        OSAChatWidget.setConfig({ communityId: 'hed' });
     </script>
-    <script src="https://api.osc.earth/osa/widget.js"></script>
+    <script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 </head>
 
-<!-- Correct - load script first -->
+<!-- Correct - load the widget script first -->
 <body>
-    <script src="https://api.osc.earth/osa/widget.js"></script>
+    <script src="https://demo.osc.earth/osa-chat-widget.js"></script>
     <script>
-        OSAWidget.init({ communityId: 'hed' });
+        OSAChatWidget.setConfig({ communityId: 'hed' });
     </script>
 </body>
 ```
 
+The `<script src="...osa-chat-widget.js">` tag must come before the
+inline `setConfig()` call, and must never carry `defer` or `async`
+unless paired with `data-no-auto-init` and a manual
+`OSAChatWidget.init()` call afterward; see
+[Loading the Script Asynchronously](deployment/widget.md#loading-the-script-asynchronously).
+
 **API endpoint:**
 ```javascript
-// Check if API is reachable
-fetch('https://api.osc.earth/osa/health')
+// Check if the widget's backend is reachable (production)
+fetch('https://widget.osc.earth/osa/health')
     .then(r => r.json())
     .then(console.log);
 // Should show: {status: "healthy"}

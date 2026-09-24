@@ -1,94 +1,211 @@
 # NEMAR Tools
 
-Tools for discovering and exploring EEG, MEG, and iEEG datasets formatted according to the Brain Imaging Data Structure (BIDS) from the NeuroElectroMagnetic Archive (NEMAR).
+The NEMAR (NeuroElectroMagnetic Archive) assistant provides tools for
+documentation retrieval and dataset discovery. NEMAR hosts hundreds of
+Brain Imaging Data Structure (BIDS)-formatted EEG, MEG, and iEEG datasets
+sourced from [OpenNeuro](https://openneuro.org/).
 
-NEMAR hosts hundreds of BIDS-formatted neuroscience datasets sourced from [OpenNeuro](https://openneuro.org/), covering various experimental paradigms and recording modalities. These tools query the NEMAR public API to help researchers find datasets matching their research interests.
+Dataset identifiers are `nm` or `on` followed by six digits, for example
+`nm000103`. They are not OpenNeuro `ds` accessions.
 
-## Dataset Search
+## Overview
 
-### `search_nemar_datasets`
+| Tool | Type | Description |
+|------|------|-------------|
+| `retrieve_nemar_docs` | Document retrieval | Fetch NEMAR, OpenNeuro, and BIDS reference documentation |
+| `nemar_search_datasets` | Dataset discovery | Search or browse the public NEMAR dataset catalog |
+| `nemar_describe_dataset` | Dataset discovery | Get a dataset's metadata, citation, and license |
+| `nemar_list_recordings` | Dataset discovery | List a dataset's recordings and channel groups |
+| `nemar_get_events` | Dataset discovery | Get one recording's BIDS events table |
+| `nemar_render_overview` | Dataset discovery | Render a PNG overview image of one recording |
+| `nemar_read_window` | Dataset discovery | Get a recipe (or a small decoded sample) for a time window |
 
-Search NEMAR datasets with flexible text search and filtering. Fetches all datasets from the NEMAR API and filters client-side, returning compact summaries suitable for browsing.
+## Document Retrieval
+
+### `retrieve_nemar_docs`
+
+Fetches documentation from three configured sources, none of them preloaded
+into the system prompt:
+
+- NEMAR dataset browser ([nemar.org/discover](https://nemar.org/discover))
+- OpenNeuro platform ([openneuro.org](https://openneuro.org/))
+- BIDS specification ([bids-specification.readthedocs.io](https://bids-specification.readthedocs.io/))
+
+## Dataset Discovery Tools
+
+These six tools come from NEMAR's own Model Context Protocol (MCP) server,
+not from a `python_plugins` module. The community's `config.yaml` declares
+it under `extensions.mcp_servers`:
+
+```yaml
+extensions:
+  mcp_servers:
+    - name: nemar
+      url: https://mcp.nemar.org/mcp
+```
+
+OSA prefixes every tool the server advertises with the server's `name`, so
+the MCP server's own `search_datasets` becomes `nemar_search_datasets` in
+the assistant's tool list, and likewise for the other five. The server is
+anonymous (no credentials needed) and stateless, so OSA opens a fresh
+session per call rather than keeping one open.
+
+They form a deliberate cost ladder, cheapest first; each step down reads
+more of the underlying data, so the assistant is instructed to walk it
+rather than jump to the bottom. `nemar_describe_dataset`'s response
+includes a `cost_hint` naming the next cheapest tool for follow-up
+questions about a specific dataset.
+
+### `nemar_search_datasets`
+
+Search or browse the public NEMAR dataset catalog. A free-text `query`
+runs the exact-id, full-text, and semantic search tiers in that order;
+every other parameter narrows the result set, and they compose.
+
+**Common parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `query` | string | Free-text search over dataset name, description, authors, tasks, and modalities. Omit to browse the catalog instead. |
+| `modality` | string | Substring match against recorded modalities (e.g. `"eeg"`, `"meg"`) |
+| `task` | string | Substring match against task names |
+| `has_hed` | boolean | Filter to datasets with Hierarchical Event Descriptors (HED) annotations |
+| `has_zarr` | boolean | Filter to datasets with a converted Zarr serving copy |
+| `author` | string | Substring match against author names |
+| `has_doi` | boolean | Filter to datasets that carry a citable DOI |
+| `license` | string | Comma-separated license tiers: `public`, `attribution`, `sharealike`, `noncommercial`, `noderiv`, `unknown` |
+| `include_unknown` | boolean | Widen every active facet filter to also admit datasets whose value is unknown, rather than excluding them |
+| `limit` | int | Maximum results to return (default 20, capped at 100) |
+
+Beyond these, the tool accepts range-style facet filters over subject
+count, channel count, session count, dataset size, file count, citation
+count, recording duration, recording count, participant age, sampling
+rate, power line frequency, electrode reference and placement, electrode
+system, source archive, Zarr conversion status, BIDS version, and HED
+version. This facet set is generated server-side and grows over time, so
+it is read from the tool's own JSON schema at call time rather than
+hand-copied here; passing a name the schema does not declare is accepted
+and silently ignored, returning unfiltered results that look filtered.
+
+A count of `0` is not an error: an unrecognized modality or task value
+simply matches nothing.
+
+### `nemar_describe_dataset`
+
+Get a dataset's descriptive metadata: name, DOI, license, a ready-to-paste
+citation string, modalities, tasks, subject count, HED and Zarr status,
+plus a `cost_hint` naming the cheapest next tool to call. Never reads
+`index.json` (the largest index in the catalog is 12.8 MB).
 
 **Parameters:**
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `query` | string | Text search across dataset names, tasks, README, and authors (case-insensitive substring match) |
-| `modality_filter` | string | Filter by recording modality: `"EEG"`, `"MEG"`, `"iEEG"`, `"MRI"` (partial match, case-insensitive) |
-| `task_filter` | string | Filter by experimental task name, e.g. `"rest"`, `"gonogo"`, `"memory"` (partial match, case-insensitive) |
-| `has_hed` | boolean | If `true`, only return datasets with Hierarchical Event Descriptors (HED) annotations |
-| `min_participants` | int | Minimum number of participants required |
-| `limit` | int | Maximum results to return (default: 20, capped at 50) |
+| `dataset_id` | string | NEMAR dataset id: `nm` or `on` plus six digits, e.g. `nm000329` |
 
-**Example:**
+### `nemar_list_recordings`
 
-```python
-from src.assistants.nemar.tools import search_nemar_datasets
-
-# Find EEG datasets related to attention with at least 20 participants
-result = search_nemar_datasets.invoke({
-    "query": "attention",
-    "modality_filter": "EEG",
-    "min_participants": 20
-})
-
-# Find all datasets with HED annotations
-result = search_nemar_datasets.invoke({
-    "has_hed": True
-})
-```
-
-**Returns:** Formatted markdown string with matching dataset summaries, each showing dataset ID, name, modalities, tasks, participant count, and size. When no matches are found, returns a message listing the active filters and total dataset count.
-
-### `get_nemar_dataset_details`
-
-Get comprehensive metadata for a specific NEMAR dataset, including description, citation, licensing, experimental details, and README content.
+List a converted dataset's recordings (Zarr stores) with their channel
+groups. Parses `index.json` once per (dataset, source commit) and caches
+the result, so repeat calls are cheap.
 
 **Parameters:**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dataset_id` | string | Dataset identifier in the format `ds` followed by 4-6 digits (e.g. `"ds000248"`, `"ds005697"`) |
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `dataset_id` | string | required | NEMAR dataset id |
+| `modality` | string | - | Case-insensitive filter against a group's modality |
+| `min_duration_s` | number | - | Filter to recordings whose longest group duration is at least this many seconds |
+| `include_derived` | boolean | `false` | Include Signal-Space Separation (SSS)-filtered derived stores |
+| `limit` | int | `50` | Maximum recordings to return (capped at 500) |
+| `offset` | int | `0` | Pagination offset |
 
-**Example:**
+A dataset that has not finished converting answers a typed tool error
+naming its actual Zarr conversion status, never an empty list.
 
-```python
-from src.assistants.nemar.tools import get_nemar_dataset_details
+### `nemar_get_events`
 
-result = get_nemar_dataset_details.invoke({
-    "dataset_id": "ds000248"
-})
-```
+Get one recording's BIDS events (onset, duration, trial type, value, HED,
+sample index). Reads `events.parquet` when the dataset has one (exact
+sample index); otherwise falls back to the recording's sibling
+`events.tsv` and flags the result `estimated`.
 
-**Returns:** Formatted markdown string with complete dataset information including:
+**Parameters:**
 
-- OpenNeuro and NEMAR links
-- DOI and citation information
-- Authors, license, and BIDS version
-- Data characteristics (modalities, tasks, participants, sessions, file count, size, age range)
-- HED annotation status and version
-- Latest snapshot version
-- References, funding, acknowledgements, and how-to-acknowledge guidance
-- README content (truncated to 1500 characters for long entries)
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `dataset_id` | string | required | NEMAR dataset id |
+| `recording` | string | required | A store's path or `zarr` field; either identifies the recording |
+| `group` | string | - | Filter to one channel group's events by name |
+| `limit` | int | `1000` | Maximum event rows to return (capped at 5000) |
+| `offset` | int | `0` | Pagination offset |
 
-## Implementation Notes
+### `nemar_render_overview`
 
-- The NEMAR API has no server-side search capability, so `search_nemar_datasets` fetches all datasets (~485) and filters client-side
-- Results are cached with a 5-minute TTL to avoid repeated API calls
-- The API endpoint is `https://nemar.org/api/dataexplorer/datapipeline`
-- Dataset IDs must match the pattern `ds` + 4-6 digits (validated before API calls)
+Render a quick min-max envelope PNG image of one recording's channel
+group, from the pre-computed view pyramid (never the level-0 array).
+Cheap by construction: kilobytes read, one image returned, cached per
+(dataset, source commit, recording, group, width).
 
-## External APIs
+**Parameters:**
 
-| Service | Endpoint | Purpose |
-|---------|----------|---------|
-| NEMAR API | `https://nemar.org/api/dataexplorer/datapipeline/records` | Fetch all datasets for search |
-| NEMAR API | `https://nemar.org/api/dataexplorer/datapipeline/datasetid` | Fetch single dataset details |
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `dataset_id` | string | required | NEMAR dataset id |
+| `recording` | string | required | A store's path or `zarr` field |
+| `group` | string | - | Which channel group to render; defaults to the first group |
+| `width_px` | int | `800` | Rendered image width in pixels (capped at 4000) |
+
+### `nemar_read_window`
+
+Read a window of one recording's actual signal. By default (`taste:
+false`) this returns a *recipe*: the array's coordinates plus a how-to
+snippet per lane, with zero signal bytes touched. Pass `taste: true`
+(and `channels`, then required) for a small, capped, inline-decoded
+window of physical values instead: at most 60 seconds, 64 channels, and
+65,536 channel-samples.
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `dataset_id` | string | required | NEMAR dataset id |
+| `recording` | string | required | A store's path or `zarr` field |
+| `group` | string | - | Which channel group to read; defaults to the first group |
+| `start_s` | number | `0` | Window start, in seconds |
+| `duration_s` | number | `10` | Window length in seconds (recipe mode up to 86400 s; a taste is additionally capped at 60 s) |
+| `channels` | int[] | - | Channel indices; required when `taste` is true (capped at 4096, and additionally at 64 for a taste) |
+| `taste` | boolean | `false` | `false` returns a read recipe; `true` decodes a small window inline |
+
+The recipe names three read lanes that are not interchangeable:
+`python_zarr` for desktop and HPC (`zarr` plus anonymous S3; not usable
+in a browser), `python_browser` for Python running in a browser via
+Pyodide, and `zarrita` for TypeScript/JavaScript in a browser or Node.
+
+Needs a dataset converted to the v3 index format; a dataset still on
+index format v1 answers a typed error (`nemar_list_recordings` and
+`nemar_get_events` still work on it).
+
+## Data Provenance
+
+Every response from `nemar_list_recordings`, `nemar_get_events`,
+`nemar_render_overview`, and `nemar_read_window` carries an `envelope`
+with provenance the assistant is instructed to surface rather than
+paper over:
+
+- **`lossy` is always `true` today.** The streaming copy is quantized
+  and rate-capped relative to the original recording; `effective_rate_hz`
+  may be lower than `source_rate_hz`.
+- **`zarr_verify_status` may be `null`**, meaning the standing fidelity
+  sweep has not yet reached that conversion. That is "not checked," not
+  "wrong."
+- **`filled_ranges`** on a decoded `nemar_read_window` taste lists any
+  sample spans that had no stored data and were filled in, rather than
+  being real recorded signal.
 
 ## Related Links
 
 - [NEMAR homepage](https://nemar.org)
-- [NEMAR Data Explorer](https://nemar.org/dataexplorer)
+- [NEMAR dataset browser](https://nemar.org/discover)
 - [OpenNeuro](https://openneuro.org/) (source platform for all NEMAR datasets)
 - [BIDS Specification](https://bids-specification.readthedocs.io/) (format standard for all NEMAR datasets)

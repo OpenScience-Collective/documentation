@@ -106,9 +106,8 @@ Papers are sourced from OpenALEX, Semantic Scholar, and PubMed.
 
 ### `search_bids_forum`
 
-Search topics from the Neurostars forum ([neurostars.org](https://neurostars.org),
-tagged `bids`). Returns topic titles, post previews, accepted answers, and
-direct links.
+Search topics from the Neurostars forum ([neurostars.org](https://neurostars.org), tagged `bids`).
+Returns topic titles, post previews, accepted answers, and direct links.
 
 **Parameters:**
 

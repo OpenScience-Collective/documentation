@@ -1,9 +1,7 @@
 # MetaBCI Tools
 
-The MetaBCI assistant provides tools for documentation retrieval, knowledge
-search, and code docstring search for MetaBCI, a Python-based open-source
-platform for Brain-Computer Interface (BCI) research covering Motor Imagery
-(MI), P300, and Steady-State Visual Evoked Potential (SSVEP) paradigms.
+The MetaBCI assistant provides tools for documentation retrieval, knowledge search, and code docstring search for MetaBCI,
+a Python-based open-source platform for Brain-Computer Interface (BCI) research covering Motor Imagery (MI), P300, and Steady-State Visual Evoked Potential (SSVEP) paradigms.
 
 ## Overview
 
@@ -20,9 +18,8 @@ platform for Brain-Computer Interface (BCI) research covering Motor Imagery
 
 ### `retrieve_metabci_docs`
 
-Fetches documentation from 13 configured sources covering the full MetaBCI
-architecture: offline analysis (`brainda`), online processing
-(`brainflow`), and stimulus presentation (`brainstim`).
+Fetches documentation from 13 configured sources covering the full MetaBCI architecture:
+offline analysis (`brainda`), online processing (`brainflow`), and stimulus presentation (`brainstim`).
 
 **Preloaded docs** (embedded in system prompt):
 
@@ -30,18 +27,20 @@ architecture: offline analysis (`brainda`), online processing
 
 **On-demand docs (12):** organized by category:
 
-- **Brainda data handling (3):** dataset loaders (BCI Competition,
-  PhysioNet, and modifiers), paradigm definitions (MI, SSVEP, P300),
+- **Brainda data handling (3):** dataset loaders (BCI Competition, PhysioNet, and modifiers),
+  paradigm definitions (MI, SSVEP, P300),
   utilities and I/O (EDF, GDF, `.mat` formats, channel selection)
-- **Brainda algorithms (4):** decomposition (CSP, SPoC, FBCSP, TRCA, CCA,
-  MsetCCA), deep learning models (EEGNet, ShallowConvNet, DeepConvNet),
-  manifold learning (Riemannian geometry, tangent space mapping), transfer
-  learning (MEKT, domain adaptation)
+- **Brainda algorithms (4):** decomposition
+  (Common Spatial Patterns (CSP), Source Power Comodulation (SPoC),
+  Filter Bank CSP (FBCSP), Task-Related Component Analysis (TRCA),
+  Canonical Correlation Analysis (CCA), Multiset CCA (MsetCCA)),
+  deep learning models (EEGNet, ShallowConvNet, DeepConvNet),
+  manifold learning (Riemannian geometry, tangent space mapping),
+  transfer learning (Manifold Embedded Knowledge Transfer (MEKT), domain adaptation)
 - **Brainflow online system (3):** amplifier and hardware interfaces,
   workers and streaming (ring buffers, threading), logger configuration
-- **Brainstim stimulus presentation (2):** paradigm UI implementation
-  (PsychoPy-based SSVEP/P300/MI stimuli), framework core (screen
-  management, event loops, marker synchronization)
+- **Brainstim stimulus presentation (2):** paradigm UI implementation (PsychoPy-based SSVEP/P300/MI stimuli),
+  framework core (screen management, event loops, marker synchronization)
 
 All documentation sources point to `metabci.readthedocs.io`.
 
@@ -117,10 +116,9 @@ functions, classes, and methods across `brainda`, `brainflow`, and
 
 ### `get_metabci_full_docstring`
 
-Fetch the complete stored docstring (up to about 10,000 characters) for
-one symbol. Use this as a follow-up to `search_metabci_code_docs` when
-the returned snippet is truncated and the user is asking about specific
-outputs, parameters, or examples.
+Fetch the complete stored docstring (up to about 10,000 characters) for one symbol.
+Use this as a follow-up to `search_metabci_code_docs` when the returned snippet is truncated
+and the user is asking about specific outputs, parameters, or examples.
 
 **Parameters:**
 

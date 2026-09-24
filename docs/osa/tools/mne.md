@@ -122,10 +122,9 @@ Search Python docstrings extracted from MNE ecosystem repositories. Covers funct
 
 ### `get_mne_full_docstring`
 
-Fetch the complete stored docstring (up to about 10,000 characters) for
-one symbol. Use this as a follow-up to `search_mne_code_docs` when the
-returned snippet is truncated and the user is asking about specific
-outputs, parameters, or examples.
+Fetch the complete stored docstring (up to about 10,000 characters) for one symbol.
+Use this as a follow-up to `search_mne_code_docs` when the returned snippet is truncated
+and the user is asking about specific outputs, parameters, or examples.
 
 **Parameters:**
 

@@ -90,9 +90,8 @@ Search academic papers related to HED.
 
 ### `search_hed_forum`
 
-Search topics from the Neurostars forum ([neurostars.org](https://neurostars.org),
-tagged `hed`). Returns topic titles, post previews, accepted answers, and
-direct links.
+Search topics from the Neurostars forum ([neurostars.org](https://neurostars.org), tagged `hed`).
+Returns topic titles, post previews, accepted answers, and direct links.
 
 **Parameters:**
 

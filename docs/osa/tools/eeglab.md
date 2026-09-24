@@ -86,12 +86,10 @@ Search academic papers related to EEGLAB.
 
 ### `search_eeglab_papers_live`
 
-On-demand live search of the latest external literature about EEGLAB,
-newest first, via the web rather than the pre-synced local database.
-Slower than `search_eeglab_papers` (up to about 15 seconds), so the
-agent is instructed to try the local search first and to only call this
-tool after the user has explicitly confirmed they want a live search, or
-has explicitly asked to search the web or for the very latest papers.
+On-demand live search of the latest external literature about EEGLAB, newest first, via the web rather than the pre-synced local database.
+Slower than `search_eeglab_papers` (up to about 15 seconds),
+so the agent is instructed to try the local search first and to only call this tool after the user has explicitly confirmed they want a live search,
+or has explicitly asked to search the web or for the very latest papers.
 
 **Parameters:**
 
@@ -142,10 +140,9 @@ Response:
 
 ### `get_eeglab_full_docstring`
 
-Fetch the complete stored docstring (up to about 10,000 characters) for
-one symbol. Use this as a follow-up to `search_eeglab_code_docs` when
-the returned snippet is truncated and the user is asking about specific
-outputs, parameters, or examples.
+Fetch the complete stored docstring (up to about 10,000 characters) for one symbol.
+Use this as a follow-up to `search_eeglab_code_docs` when the returned snippet is truncated
+and the user is asking about specific outputs, parameters, or examples.
 
 **Parameters:**
 

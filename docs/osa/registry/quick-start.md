@@ -143,7 +143,7 @@ uv run osa sync all --community my-tool
 Add the chat widget to your community's website. If you configured the `widget` section in your `config.yaml`, only `communityId` is needed; the widget fetches display settings from the API automatically:
 
 ```html
-<script src="https://osa-demo.pages.dev/osa-chat-widget.js"></script>
+<script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 <script>
   OSAChatWidget.setConfig({
     communityId: 'my-tool'

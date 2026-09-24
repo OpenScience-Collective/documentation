@@ -4,7 +4,7 @@ An extensible AI assistant platform for researchers working with open science to
 
 ## Overview
 
-OSA provides domain-specific AI assistants for open science tools (HED, BIDS, EEGLAB, FieldTrip) with:
+OSA provides domain-specific AI assistants for open science tools such as HED, BIDS, EEGLAB, and FieldTrip (see [Specialist Assistants](#specialist-assistants) below for the full list) with:
 
 - **Modular tool system** for document retrieval, validation, and code execution
 - **Multi-source knowledge bases** from GitHub, OpenALEX, Discourse forums, mailing lists
@@ -20,7 +20,7 @@ OSA provides domain-specific AI assistants for open science tools (HED, BIDS, EE
 
 ## Target Users
 
-- Researchers learning HED annotations, BIDS formatting, EEGLAB analysis, or FieldTrip pipelines
+- Researchers learning HED annotations, BIDS formatting, EEGLAB analysis, FieldTrip pipelines, or any of the other supported tools
 - Lab members needing quick, accurate answers from documentation
 - Developers integrating these tools who need API/usage guidance
 
@@ -72,6 +72,10 @@ uv run pytest tests/ -v
 | **BIDS Assistant** | Brain Imaging Data Structure | bids-standard repos, Neurostars |
 | **EEGLAB Assistant** | EEG analysis toolbox | SCCN wiki, mailing lists |
 | **FieldTrip Assistant** | MEG/EEG/iEEG analysis toolbox | FieldTrip website, GitHub |
+| **MNE-Python Assistant** | M/EEG analysis toolbox | mne.tools, GitHub, Discourse forum |
+| **NEMAR Assistant** | NeuroElectroMagnetic Archive (EEG/MEG/iEEG datasets) | NEMAR's Model Context Protocol (MCP) server |
+| **MetaBCI Assistant** | Brain-Computer Interface (BCI) research platform | MetaBCI docs, GitHub |
+| **OpenNeuroPET Assistant** | Open, reproducible Positron Emission Tomography (PET) tools | OpenNeuroPET wiki, GitHub |
 
 ## Documentation
 

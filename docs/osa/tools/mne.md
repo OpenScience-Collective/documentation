@@ -11,6 +11,7 @@ The MNE-Python assistant provides tools for documentation retrieval, knowledge s
 | `list_mne_recent` | Knowledge search | List recent GitHub activity |
 | `search_mne_papers` | Knowledge search | Search academic papers |
 | `search_mne_code_docs` | Code docstrings | Search Python function documentation |
+| `get_mne_full_docstring` | Code docstrings | Fetch a symbol's complete docstring |
 | `search_mne_forum` | Forum search | Search Discourse forum topics |
 
 ## Document Retrieval
@@ -118,6 +119,21 @@ Search Python docstrings extracted from MNE ecosystem repositories. Covers funct
 - `mne-tools/mne-connectivity`
 - `mne-tools/mne-icalabel`
 - `mne-tools/mne-lsl`
+
+### `get_mne_full_docstring`
+
+Fetch the complete stored docstring (up to about 10,000 characters) for one symbol.
+Use this as a follow-up to `search_mne_code_docs` when the returned snippet is truncated
+and the user is asking about specific outputs, parameters, or examples.
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `symbol_name` | `str` | required | Exact symbol name (case-insensitive), e.g. `"read_raw_edf"` |
+
+Returns up to 5 matches when the same symbol name appears in more than
+one tracked repository.
 
 ## Discourse Forum Search
 

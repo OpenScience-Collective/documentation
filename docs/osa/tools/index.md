@@ -32,7 +32,17 @@ Tools for working with the EEGLAB analysis toolbox.
 
 Tools for working with the FieldTrip MEG/EEG/iEEG analysis toolbox.
 
-Uses the standard knowledge discovery tools (document retrieval, GitHub search, paper search, docstring search). No community-specific custom tools.
+Uses the standard knowledge discovery tools (document retrieval, GitHub
+search, paper search, docstring search including full-docstring lookup).
+No community-specific custom tools.
+
+**Status:** Available
+
+### MNE-Python Tools
+
+Tools for working with the MNE-Python M/EEG analysis toolbox.
+
+- [MNE-Python Tools](mne.md) - Document retrieval, docstring search, Discourse forum search, knowledge search
 
 **Status:** Available
 
@@ -40,7 +50,23 @@ Uses the standard knowledge discovery tools (document retrieval, GitHub search, 
 
 Tools for discovering and exploring BIDS-formatted datasets from the NeuroElectroMagnetic Archive (NEMAR).
 
-- [NEMAR Tools](nemar.md) - Dataset search and metadata retrieval
+- [NEMAR Tools](nemar.md) - Document retrieval plus six dataset-discovery tools served by NEMAR's Model Context Protocol (MCP) server
+
+**Status:** Available
+
+### MetaBCI Tools
+
+Tools for working with MetaBCI, a Python-based open-source Brain-Computer Interface (BCI) research platform.
+
+- [MetaBCI Tools](metabci.md) - Document retrieval, docstring search, knowledge search
+
+**Status:** Available
+
+### OpenNeuroPET Tools
+
+Tools for working with the OpenNeuroPET ecosystem of open and reproducible Positron Emission Tomography (PET) tools.
+
+- [OpenNeuroPET Tools](openneuropet.md) - Document retrieval, GitHub knowledge search
 
 **Status:** Available
 

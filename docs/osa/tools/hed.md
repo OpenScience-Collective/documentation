@@ -10,6 +10,7 @@ The Hierarchical Event Descriptors (HED) assistant provides tools for document r
 | `search_hed_discussions` | Knowledge search | Search GitHub issues and PRs |
 | `list_hed_recent` | Knowledge search | List recent GitHub activity |
 | `search_hed_papers` | Knowledge search | Search academic papers |
+| `search_hed_forum` | Knowledge search | Search Discourse forum topics |
 | `validate_hed_string` | HED-specific | Validate HED annotation strings via hedtools.org API |
 | `get_hed_schema_versions` | HED-specific | List available HED schema versions |
 | `suggest_hed_tags` | HED-specific | Suggest HED tags from natural language via hed-lsp |
@@ -86,6 +87,22 @@ Search academic papers related to HED.
 |-----------|------|---------|-------------|
 | `query` | `str` | required | Search query |
 | `limit` | `int` | `5` | Maximum results |
+
+### `search_hed_forum`
+
+Search topics from the Neurostars forum ([neurostars.org](https://neurostars.org), tagged `hed`).
+Returns topic titles, post previews, accepted answers, and direct links.
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `query` | `str` | required | Search query |
+| `category` | `str \| None` | `None` | Filter by Discourse category |
+| `limit` | `int` | `5` | Maximum results |
+
+!!! note "Sync Required"
+    Populate with `osa sync discourse --community hed`.
 
 ## HED-Specific Tools
 

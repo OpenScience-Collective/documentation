@@ -63,7 +63,7 @@ osa ask -a hed "What is HED?" --no-stream
 
 Options:
 
-- `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
+- `--assistant, -a`: A community id, for example `hed` (see [Tools](tools/index.md) for the full list). Default: hed
 - `--mirror, -m`: Mirror ID for ephemeral database routing (see [Database Mirrors](mirrors.md))
 - `--api-key, -k`: Anthropic or OpenRouter API key (overrides saved config, and wins over both env vars)
 - `--api-url`: Override API URL
@@ -87,7 +87,7 @@ osa chat -a eeglab --no-stream
 
 Options:
 
-- `--assistant, -a`: Community assistant ID (hed, bids, eeglab). Default: hed
+- `--assistant, -a`: A community id, for example `hed` (see [Tools](tools/index.md) for the full list). Default: hed
 - `--mirror, -m`: Mirror ID for ephemeral database routing (see [Database Mirrors](mirrors.md))
 - `--api-key, -k`: Anthropic or OpenRouter API key (overrides saved config, and wins over both env vars)
 - `--api-url`: Override API URL
@@ -210,6 +210,34 @@ Options:
 - `--port, -p`: Port to bind to. Default: 38528
 - `--reload, -r`: Enable auto-reload
 
+### `osa validate`
+
+Validate a community configuration file. Requires server dependencies.
+
+```bash
+# File mode: YAML syntax, schema validation, env var checks
+osa validate src/assistants/my-tool/config.yaml
+
+# Also test the community's own API key against its provider
+osa validate src/assistants/my-tool/config.yaml --test-api-key
+
+# Community mode: full test suite, including URL accessibility and
+# GitHub repo validation
+osa validate --community hed
+
+# Verbose pytest output in community mode
+osa validate --community hed --verbose
+```
+
+Options:
+
+- `config_path` (argument): path to a community's `config.yaml` (file mode; mutually exclusive with `--community`)
+- `--community, -c`: community ID to validate with the full test suite instead of a single file
+- `--test-api-key`: test the community's own API key against its provider (Anthropic or OpenRouter)
+- `--verbose, -v`: show verbose pytest output when using `--community`
+
+Exit code is 0 on success, 1 on failure.
+
 ### `osa mirror`
 
 Manage ephemeral database mirrors for development. See [Database Mirrors](mirrors.md) for full documentation.
@@ -259,6 +287,9 @@ osa sync docstrings --community eeglab --language matlab
 # Sync mailing list archives
 osa sync mailman --community eeglab
 
+# Sync Discourse forum topics
+osa sync discourse --community mne
+
 # Generate FAQ from mailing list threads
 osa sync faq --community eeglab --estimate
 
@@ -274,6 +305,8 @@ osa sync status
 # Search knowledge database
 osa sync search "validation error" --community hed
 ```
+
+`osa sync discourse` is documented in full, including the `discourse` config block it reads, under [Knowledge Sync](knowledge-sync.md#osa-sync-discourse).
 
 ## Configuration
 

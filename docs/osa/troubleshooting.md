@@ -473,6 +473,12 @@ Your website origin not listed in `cors_origins` config.
 - Port number missing (e.g., `:3000`)
 - Trailing slash in config (remove it)
 
+!!! note "This is not a Content Security Policy (CSP) error"
+    A CORS rejection comes from the *backend* deciding whether to answer your origin, and is fixed in `cors_origins` as above.
+    A CSP violation comes from *your own page* blocking the request or script before it is sent, and is fixed in your page's CSP header instead;
+    see [Content Security Policy (CSP)](deployment/widget.md#content-security-policy-csp) in the Widget Deployment Guide.
+    The two look similar in the console but need different fixes.
+
 ---
 
 ### Error: Widget not loading
@@ -491,19 +497,19 @@ Widget icon doesn't appear or widget doesn't open.
 1. **Check browser console** (F12 -> Console):
    ```
    Look for errors like:
-   - Failed to load widget.js
-   - OSAWidget is not defined
+   - Failed to load osa-chat-widget.js
+   - OSAChatWidget is not defined (see Script placement below)
    - Community 'xxx' not found
    ```
 
 2. **Verify script loads:**
    ```html
    <!-- Check this in your HTML -->
-   <script src="https://api.osc.earth/osa/widget.js"></script>
+   <script src="https://demo.osc.earth/osa-chat-widget.js"></script>
    ```
 
 3. **Check network tab:**
-   - Widget.js should load (200 OK)
+   - `osa-chat-widget.js` should load (200 OK)
    - API requests should succeed
 
 **Solutions:**
@@ -511,43 +517,52 @@ Widget icon doesn't appear or widget doesn't open.
 **Wrong community ID:**
 ```html
 <!-- Wrong - ID doesn't match config -->
+<script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 <script>
-    OSAWidget.init({
+    OSAChatWidget.setConfig({
         communityId: 'wrong-id'  // Check this matches config.yaml
     });
 </script>
 
 <!-- Correct -->
+<script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 <script>
-    OSAWidget.init({
+    OSAChatWidget.setConfig({
         communityId: 'hed'  // Must match config.yaml id field
     });
 </script>
 ```
 
+There is no `OSAWidget` global and `init()` takes no arguments;
+all configuration goes through `setConfig()`.
+
 **Script placement:**
 ```html
-<!-- Wrong - script in <head> before widget init -->
+<!-- Wrong - setConfig() runs before the widget script defines OSAChatWidget -->
 <head>
     <script>
-        OSAWidget.init({ communityId: 'hed' });
+        OSAChatWidget.setConfig({ communityId: 'hed' });
     </script>
-    <script src="https://api.osc.earth/osa/widget.js"></script>
+    <script src="https://demo.osc.earth/osa-chat-widget.js"></script>
 </head>
 
-<!-- Correct - load script first -->
+<!-- Correct - load the widget script first -->
 <body>
-    <script src="https://api.osc.earth/osa/widget.js"></script>
+    <script src="https://demo.osc.earth/osa-chat-widget.js"></script>
     <script>
-        OSAWidget.init({ communityId: 'hed' });
+        OSAChatWidget.setConfig({ communityId: 'hed' });
     </script>
 </body>
 ```
 
+The `<script src="...osa-chat-widget.js">` tag must come before the inline `setConfig()` call,
+and must never carry `defer` or `async` unless paired with `data-no-auto-init` and a manual `OSAChatWidget.init()` call afterward;
+see [Loading the Script Asynchronously](deployment/widget.md#loading-the-script-asynchronously).
+
 **API endpoint:**
 ```javascript
-// Check if API is reachable
-fetch('https://api.osc.earth/osa/health')
+// Check if the widget's backend is reachable (production)
+fetch('https://widget.osc.earth/osa/health')
     .then(r => r.json())
     .then(console.log);
 // Should show: {status: "healthy"}
@@ -574,9 +589,13 @@ Widget accepts input but shows loading spinner indefinitely.
    - Look for timeout errors
 
 2. **Check API health:**
+   The widget's own traffic goes through `https://widget.osc.earth/osa` (the Cloudflare Worker proxy in front of the backend),
+   so check that host first, not the backend it sits in front of:
    ```bash
-   curl https://api.osc.earth/osa/health
+   curl https://widget.osc.earth/osa/health
    ```
+   `https://api.osc.earth/osa/health` reaches the FastAPI backend behind the worker directly, which is useful too,
+   but a widget-specific issue (CORS, rate limiting, Turnstile) shows up at `widget.osc.earth`, not at `api.osc.earth`.
 
 3. **Check backend logs** (if you have access):
    ```bash
@@ -785,9 +804,10 @@ thinking-heavy question is slower on either model than a lookup is.
 
 **Check network:**
 ```bash
-# Test API latency
-time curl https://api.osc.earth/osa/health
-# Should be < 1 second
+# Test latency of the host the widget actually talks to
+time curl https://widget.osc.earth/osa/health
+# Should be < 1 second; https://api.osc.earth/osa is the FastAPI
+# backend behind this worker, useful for isolating worker vs. backend latency
 ```
 
 ---
@@ -881,7 +901,7 @@ CSS conflicts with your site's styles.
 ```html
 <style>
   /* Adjust widget position */
-  #osa-widget-container {
+  .osa-chat-widget {
     bottom: 20px !important;
     right: 20px !important;
     z-index: 9999 !important;
@@ -892,7 +912,7 @@ CSS conflicts with your site's styles.
 **Check for conflicts:**
 ```javascript
 // In browser console
-console.log(getComputedStyle(document.getElementById('osa-widget-container')));
+console.log(getComputedStyle(document.querySelector('.osa-chat-widget')));
 ```
 
 ---

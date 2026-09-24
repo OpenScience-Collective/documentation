@@ -10,6 +10,7 @@ The Brain Imaging Data Structure (BIDS) assistant provides tools for documentati
 | `search_bids_discussions` | Knowledge search | Search GitHub issues and Pull Requests (PRs) |
 | `list_bids_recent` | Knowledge search | List recent GitHub activity |
 | `search_bids_papers` | Knowledge search | Search academic papers |
+| `search_bids_forum` | Knowledge search | Search Discourse forum topics |
 | `lookup_bep` | BIDS-specific | Look up BIDS Extension Proposals |
 
 ## Document Retrieval
@@ -102,6 +103,22 @@ The BIDS assistant tracks papers citing 14 core DOIs, including:
 - And 9 additional modality-specific extension papers
 
 Papers are sourced from OpenALEX, Semantic Scholar, and PubMed.
+
+### `search_bids_forum`
+
+Search topics from the Neurostars forum ([neurostars.org](https://neurostars.org), tagged `bids`).
+Returns topic titles, post previews, accepted answers, and direct links.
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `query` | `str` | required | Search query |
+| `category` | `str \| None` | `None` | Filter by Discourse category |
+| `limit` | `int` | `5` | Maximum results |
+
+!!! note "Sync Required"
+    Populate with `osa sync discourse --community bids`.
 
 ## BIDS-Specific Tools
 

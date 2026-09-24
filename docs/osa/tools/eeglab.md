@@ -10,8 +10,10 @@ The EEGLAB assistant provides tools for documentation retrieval, knowledge searc
 | `search_eeglab_discussions` | Knowledge search | Search GitHub issues and PRs |
 | `list_eeglab_recent` | Knowledge search | List recent GitHub activity |
 | `search_eeglab_papers` | Knowledge search | Search academic papers |
-| `search_eeglab_docstrings` | EEGLAB-specific | Search MATLAB/Python function documentation |
-| `search_eeglab_faqs` | EEGLAB-specific | Search mailing list FAQ entries |
+| `search_eeglab_papers_live` | Knowledge search | On-demand live literature search |
+| `search_eeglab_code_docs` | EEGLAB-specific | Search MATLAB/Python function documentation |
+| `get_eeglab_full_docstring` | EEGLAB-specific | Fetch a symbol's complete docstring |
+| `search_eeglab_faq` | EEGLAB-specific | Search mailing list FAQ entries |
 
 ## Document Retrieval
 
@@ -82,9 +84,23 @@ Search academic papers related to EEGLAB.
 - Pion-Tonachini et al. (2019) - ICLabel: automated EEG IC classification
 - Bigdely-Shamlo et al. (2015) - PREP: standardized preprocessing
 
+### `search_eeglab_papers_live`
+
+On-demand live search of the latest external literature about EEGLAB, newest first, via the web rather than the pre-synced local database.
+Slower than `search_eeglab_papers` (up to about 15 seconds),
+so the agent is instructed to try the local search first and to only call this tool after the user has explicitly confirmed they want a live search,
+or has explicitly asked to search the web or for the very latest papers.
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `query` | `str` | required | Search query |
+| `limit` | `int` | `5` | Maximum results |
+
 ## EEGLAB-Specific Tools
 
-### `search_eeglab_docstrings`
+### `search_eeglab_code_docs`
 
 Search function documentation from the EEGLAB codebase. This tool searches over MATLAB and Python docstrings extracted from EEGLAB and its plugins.
 
@@ -108,7 +124,7 @@ Search function documentation from the EEGLAB codebase. This tool searches over 
 
 ```
 User: "How do I use pop_loadset?"
-Agent: calls search_eeglab_docstrings(query="pop_loadset")
+Agent: calls search_eeglab_code_docs(query="pop_loadset")
 Response:
   Found 1 function(s):
 
@@ -122,7 +138,22 @@ Response:
 !!! note "Sync Required"
     Populate with `osa sync docstrings --community eeglab`.
 
-### `search_eeglab_faqs`
+### `get_eeglab_full_docstring`
+
+Fetch the complete stored docstring (up to about 10,000 characters) for one symbol.
+Use this as a follow-up to `search_eeglab_code_docs` when the returned snippet is truncated
+and the user is asking about specific outputs, parameters, or examples.
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `symbol_name` | `str` | required | Exact symbol name (case-insensitive), e.g. `"pop_loadset"` |
+
+Returns up to 5 matches when the same symbol name appears in more than
+one tracked repository.
+
+### `search_eeglab_faq`
 
 Search FAQ entries generated from the EEGLAB mailing list archive (since 2004). The FAQ database is created using a two-agent Large Language Model (LLM) pipeline that evaluates thread quality and summarizes high-quality discussions.
 
@@ -146,7 +177,7 @@ Search FAQ entries generated from the EEGLAB mailing list archive (since 2004). 
 
 ```
 User: "How do I remove artifacts from EEG data?"
-Agent: calls search_eeglab_faqs(query="artifact removal")
+Agent: calls search_eeglab_faq(query="artifact removal")
 Response:
   Found 3 FAQ entries:
 

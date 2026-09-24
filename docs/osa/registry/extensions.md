@@ -131,8 +131,8 @@ __all__ = ["validate_config", "search_examples"]
 
 | Tool | Purpose | Data Source |
 |------|---------|-------------|
-| `search_eeglab_docstrings` | Search MATLAB/Python function docs | Synced docstrings database |
-| `search_eeglab_faqs` | Search mailing list FAQ entries | LLM-generated FAQ database |
+| `search_eeglab_code_docs` | Search MATLAB/Python function docs | Synced docstrings database |
+| `search_eeglab_faq` | Search mailing list FAQ entries | LLM-generated FAQ database |
 
 These tools provide domain-specific functionality that cannot be replicated in YAML configuration alone.
 
@@ -164,33 +164,30 @@ The `CommunityAssistant` loads plugin tools during initialization:
 
 ## MCP Servers
 
-MCP (Model Context Protocol) servers provide an alternative extension mechanism for tools that run as separate processes.
+MCP (Model Context Protocol) servers provide an alternative extension mechanism: tools served by a separate process instead of a `python_plugins` module in this repository. This is implemented: `src/tools/mcp_client.py` discovers a server's tools and wraps each as a LangChain tool, and the NEMAR community uses it in production for its six dataset-discovery tools (see [NEMAR Tools](../tools/nemar.md)).
 
-!!! note "Status"
-    MCP server support is defined in the schema but not yet fully implemented in the runtime. The configuration is validated, and infrastructure is being built.
+Every tool name is prefixed with the server's own `name`, so a server named `nemar` serving a tool called `search_datasets` is exposed to the assistant as `nemar_search_datasets`. Discovery runs against a 20-second budget and is cached for 5 minutes; a server that is unreachable or times out yields no tools and a log line rather than failing assistant startup.
 
 ### Configuration
 
 ```yaml
 extensions:
   mcp_servers:
-    # Local server (started as a subprocess)
-    - name: my-validator
-      command: ["node", "path/to/mcp-server.js"]
-
     # Remote server (connects via URL)
     - name: remote-service
       url: https://mcp.my-tool.org
 ```
 
+The `McpServer` model (`src/core/config/community.py`) also accepts a `command: [...]` field for a local, subprocess-started server, and requires exactly one of `command` or `url`. Only `url` (remote, Streamable HTTP) servers are wired up at runtime today: `discover_mcp_tools` declines a `command`-only entry explicitly, logs a warning, and returns no tools for it, rather than attempting to spawn a process.
+
 ### Local vs Remote
 
-| Type | Config | Use Case |
-|------|--------|----------|
-| Local | `command: [...]` | Tools bundled with your project |
-| Remote | `url: https://...` | Shared services, heavy compute |
+| Type | Config | Status |
+|------|--------|--------|
+| Local | `command: [...]` | Accepted by the schema; not implemented in the runtime |
+| Remote | `url: https://...` | Implemented; e.g. NEMAR's `https://mcp.nemar.org/mcp` |
 
-Exactly one of `command` or `url` must be provided for each server.
+Exactly one of `command` or `url` must be provided for each server, even though only `url` currently does anything.
 
 ## Extension Loading Order
 
@@ -205,6 +202,6 @@ When a `CommunityAssistant` is created, tools are loaded in this order:
 2. **Documentation retrieval** - `retrieve_{community}_docs`
 3. **Page context** - `fetch_current_page` (if `enable_page_context: true`)
 4. **Python plugin tools** from `extensions.python_plugins`
-5. **MCP server tools** from `extensions.mcp_servers` (when implemented)
+5. **MCP server tools** from `extensions.mcp_servers`
 
 All tools are available to the LLM simultaneously. The system prompt should guide the LLM on when to use each tool.

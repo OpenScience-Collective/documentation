@@ -66,7 +66,7 @@ The Open Science Assistant is an extensible AI platform that serves small resear
 - **Design philosophy**: Precision over features; researchers need accurate, citation-backed answers
 - **Architecture**: Cloudflare Worker edge proxy, FastAPI + LangGraph backend, SQLite FTS5 knowledge stores
 - **Community onboarding**: One YAML file creates a full AI assistant with API routes, tools, and knowledge sync
-- **6 live communities**: HED, EEGLAB, BIDS, MNE-Python, NEMAR, FieldTrip
+- **6 live communities** (as of March 2026): HED, EEGLAB, BIDS, MNE-Python, NEMAR, FieldTrip
 - **Two-tier tool system**: Auto-generated knowledge tools from YAML plus custom Python plugins
 - **Knowledge pipeline**: 5 sources (GitHub, OpenALEX, mailing lists, Discourse, docstrings) synced into per-community databases
 - **Smart FAQ generation**: Two-stage LLM pipeline reducing costs by ~85%

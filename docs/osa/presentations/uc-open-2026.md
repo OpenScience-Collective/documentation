@@ -51,7 +51,7 @@ A 15-minute talk at the [UC Open 2026 summit](https://ucospo.net/events/uc-open-
 
 Research tools like BIDS, EEGLAB, MNE-Python, and HED depend on a handful of maintainers, scattered documentation, and forums that are easy to miss. General-purpose AI assistants hallucinate tool-specific answers. Each community is too small to build a bespoke AI on its own.
 
-The Open Science Collective (OSC) treats this as a shared-infrastructure problem. The Open Science Assistant (OSA) is the AI layer of that infrastructure: one platform, one FastAPI + LangGraph agent loop, one SQLite FTS5 store per community, and a YAML file that onboards the next community in an afternoon. Seven assistants are live today; EEGLAB alone has answered over sixteen hundred questions at a 99% success rate, peaking above 100 questions a day.
+The Open Science Collective (OSC) treats this as a shared-infrastructure problem. The Open Science Assistant (OSA) is the AI layer of that infrastructure: one platform, one FastAPI + LangGraph agent loop, one SQLite FTS5 store per community, and a YAML file that onboards the next community in an afternoon. Seven assistants were live as of the talk (April 2026); EEGLAB alone has answered over sixteen hundred questions at a 99% success rate, peaking above 100 questions a day.
 
 The talk covers:
 

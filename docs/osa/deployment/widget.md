@@ -28,6 +28,56 @@ The widget appears as a chat bubble in the bottom-right corner of the page.
     keep working; that address is not going away.
     New embeds should use `https://demo.osc.earth/osa-chat-widget.js` instead.
 
+## Loading the Script Asynchronously
+
+The widget defines `window.OSAChatWidget` when its script runs, and it
+auto-initializes as soon as the page is ready. If you need to load the
+script with `defer` or `async` (for example, to keep it out of the
+critical rendering path), add `data-no-auto-init` to the script tag and
+call `setConfig()` and `init()` from an `onload` handler instead:
+
+```html
+<script
+  src="https://demo.osc.earth/osa-chat-widget.js"
+  defer
+  data-no-auto-init
+  onload="OSAChatWidget.setConfig({ communityId: 'hed' }); OSAChatWidget.init();">
+</script>
+```
+
+Do not add `defer` or `async` to the script tag while still relying on a
+separate inline `setConfig()` call: the deferred script has not run yet
+when the inline block executes, `window.OSAChatWidget` does not exist,
+and the call throws `ReferenceError: OSAChatWidget is not defined`.
+
+## Pinning to a Release with Subresource Integrity
+
+Security-sensitive environments that require Subresource Integrity (SRI)
+can pin the widget to a specific release using a versioned jsDelivr URL.
+The `integrity` hash for each release is published on the
+[GitHub releases page](https://github.com/OpenScience-Collective/osa/releases).
+
+```html
+<!-- Replace vX.Y.Z and the integrity hash from the GitHub release notes -->
+<script
+  src="https://cdn.jsdelivr.net/gh/OpenScience-Collective/osa@vX.Y.Z/frontend/osa-chat-widget.js"
+  integrity="sha384-..."
+  crossorigin="anonymous">
+</script>
+<script>
+  OSAChatWidget.setConfig({ communityId: 'hed' });
+</script>
+```
+
+Do not add `defer` to the pinned `<script>` tag unless you also add
+`data-no-auto-init` and initialize the widget from an `onload` handler,
+per [Loading the Script Asynchronously](#loading-the-script-asynchronously)
+above; otherwise the inline `setConfig()` call runs before the script
+has defined `OSAChatWidget`.
+
+You must update the version tag by hand when upgrading; SRI pinning does
+not follow new releases automatically.
+
 ## How Configuration Works
 
 Widget configuration uses a two-layer approach:

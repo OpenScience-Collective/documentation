@@ -184,6 +184,7 @@ nav:
           - EEGLAB Tools: osa/tools/eeglab.md
           - MNE-Python Tools: osa/tools/mne.md
           - NEMAR Tools: osa/tools/nemar.md
+          - NEMAR Examples: osa/tools/nemar-examples.md
           - MetaBCI Tools: osa/tools/metabci.md
           - OpenNeuroPET Tools: osa/tools/openneuropet.md
       - Presentations:

@@ -19,6 +19,7 @@ A typical request flows through the system as follows:
 4. **Community router** (e.g., `/hed/ask`) handles the request using the community's configuration
 5. **LangGraph agent** runs the conversation loop:
     - Sends messages to Claude on the **Claude Platform on AWS** via `langchain-anthropic`,
+      to GPT-6 Luna, Qwen3 Next or gpt-oss-120b on **Amazon Bedrock** via `langchain-aws`,
       or through **LiteLLM** to OpenRouter when the caller brought an OpenRouter key
     - LLM may request **tool calls** (document retrieval, knowledge search, validation)
     - Tools query **SQLite + FTS5** databases or external APIs (GitHub, hedtools.org)
@@ -55,16 +56,20 @@ Each community gets four endpoints:
 Model selection follows a priority chain:
 
 ```
-User requests custom model (requires BYOK)
-    |
-    v  (no custom model)
+Request names a model
+    |  an offered model runs (on the Claude Platform, or Amazon Bedrock for the three Bedrock models)
+    |  one that is not offered is a 400; on OpenRouter a custom model needs the caller's own key
+    v  (no model named)
 Community default_model (from config.yaml)
     |
     v  (no community override)
-Platform default_model (from settings)
+Platform default_model (from settings; claude-haiku-4-5)
 ```
 
-This allows communities to choose their preferred model while giving users with BYOK the freedom to use any model.
+This allows communities to choose their preferred model while letting a reader pick any other offered model in the widget.
+
+The reasoning level follows the model that was chosen:
+the community's [`reasoning_effort`](registry/schema-reference.md#reasoning_effort) (`high` when unset), which the chosen model clamps to the levels it accepts.
 
 ---
 

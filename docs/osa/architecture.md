@@ -56,6 +56,7 @@ See the [Community Registry](registry/index.md) documentation for details.
 | CLI | Typer + Rich | Command-line interface (`pip install open-science-assistant`) |
 | Agent Orchestration | LangGraph | State machine for conversation + tool-calling loop |
 | LLM Access | langchain-anthropic | Claude Platform on AWS: prompt caching, extended thinking, citations |
+| LLM Access (Bedrock) | langchain-aws | Amazon Bedrock: GPT-6 Luna, Qwen3 Next and gpt-oss-120b, on the platform's own key |
 | LLM Access (BYOK) | LiteLLM | OpenRouter, only when a caller brings an OpenRouter key |
 | Knowledge Storage | SQLite + FTS5 | Issues, PRs, docs with full-text search (BM25) |
 | Observability | LangFuse | Tracing, cost tracking, quality metrics |
@@ -70,7 +71,8 @@ OSA integrates with existing validator and tool APIs rather than hosting validat
 | Service | Integration |
 |---------|-------------|
 | [HED Validation](https://hedtools.org/hed) | String, sidecar, spreadsheet, BIDS validation |
-| [Claude Platform on AWS](https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws) | Default LLM provider (Claude Haiku 4.5, Claude Sonnet 5) |
+| [Claude Platform on AWS](https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws) | Default LLM provider (Claude Haiku 4.5, Claude Sonnet 5.5) |
+| [Amazon Bedrock](https://aws.amazon.com/bedrock/) | Three lower-cost non-Claude models (GPT-6 Luna, Qwen3 Next, gpt-oss-120b), when the deployment has a Bedrock key |
 | [OpenRouter](https://openrouter.ai) | BYOK-only alternative LLM provider |
 | [GitHub API](https://api.github.com) | Knowledge source (issues, PRs) |
 | [LangFuse](https://langfuse.com) | Observability and cost tracking |
@@ -86,7 +88,7 @@ OSA supports two authentication modes:
   and that request is billed to them instead of to the platform
 
 Which header arrives decides which provider serves the request.
-An Anthropic key takes the Claude Platform path and can use either offered model;
+An Anthropic key takes the Claude Platform path and can use either offered Claude model (the Bedrock models run only on the platform's own key);
 an OpenRouter key takes the LiteLLM path.
 BYOK is additive rather than a replacement,
 so a community that was using OpenRouter before the migration keeps working.

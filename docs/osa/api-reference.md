@@ -131,13 +131,22 @@ X-Anthropic-API-Key: sk-ant-your-key
 {
   "question": "How do I annotate a button press in HED?",
   "stream": true,
-  "model": "claude-sonnet-5"
+  "model": "claude-sonnet-5-5"
 }
 ```
 
-`model` is optional: `claude-haiku-4-5` or `claude-sonnet-5`, or a legacy alias
-of either. Any other id needs an OpenRouter key. Omit it to use the community's
-configured default.
+`model` is optional: `claude-haiku-4-5` or `claude-sonnet-5-5`, or a legacy alias
+of either. Omit it to use the community's configured default.
+
+The three Amazon Bedrock models (`openai.gpt-6-luna`, `qwen.qwen3-next-80b-a3b`
+and `openai.gpt-oss-120b`) are also offered when the deployment has a Bedrock key.
+They run on the platform's key, so a request that carries the caller's own Anthropic key
+and names one is refused, and a deployment without a Bedrock key answers with a 400.
+Any other id needs an OpenRouter key.
+
+How hard the model thinks is the community's
+[`reasoning_effort`](registry/schema-reference.md#reasoning_effort) (`high` when unset);
+a request does not set it.
 
 #### Non-streaming Response
 
@@ -392,7 +401,7 @@ for doi, by_year in data["by_paper"].items():
 |-----------|------|----------|-------------|
 | `question` | string | Yes | Question to ask |
 | `stream` | boolean | No | Enable SSE streaming (default: false) |
-| `model` | string | No | `claude-haiku-4-5` or `claude-sonnet-5`; any other id requires an OpenRouter key |
+| `model` | string | No | `claude-haiku-4-5` or `claude-sonnet-5-5`; any other id requires an OpenRouter key |
 | `page_context` | object | No | Page the widget is embedded in, so the assistant can answer about it |
 
 ### Chat Request
@@ -402,7 +411,7 @@ for doi, by_year in data["by_paper"].items():
 | `message` | string | Yes | User message |
 | `session_id` | string | No | Session ID for multi-turn chat |
 | `stream` | boolean | No | Enable SSE streaming (default: true) |
-| `model` | string | No | `claude-haiku-4-5` or `claude-sonnet-5`; any other id requires an OpenRouter key |
+| `model` | string | No | `claude-haiku-4-5` or `claude-sonnet-5-5`; any other id requires an OpenRouter key |
 | `page_context` | object | No | Page the widget is embedded in, so the assistant can answer about it |
 
 ## Response Fields

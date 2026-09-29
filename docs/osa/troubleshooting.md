@@ -616,7 +616,7 @@ Widget accepts input but shows loading spinner indefinitely.
 
 **Timeouts:**
 - May indicate model is slow or overloaded
-- Try `claude-haiku-4-5`, which is the faster of the two offered models
+- Try `claude-haiku-4-5`, which is the faster of the two Claude models, or lower `reasoning_effort` (see below)
 - Check [status.anthropic.com](https://status.anthropic.com), or OpenRouter's status page for an OpenRouter community
 
 ---
@@ -791,16 +791,25 @@ documentation:
 
 **Use the faster model:**
 ```yaml
-# Before - Sonnet 5 is the more capable of the two, and the slower
-default_model: claude-sonnet-5
+# Before - Sonnet 5.5 is the more capable of the two Claude models, and the slower
+default_model: claude-sonnet-5-5
 
 # After - Haiku 4.5, the platform default
 default_model: claude-haiku-4-5
 ```
 
-Extended thinking also costs latency before the first token.
-Haiku thinks on a fixed budget and Sonnet decides per request, so a
-thinking-heavy question is slower on either model than a lookup is.
+**Think less:**
+```yaml
+# Every model with reasoning levels runs at high unless told otherwise
+reasoning_effort: medium    # or low
+```
+
+Thinking costs latency before the first token, and every offered model runs at `high` by default.
+Lowering `reasoning_effort` is often a better first step than changing the model:
+on one NWB question GPT-6 Luna's median time to first text was about 5 seconds at `high`, 11 at `xhigh` and 48 at `max`.
+Haiku's level is a thinking budget (1,024, 2,048 or 4,096 tokens) and Sonnet decides per request,
+so a thinking-heavy question is slower on either than a lookup is.
+See [`reasoning_effort`](registry/schema-reference.md#reasoning_effort).
 
 **Check network:**
 ```bash
@@ -819,21 +828,30 @@ time curl https://widget.osc.earth/osa/health
 - Usage exceeded budget
 
 **Causes:**
-1. `claude-sonnet-5` where `claude-haiku-4-5` would do
-2. Long conversations (context accumulation)
-3. Many users
-4. Preloaded docs increasing prompt size
-5. Prompt caching disabled, so the same system prompt is billed at full rate on every turn
+1. `claude-sonnet-5-5` where `claude-haiku-4-5` would do
+2. A high `reasoning_effort` (thinking tokens are billed as output, and every model runs at `high` unless set)
+3. Long conversations (context accumulation)
+4. Many users
+5. Preloaded docs increasing prompt size
+6. Prompt caching disabled, so the same system prompt is billed at full rate on every turn
 
 **Solutions:**
 
 **Use the cheaper model:**
 ```yaml
-# Sonnet 5: twice Haiku's rate, worth it for genuinely hard questions
-default_model: claude-sonnet-5
+# Sonnet 5.5: twice Haiku's rate, worth it for genuinely hard questions
+default_model: claude-sonnet-5-5
 
 # Haiku 4.5: the default, and enough for documentation Q&A
 default_model: claude-haiku-4-5
+
+# GPT-6 Luna on Amazon Bedrock: about a ninth of Haiku's input rate
+default_model: openai.gpt-6-luna
+```
+
+**Think less:**
+```yaml
+reasoning_effort: medium    # every model runs at high unless set
 ```
 
 **Reduce preloaded docs:**
@@ -854,10 +872,14 @@ default_model: claude-haiku-4-5
 | Model | Input (per 1M tokens) | Output (per 1M tokens) | Use Case |
 |-------|----------------------|------------------------|----------|
 | `claude-haiku-4-5` | $1.00 | $5.00 | General Q&A, FAQ generation |
-| `claude-sonnet-5` | $2.00 | $10.00 | Complex reasoning, long threads |
+| `claude-sonnet-5-5` | $2.00 | $10.00 | Complex reasoning, long threads |
+| `openai.gpt-6-luna` | $0.11 | $0.55 | Documentation Q&A (Amazon Bedrock) |
+| `qwen.qwen3-next-80b-a3b` | $0.14 | $1.20 | Documentation Q&A (Amazon Bedrock) |
+| `openai.gpt-oss-120b` | $0.15 | $0.60 | Documentation Q&A (Amazon Bedrock) |
 
 Opus is not offered here.
-The platform exposes two models on purpose, so a community's cost is predictable and the fallback is always the cheaper one.
+Every offered model is priced at or below Sonnet 5.5, and the three Bedrock models at or below Haiku 4.5,
+so a community's cost is predictable and the fallback is always the cheaper one.
 
 ---
 

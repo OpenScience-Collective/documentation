@@ -162,7 +162,7 @@ header. It is never a body field.
 curl -X POST http://localhost:38528/my-tool/ask \
   -H "Content-Type: application/json" \
   -H "X-Anthropic-API-Key: sk-ant-your-key" \
-  -d '{"question": "What is My Tool?", "model": "claude-sonnet-5"}' | jq
+  -d '{"question": "What is My Tool?", "model": "claude-sonnet-5-5"}' | jq
 
 # OpenRouter key, which is also what lets you name a non-Claude model
 curl -X POST http://localhost:38528/my-tool/ask \

@@ -14,8 +14,10 @@ Complete reference for the community `config.yaml` file format.
 | `cors_origins` | list[string] | No | `[]` | Allowed CORS origins for widget embedding |
 | `anthropic_api_key_env_var` | string | No | Platform key | Env var name for the community's own Claude Platform key |
 | `openrouter_api_key_env_var` | string | No | Platform key | Env var name for the community's own OpenRouter key |
-| `default_model` | string | No | Platform default | Default Claude model (`claude-haiku-4-5` or `claude-sonnet-5`) |
+| `default_model` | string | No | `claude-haiku-4-5` | Default model: one of the [offered models](#default_model) |
 | `default_model_provider` | string | No | None | OpenRouter-only provider routing hint; ignored on the Claude Platform |
+| `reasoning_effort` | enum | No | `high` | How hard the assistant thinks: `none`, `low`, `medium`, `high`, `xhigh` or `max` |
+| `model_instructions` | map | No | `{}` | Extra system-prompt text for particular models |
 | `enable_page_context` | boolean | No | `true` | Enable page context tool for widget embedding |
 | `maintainers` | list[string] | No | `[]` | Community maintainer GitHub usernames |
 | `documentation` | list | No | `[]` | Documentation sources |
@@ -123,6 +125,12 @@ export ANTHROPIC_API_KEY_HED="sk-ant-your-api-key-here"
 
 Without a community key, costs are billed to the platform's shared key with shared rate limits.
 
+!!! note "Your Anthropic key pays for Claude models only"
+
+    The Amazon Bedrock models (GPT-6 Luna, Qwen3 Next and gpt-oss-120b) always run on the platform's Bedrock key,
+    because a community's Anthropic key is not valid for them.
+    A community that wants Bedrock spend attributed to itself would need a Bedrock key of its own, which OSA does not support yet.
+
 ## `openrouter_api_key_env_var`
 
 Environment variable name holding your community's OpenRouter API key,
@@ -152,26 +160,44 @@ Setting both is not an error, but the OpenRouter one will never be used.
 
 ## `default_model`
 
-One of the two offered Claude models.
+The model this community's assistant runs when a request names none.
+It must be one of the offered models, given by its id.
 Legacy OpenRouter-style identifiers such as `anthropic/claude-haiku-4.5`
 are still accepted and normalized, so an older `config.yaml` keeps working,
-but new configs should use the first-party id.
+but new configs should use the ids below.
 
 ```yaml
 # Cost-effective, with extended thinking on by default (recommended)
 default_model: claude-haiku-4-5
 
 # More capable, with adaptive thinking
-default_model: claude-sonnet-5
+default_model: claude-sonnet-5-5
+
+# A lower-cost model served from Amazon Bedrock
+default_model: openai.gpt-6-luna
 ```
 
-| Model | Input / output per 1M tokens | Use case |
-|-------|------------------------------|----------|
-| `claude-haiku-4-5` | $1.00 / $5.00 | General Q&A; the platform default |
-| `claude-sonnet-5` | $2.00 / $10.00 | Harder reasoning, longer synthesis |
+| Model | Runs on | Input / output per 1M tokens | Use case |
+|-------|---------|------------------------------|----------|
+| `claude-haiku-4-5` | Claude Platform on AWS | $1.00 / $5.00 | General Q&A; the platform default |
+| `claude-sonnet-5-5` | Claude Platform on AWS | $2.00 / $10.00 | Harder reasoning, longer synthesis |
+| `openai.gpt-6-luna` | Amazon Bedrock | $0.11 / $0.55 | Documentation Q&A at a lower cost |
+| `qwen.qwen3-next-80b-a3b` | Amazon Bedrock | $0.14 / $1.20 | Documentation Q&A at a lower cost |
+| `openai.gpt-oss-120b` | Amazon Bedrock | $0.15 / $0.60 | Documentation Q&A at a lower cost |
 
 Any other value is rejected at startup with the list of offered models,
 rather than failing later at request time.
+Claude Opus, for example, is not offered.
+
+- A reader can pick any other offered model in the widget; `default_model` is what they get without choosing.
+- The Bedrock models run on the platform's Amazon Bedrock key, and a caller's own Anthropic key cannot select them.
+  When a request cannot have the community's Bedrock default
+  (the caller brought their own Anthropic key and named no model, or the deployment has no Bedrock key),
+  it runs the deployment's Claude default instead, and an error naming the community is logged.
+  `osa validate` warns about a default like that.
+- The models do not all take the same request:
+  GPT-6 Luna and Claude Sonnet 5.5 reject a `temperature`,
+  and the Bedrock models take no images.
 
 ## `default_model_provider`
 
@@ -184,6 +210,70 @@ default_model_provider: Cerebras    # only meaningful with an OpenRouter key
 ```
 
 Common providers: `Cerebras` (ultra-fast), `Together` (balanced). Availability varies by model.
+
+## `reasoning_effort`
+
+How hard the assistant thinks before it answers, on one scale that works the same on every provider
+(the Claude Platform on AWS, Amazon Bedrock and OpenRouter).
+Each model turns the level into its own provider's request field, so a community sets it once.
+
+```yaml
+reasoning_effort: high      # the default
+```
+
+The scale, lowest to highest: `none`, `low`, `medium`, `high`, `xhigh`, `max`.
+
+If you set nothing, every model runs at `high`.
+The key applies to whichever model a request runs, not only `default_model`:
+a reader who picks another model in the widget gets that model's nearest level.
+
+Each model keeps its own predetermined levels, and a level a model does not accept is never sent.
+It is lowered to the highest level the model accepts at or below the one you asked for,
+or raised to its lowest when you asked for less than the model can do.
+
+| Model | Levels it accepts | What a level does |
+|-------|-------------------|-------------------|
+| `claude-sonnet-5-5` | `none`, `low`, `medium`, `high` | Sets the model's effort. `xhigh` and `max` give `high`: Sonnet is never run above `high`. `none` is no up-front thinking at effort `low`. |
+| `claude-haiku-4-5` | `none`, `low`, `medium`, `high` | Haiku has no effort setting, so a level is its thinking budget: `low` 1,024 tokens, `medium` 2,048, `high` 4,096, and `none` no thinking. `xhigh` and `max` give `high`. |
+| `openai.gpt-6-luna` | `none`, `low`, `medium`, `high`, `xhigh`, `max` | Sets the model's reasoning effort. |
+| `openai.gpt-oss-120b` | `low`, `medium`, `high` | Sets the model's reasoning effort. `none` gives `low`; `xhigh` and `max` give `high`. |
+| `qwen.qwen3-next-80b-a3b` | none | Has no reasoning control, so the key is ignored. |
+
+!!! tip "Choosing a level"
+
+    Higher levels answer more carefully and take longer before the first word,
+    and the thinking tokens are billed as output.
+    On one NWB documentation question, GPT-6 Luna's median time to first text
+    was about 5 seconds at `high`, 11 seconds at `xhigh` and 48 seconds at `max`,
+    and at the two higher levels it sometimes answered without searching the documentation, so the answer had no citations.
+    For a faster assistant, lower the level (`medium` or `low`) before reaching for a different model.
+
+!!! note "When the level cannot be honored"
+
+    If your `default_model` cannot run at the level you set
+    (`max` on Claude Sonnet, or any level on Qwen3 Next),
+    the config still loads, and a warning says what it will run at.
+    `osa validate` lists that warning.
+    Changing the level of a live community changes its requests once,
+    so the provider's prompt cache is refilled after the change.
+
+## `model_instructions`
+
+Extra system-prompt text for particular models, keyed by offered model id.
+Models differ in what they need to be told:
+GPT-6 Luna and gpt-oss-120b, for example, keep searching unless they are asked to stop after a couple of searches,
+which the platform already adds for them.
+Text here is appended after any such built-in note, and only on requests that run that model,
+so a community can tune one model without touching the others.
+
+```yaml
+model_instructions:
+  openai.gpt-oss-120b: |
+    Answer in the same language the question was asked in.
+```
+
+Keys are model ids or aliases from the [offered models](#default_model).
+An unknown key is an error, not a silent no-op.
 
 ## `documentation`
 
@@ -379,7 +469,7 @@ Configuration for the two-stage LLM pipeline that generates FAQ entries from mai
 
 | Field | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
-| `model` | string | Yes | - | `claude-haiku-4-5` or `claude-sonnet-5`, or a legacy alias of either |
+| `model` | string | Yes | - | `claude-haiku-4-5` or `claude-sonnet-5-5`, or a legacy alias of either |
 | `provider` | string | No | - | Deprecated OpenRouter routing hint; accepted and ignored |
 | `temperature` | float | No | `0.1` | Sampling temperature, honored only by `claude-haiku-4-5` |
 | `enable_caching` | bool | No | `true` | Enable prompt caching |
@@ -389,9 +479,9 @@ has one and the platform key otherwise.
 Two things to know before choosing models here:
 
 - The evaluation agent scores *every* thread, so it is most of the bill;
-  `claude-sonnet-5` there costs roughly twice what `claude-haiku-4-5` does and defeats the point of splitting the pipeline in two.
+  `claude-sonnet-5-5` there costs roughly twice what `claude-haiku-4-5` does and defeats the point of splitting the pipeline in two.
   `osa validate` warns if you do it anyway.
-- `claude-sonnet-5` accepts only its default temperature.
+- `claude-sonnet-5-5` accepts only its default temperature.
   A `temperature` set alongside it is dropped rather than sent, which is also a warning from `osa validate`.
 
 ```yaml

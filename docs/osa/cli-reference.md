@@ -366,7 +366,9 @@ These are only relevant when running the server (`osa serve`):
 | `ANTHROPIC_API_KEY` | Server-side Claude Platform key | Required |
 | `ANTHROPIC_BASE_URL` | AWS Marketplace endpoint; must be set with `ANTHROPIC_WORKSPACE_ID` | First-party default |
 | `ANTHROPIC_WORKSPACE_ID` | Workspace the key is authorized on (`wrkspc_...`) | None |
-| `DEFAULT_MODEL` | `claude-haiku-4-5` or `claude-sonnet-5` | `claude-haiku-4-5` |
+| `DEFAULT_MODEL` | `claude-haiku-4-5` or `claude-sonnet-5-5` (keep it a Claude model) | `claude-haiku-4-5` |
+| `AWS_BEARER_TOKEN_BEDROCK` | Amazon Bedrock API key; turns on GPT-6 Luna, Qwen3 Next and gpt-oss-120b (not listed without it) | Optional |
+| `BEDROCK_REGION` | Region the Bedrock models are called in (Qwen3 Next always runs in `us-east-1`) | `us-east-2` |
 | `OPENROUTER_API_KEY` | Server-side OpenRouter key, for a deployment funded that way instead | Optional |
 | `LANGFUSE_PUBLIC_KEY` | LangFuse public key | Optional |
 | `LANGFUSE_SECRET_KEY` | LangFuse secret key | Optional |

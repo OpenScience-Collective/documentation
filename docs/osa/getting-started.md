@@ -159,7 +159,7 @@ ANTHROPIC_API_KEY=your-key-here
 ANTHROPIC_BASE_URL=https://aws-external-anthropic.us-east-2.api.aws
 ANTHROPIC_WORKSPACE_ID=wrkspc_your-workspace-id
 
-# One of claude-haiku-4-5 (default) or claude-sonnet-5
+# One of claude-haiku-4-5 (default) or claude-sonnet-5-5; keep this a Claude model
 DEFAULT_MODEL=claude-haiku-4-5
 
 # Optional: LangFuse for observability
@@ -173,12 +173,18 @@ the AWS endpoint requires an `anthropic-workspace-id` header,
 so setting the base URL without the workspace id fails at request time.
 Leave both unset to talk to `api.anthropic.com` with a first-party key instead.
 
-!!! note "This is not Amazon Bedrock"
+!!! note "Claude is not on Amazon Bedrock"
 
     The Claude Platform on AWS is Anthropic's own Messages API,
     billed through AWS Marketplace.
     It takes an `ANTHROPIC_API_KEY`, not AWS credentials,
-    and OSA does not use the Bedrock SDK or Bedrock model identifiers.
+    and Claude models never go through Bedrock.
+
+    Three lower-cost models that are not Claude (GPT-6 Luna, Qwen3 Next 80B A3B and gpt-oss-120b)
+    are served from Amazon Bedrock instead.
+    They are offered only when the deployment sets `AWS_BEARER_TOKEN_BEDROCK`,
+    an Amazon Bedrock API key (no other AWS credentials are needed).
+    Without it they are not listed, and a request that names one gets a 400.
 
 `OPENROUTER_API_KEY` is still read, but only as a bring-your-own-key path;
 it is never the platform default.

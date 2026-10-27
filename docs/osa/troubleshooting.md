@@ -165,7 +165,7 @@ cors_origins:
 cors_origins:
   - https://example.com
   - https://www.example.com
-  - https://*.pages.dev
+  - https://*.example.com
 ```
 
 **Common Mistakes:**
@@ -173,6 +173,7 @@ cors_origins:
 - Including path (`/docs`)
 - Including query string (`?foo=bar`)
 - Using `*` alone (not allowed)
+- A wildcard on a shared hosting domain, such as `https://*.pages.dev`, which authorizes every site on that platform
 
 ---
 

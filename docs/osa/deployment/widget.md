@@ -21,10 +21,10 @@ see [Loading the Script Asynchronously](#loading-the-script-asynchronously).
 
 The widget appears as a chat bubble in the bottom-right corner of the page.
 
-!!! note "Existing embeds on osa-demo.pages.dev"
-    Sites that already load the widget from `https://osa-demo.pages.dev/osa-chat-widget.js` keep working;
-    that address is not going away.
-    New embeds should use `https://demo.osc.earth/osa-chat-widget.js` instead.
+!!! warning "Embeds that load from osa-demo.pages.dev"
+    `https://osa-demo.pages.dev/osa-chat-widget.js` is the Cloudflare Pages project's own address.
+    It belongs to the Cloudflare account that hosts the project, so it stops working when OSA moves accounts.
+    Load the widget from `https://demo.osc.earth/osa-chat-widget.js` instead; it serves the same file.
 
 ## Loading the Script Asynchronously
 
@@ -213,9 +213,11 @@ not from where the widget script itself was loaded:
 
 | Embedding page's hostname | Backend |
 |---|---|
-| `demo.osc.earth` or `osa-demo.pages.dev` | Production: `https://widget.osc.earth/osa` |
-| Ends with `-demo.osc.earth` or `.osa-demo.pages.dev`, or contains `localhost` or `127.0.0.1` | Develop: `https://develop-widget.osc.earth/osa` |
+| `demo.osc.earth` | Production: `https://widget.osc.earth/osa` |
+| Ends with `-demo.osc.earth` (such as `develop-demo.osc.earth`), or contains `localhost` or `127.0.0.1` | Develop: `https://develop-widget.osc.earth/osa` |
 | Anything else (an adopter's own domain) | Production: `https://widget.osc.earth/osa` |
+
+The widget also still recognizes the Pages project's own `osa-demo.pages.dev` names (production, and `<branch>.osa-demo.pages.dev` as develop), but the demo redirects those to the custom domains before the widget loads.
 
 This means an adopter testing the widget on `localhost` talks to the develop backend by default.
 Set `apiEndpoint` explicitly to point at production instead:
@@ -232,7 +234,7 @@ OSAChatWidget.setConfig({
 ## Cross-Origin Requests (CORS)
 
 Without a bring-your-own key (see [Authentication](../api-reference.md#authentication)), the backend only answers a widget request whose `Origin` header is authorized for that community.
-Two platform origins, `https://demo.osc.earth` and `https://osa-demo.pages.dev`, are always authorized for every community.
+The demo's own origins, `https://demo.osc.earth` and its preview hosts `https://<branch>-demo.osc.earth` (such as `https://develop-demo.osc.earth`), are always authorized for every community.
 Any other origin, such as an adopter's own domain, must be added to that community's `cors_origins` in its `config.yaml`:
 
 ```yaml
@@ -349,7 +351,7 @@ To host the widget yourself:
 
 ## Demo Page
 
-The demo page at [demo.osc.earth](https://demo.osc.earth) (also served from the `osa-demo.pages.dev` address that existing embeds use) dynamically loads all available communities from the `/communities` API and showcases them with URL-based routing:
+The demo page at [demo.osc.earth](https://demo.osc.earth) dynamically loads all available communities from the `/communities` API and showcases them with URL-based routing:
 
 - `/` - Landing page with community cards (populated from API)
 - `/{communityId}` - Community-specific assistant demo (e.g., `/hed`, `/bids`, `/eeglab`, `/fieldtrip`)

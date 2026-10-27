@@ -95,8 +95,7 @@ cors_origins:
   - https://www.myproject.org
 
   # Development/preview environments
-  - https://*.pages.dev           # Cloudflare Pages previews
-  - https://*.vercel.app          # Vercel previews
+  - https://*.myproject.pages.dev # Cloudflare Pages previews of your project
   - http://localhost:3000         # Local development
 
   # Subdomain wildcard
@@ -105,6 +104,7 @@ cors_origins:
 
 !!! tip "CORS Best Practices"
     - Only add origins you control
+    - Never put a wildcard on a shared hosting domain: `https://*.pages.dev` or `https://*.vercel.app` authorizes every site on that platform, including anyone else's
     - Use specific domains when possible
     - Wildcards only for preview environments
     - Never use `*` alone

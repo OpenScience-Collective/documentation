@@ -53,7 +53,7 @@ Deploy to Cloudflare Pages:
 bun run deploy
 ```
 
-This builds the site and deploys to `osc-docs.pages.dev`.
+This builds the site and deploys it to the `osc-docs` Cloudflare Pages project, served at [docs.osc.earth](https://docs.osc.earth).
 
 ## Structure
 

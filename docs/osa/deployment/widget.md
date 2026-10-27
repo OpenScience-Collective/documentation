@@ -217,6 +217,8 @@ not from where the widget script itself was loaded:
 | Ends with `-demo.osc.earth` (such as `develop-demo.osc.earth`), or contains `localhost` or `127.0.0.1` | Develop: `https://develop-widget.osc.earth/osa` |
 | Anything else (an adopter's own domain) | Production: `https://widget.osc.earth/osa` |
 
+The widget also still recognizes the Pages project's own `osa-demo.pages.dev` names (production, and `<branch>.osa-demo.pages.dev` as develop), but the demo redirects those to the custom domains before the widget loads.
+
 This means an adopter testing the widget on `localhost` talks to the develop backend by default.
 Set `apiEndpoint` explicitly to point at production instead:
 

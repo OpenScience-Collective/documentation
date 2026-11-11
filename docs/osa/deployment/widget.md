@@ -103,10 +103,12 @@ These fields are typically configured in the community's `config.yaml` and loade
 | `showExperimentalBadge` | boolean | `true` | Show beta/experimental badge |
 | `repoUrl` | string | `'https://osc.earth/osa/'` | URL for the "Powered by" footer link |
 | `repoName` | string | `'Open Science Assistant'` | Display name in footer |
-| `allowPageContext` | boolean | `true` | Show page context toggle |
-| `pageContextDefaultEnabled` | boolean | `true` | Default state of page context |
-| `pageContextStorageKey` | string | `'osa-page-context-enabled'` | localStorage key for page context preference |
-| `pageContextLabel` | string | `'Share page URL...'` | Label text for the page context checkbox |
+| `allowPageContext` | boolean | `true` | Offer "Use this page for answers" in the Privacy choices dialog |
+| `pageContextDefaultEnabled` | boolean | `true` | Default state of "Use this page for answers" |
+| `pageContextStorageKey` | string | `'osa-page-context-enabled'` | localStorage key for that choice |
+| `shareUsageDefaultEnabled` | boolean | `true` | Default state of "Share usage data" |
+| `shareUsageStorageKey` | string | `'osa-share-usage-enabled'` | localStorage key for that choice |
+| `privacyUrl` | string | `null` | The page the Privacy choices dialog links to (`https://` only); a value set here wins over the community's `widget.privacy_url`, and without either the link goes to the [Privacy](../privacy.md) page |
 | `fullscreen` | boolean | `false` | Open chat in fullscreen mode |
 | `disclaimerEnabled` | boolean | `true` | Show AI disclaimer above footer |
 | `disclaimerText` | string | `'This is an AI assistant and may make mistakes.'` | Disclaimer message text |
@@ -178,10 +180,16 @@ This is useful when the same community assistant is embedded across multiple pag
 
 When enabled, the widget can share the current page's URL and title with the assistant. This helps provide contextually relevant answers when the widget is embedded on documentation pages.
 
-Users can toggle this via a checkbox in the widget. The preference is persisted in localStorage.
+Readers turn it off with "Use this page for answers" in the Privacy choices dialog; the choice is kept in localStorage.
+The dataset a page names with `setDataset` is sent either way.
 The full address is sent, including any query string or fragment, so a site whose addresses carry anything private should set `allowPageContext: false` or `pageContextDefaultEnabled: false`.
 
 ### Privacy
+
+The footer's **Privacy choices** button opens a small dialog with two choices, both on by default, and a link to the privacy page:
+
+- **Use this page for answers** sends the page's address and title with each question (see above).
+- **Share usage data**, when off, keeps the request's conversation id and tool names out of the server's usage log and makes no trace of the request; the counts, cost and timing are still recorded so budgets add up.
 
 What the widget sends, where it goes and what is stored is on the [Privacy](../privacy.md) page.
 A site that embeds the widget should link that page from its own privacy policy, as NEMAR does.
@@ -387,5 +395,5 @@ Each community page auto-configures the widget using the YAML-defined defaults. 
 **Page context not working:**
 
 - Ensure `allowPageContext: true` (default)
-- User must enable the checkbox in the widget
+- "Use this page for answers" must be on in the widget's Privacy choices dialog
 - The page URL is sent; the backend fetches the content

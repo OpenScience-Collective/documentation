@@ -24,8 +24,10 @@ If you run OSA yourself, your own configuration decides the model provider, logg
 - The models run under zero data retention agreements:
   the provider is not to store your prompts or the replies once it has answered,
   apart from a short in-memory prompt cache, and is not to train on them.
-- Usage metrics record how each request was served (model, token counts, cost, timing, tool names),
+- Usage metrics record how each request was served (model, token counts, cost, timing, tool names, conversation id),
   never what was asked or answered.
+  With "Share usage data" off in the Privacy choices dialog, a request's row keeps only the counts, costs and timing:
+  no conversation id, no tool names and no trace.
 - Your chat history, figures, code and settings stay in your browser.
 - No tracing service, analytics script or advertising receives your conversations.
 
@@ -34,9 +36,10 @@ If you run OSA yourself, your own configuration decides the model provider, logg
 | What | When | Why |
 | --- | --- | --- |
 | Your message | Always | To answer it. |
-| A conversation id | From the second message on (the server issues it) | To continue the same conversation. |
-| The page's full address (including anything after a `?` or `#`) and its title | When "Share page URL to help answer questions" is on (the default) | So the assistant knows where you are; it may also read that public page to answer. (A URL, or uniform resource locator, is the page's web address.) Check the address bar before you leave sharing on. |
-| The dataset the page shows, and the community's instructions for that page | On pages that set them (for example a NEMAR dataset page) | The question is usually about that dataset. Sent whether or not you share the page's address. |
+| A conversation id | From the second message on (the server issues it) | To continue the same conversation. Sent whether or not you share usage data; the server only stops writing it to the usage log. |
+| A note that you turned off "Share usage data" | When that choice in the Privacy choices dialog is off (on by default) | So the server leaves the conversation id and tool names out of that request's usage row and makes no trace of it (see [What is stored](#what-is-stored)). |
+| The page's full address (including anything after a `?` or `#`) and its title | When "Use this page for answers" in the Privacy choices dialog is on (the default) | So the assistant knows where you are; it may also read that public page to answer. (A URL, or uniform resource locator, is the page's web address.) Check the address bar before you leave sharing on. |
+| The dataset the page shows, and the community's instructions for that page | On pages that set them (for example a NEMAR dataset page) | The question is usually about that dataset. Sent whether or not you use the page's address. |
 | The text of earlier turns in this chat | When the server may have lost the conversation (after a reload, or after more than 24 hours) | To restore the conversation. Text only: never code runs, results or figures. |
 | The results of code you allow to run in your browser, and your decision on a plan | When the assistant runs code or proposes a plan | Printed output, any error text, a short summary, the names of files the run saved, the run time and up to three figures; for a plan, the steps as you left them and any note you wrote. So the assistant can continue the analysis. Code you edit and run yourself is never sent. |
 | Your memory budget setting | When code can run | So the assistant sizes its reads. |
@@ -84,9 +87,15 @@ the time, the community, the endpoint, the model, token counts, the estimated co
 the names of the tools used, the status, the duration,
 whether the quick or the analysis model answered, whether your own key paid for it,
 a short note on why a request failed,
-and the conversation id.
+and, unless you turned off "Share usage data", the conversation id, and the id of the trace described below.
+With that choice off, a request's row still holds the counts, the estimated cost, the tier and the timing,
+so budgets add up, but it has no conversation id, no tool names and no trace id,
+and no trace of the request is made.
+The dataset a page names is still sent with the question, as the table says.
+Your thumbs and comments are still received, but with usage sharing off they are not attached to a trace.
 No usage-metrics row holds your question, the reply, the page's address or your IP address.
-They are used to track cost, budgets and reliability, and there is no automatic deletion yet.
+They are used to track cost, budgets and reliability.
+They are kept for five years, then deleted automatically.
 
 **On the OSA server, on disk: feedback.**
 A thumbs up or down, and any comment you wrote with it.
@@ -95,7 +104,7 @@ and also when you send another question, start a new chat or close the window, w
 Feedback from the "Send feedback" form carries your comment and, only if you share the page, the page's address.
 Each also carries the ids that tie it to the conversation and the reply.
 Feedback is read by the OSA maintainers and that community's maintainers, so please do not include personal information.
-There is no automatic deletion.
+It is kept for five years, then deleted automatically.
 
 **Server logs.**
 They do not record your questions or the replies as such.
@@ -116,8 +125,12 @@ Logs are kept on the server's disk.
 
 ## Your choices
 
-- **Sharing the page:** the "Share page URL to help answer questions" box in the widget's footer is on by default;
-  your choice is remembered in this browser.
+- **Privacy choices:** the "Privacy choices" button in the widget's footer opens a dialog with two choices, both on by default.
+  "Use this page for answers" sends the page's address and title with your question
+  (the dataset a page names is still sent when it is off).
+  "Share usage data" lets the usage log link your requests into a conversation and name the tools that ran;
+  off, a request's row has no conversation id, tool names or trace id.
+  Your choices are remembered in this browser and apply in your other open tabs without a reload.
 - **Your history:** delete chats in History and the workspace in Settings.
   This clears your browser's copy; the server's in-memory copy cannot be continued after 24 hours and is removed shortly after (see [What is stored](#what-is-stored)).
 - **Your own key:** with your own Anthropic or OpenRouter key, requests go to that provider under your agreement.
@@ -126,7 +139,8 @@ Logs are kept on the server's disk.
 ## What OSA does not do
 
 - No tracing or observability service receives conversation content on osc.earth.
-  (OSA can send traces to LangFuse when an operator installs and configures it; the osc.earth deployment does not.)
+  (OSA can send traces to LangFuse when an operator installs and configures it; the osc.earth deployment does not.
+  With "Share usage data" off, OSA makes no trace even where one is configured.)
 - The widget loads no analytics, advertising or tracking scripts.
 - Conversations are not sold, shared for advertising, or used to train models.
 
@@ -137,6 +151,9 @@ for NEMAR, see the [NEMAR privacy policy](https://docs.nemar.org/policies/privac
 
 ## Questions and changes
 
-Open an issue at [github.com/OpenScience-Collective/osa](https://github.com/OpenScience-Collective/osa/issues);
+For a privacy question, email [privacy@osc.earth](mailto:privacy@osc.earth); the OSA maintainers read it.
+Usage records and feedback are not tied to a name or an account,
+so the maintainers may not be able to find what concerns one person.
+For anything else, open an issue at [github.com/OpenScience-Collective/osa](https://github.com/OpenScience-Collective/osa/issues);
 issues are public, so please do not put personal information in one.
 Changes to this page are in its history on GitHub.

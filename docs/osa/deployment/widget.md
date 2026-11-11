@@ -179,6 +179,12 @@ This is useful when the same community assistant is embedded across multiple pag
 When enabled, the widget can share the current page's URL and title with the assistant. This helps provide contextually relevant answers when the widget is embedded on documentation pages.
 
 Users can toggle this via a checkbox in the widget. The preference is persisted in localStorage.
+The full address is sent, including any query string or fragment, so a site whose addresses carry anything private should set `allowPageContext: false` or `pageContextDefaultEnabled: false`.
+
+### Privacy
+
+What the widget sends, where it goes and what is stored is on the [Privacy](../privacy.md) page.
+A site that embeds the widget should link that page from its own privacy policy, as NEMAR does.
 
 ### Chat History
 

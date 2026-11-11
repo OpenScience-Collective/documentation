@@ -159,6 +159,7 @@ nav:
   - OSA:
       - osa/index.md
       - Getting Started: osa/getting-started.md
+      - Privacy: osa/privacy.md
       - Architecture:
           - Overview: osa/architecture.md
           - Details: osa/architecture-details.md

@@ -80,6 +80,7 @@ uv run pytest tests/ -v
 ## Documentation
 
 - [Getting Started](getting-started.md) - Installation and setup
+- [Privacy](privacy.md) - What the assistant sends, to whom, and what is stored
 - [Architecture](architecture.md) - System design and diagrams
 - [Community Registry](registry/index.md) - YAML-driven assistant configuration
     - [Adding a Community](registry/quick-start.md) - Add a new assistant in 5 minutes

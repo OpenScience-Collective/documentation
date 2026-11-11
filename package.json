@@ -1,6 +1,7 @@
 {
   "name": "osc-documentation",
   "version": "0.1.0",
+  "packageManager": "bun@1.4.3",
   "description": "Documentation for the Open Science Collective",
   "scripts": {
     "setup": "uv sync",
